@@ -4,6 +4,7 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TH1F.h"
+#include "TH2F.h"
 #include "TString.h"
 #include "TChain.h"
 #include <iostream>
@@ -261,9 +262,17 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 
   TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,1000);
   //  std::vector<TString> ratioStrings = {"HOvE","HOvE3","HOvE9","H3OvE3","H9OvE9"};
-
+  TH1D * hJetEta = new TH1D("jetEta","jetEta",50,-5,5);
   TH1F* HovEtotal_1x1_emu = new TH1F("HovEtotal_1x1_emu", "HCAL energy / ECAL+HCAL energy for Jets (1x1);H/E;# Entries", 50,0,1);
   TH1F* HovEtotal_3x3_emu = new TH1F("HovEtotal_3x3_emu", "HCAL energy / ECAL+HCAL energy for Jets (3x3);H/E;# Entries", 50,0,1);
+  TH1F* HovEtotal_1x1_emu_AllJets = new TH1F("HovEtotal_1x1_emu_AllJets", "HCAL energy / ECAL+HCAL energy for All Jets (1x1);H/E;# Entries", 50,0,1);
+  TH1F* HovEtotal_3x3_emu_AllJets = new TH1F("HovEtotal_3x3_emu_AllJets", "HCAL energy / ECAL+HCAL energy for All Jets (3x3);H/E;# Entries", 50,0,1);
+  TH1F* HEnergytotal_1x1_emu_AllJets = new TH1F("HEnergytotal_1x1_emu_AllJet", "HCAL Energy for All Jets;# Entries", 50,0,50);
+  TH1F* EEnergytotal_1x1_emu_AllJets = new TH1F("EEnergytotal_1x1_emu_AllJet", "ECAL Energy for All Jets;# Entries", 50,0,50);
+  TH1F* EEnergytotal_3x3_emu_AllJets = new TH1F("EEnergytotal_3x3_emu_AllJets", "Ecal Energy for All Jets (3x3);H/E;# Entries", 50,0,50);
+  TH1F* HEnergytotal_3x3_emu_AllJets = new TH1F("HEnergytotal_3x3_emu_AllJets", "Hcal Energy for All Jets (3x3);H/E;# Entries", 50,0,50);
+  TH2F* HEEnergytotal_1x1_emu_AllJets = new TH2F("HEEnergytotal_1x1_emu_AllJet", "HCAL vs ECAL Energy for All Jets", 50, 0, 50, 50, 0, 50);
+  TH2F* HEEnergytotal_3x3_emu_AllJets = new TH2F("HEEnergytotal_3x3_emu_AllJet", "HCAL vs ECAL Energy for All Jets", 50, 0, 50, 50, 0, 50);
 
   /////////////////////////////////
   // loop through all the entries//
@@ -390,6 +399,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       if (nJetemu ==0) continue;
       for(uint jetIt=0; jetIt<nJetemu; jetIt++){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]);
+	hJetEta ->Fill(l1emu_->jetEta[jetIt]);
 	seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
 	seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
 	double seedTowerHad(0), seedTowerEm(0), seedTower3x3Em(0), seedTower3x3Had(0), seedTower9x9Em(0), seedTower9x9Had(0);
@@ -432,7 +442,19 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
 	emVariablesAllJets["HOvE9"].push_back(seedTower9x9Em);
 	emVariablesAllJets["H3OvE3"].push_back(seedTower3x3Em);
 	emVariablesAllJets["H9OvE9"].push_back(seedTower9x9Em);
-      } // closing the jet loop
+	
+	if (seedTowerHad > 0 && seedTowerEm > 0)
+	  {
+	    HovEtotal_1x1_emu_AllJets->Fill( seedTowerHad / (seedTowerHad + seedTowerEm) );
+	    HovEtotal_3x3_emu_AllJets->Fill( seedTower3x3Had / (seedTower3x3Had + seedTower3x3Em) );
+	    HEnergytotal_1x1_emu_AllJets->Fill( seedTowerHad );
+	    EEnergytotal_1x1_emu_AllJets->Fill( seedTowerEm );
+	    EEnergytotal_3x3_emu_AllJets->Fill( seedTower3x3Em );
+	    HEnergytotal_3x3_emu_AllJets->Fill( seedTower3x3Had );
+	    HEEnergytotal_1x1_emu_AllJets->Fill(seedTowerEm, seedTowerHad);
+	    HEEnergytotal_3x3_emu_AllJets->Fill(seedTower3x3Em, seedTower3x3Had);
+	  }
+      } // Closing the jet loop
       HovEtotal_1x1_emu->Fill((hadVariablesAllJets["HOvE"][0])/(hadVariablesAllJets["HOvE"][0]+emVariablesAllJets["HOvE"][0]));
       HovEtotal_3x3_emu->Fill((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]));
 
@@ -499,7 +521,6 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
         if( (metHFSum) >= metHFSumLo+(bin*metHFSumBinWidth) ) metHFSumRates_emu->Fill(metHFSumLo+(bin*metHFSumBinWidth)); //GeV           
       }
 
-      std::cout << "done filling histograms" << std::endl;
     }// closes if 'emuOn' is true
 
 
@@ -735,8 +756,17 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
 
+    hJetEta->Write();
     HovEtotal_1x1_emu->Write();
     HovEtotal_3x3_emu->Write();
+    HovEtotal_1x1_emu_AllJets->Write();
+    HovEtotal_3x3_emu_AllJets->Write();
+    HEnergytotal_1x1_emu_AllJets->Write();
+    HEnergytotal_3x3_emu_AllJets->Write();
+    EEnergytotal_1x1_emu_AllJets->Write();
+    EEnergytotal_3x3_emu_AllJets->Write();
+    HEEnergytotal_1x1_emu_AllJets->Write();
+    HEEnergytotal_3x3_emu_AllJets->Write();
   }
 
   if (hwOn){
