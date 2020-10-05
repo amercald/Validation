@@ -34,13 +34,12 @@ double numBunch = 1537; //the number of bunches colliding for the run of interes
 double runLum = 0.02; // 0.44: 275783  0.58:  276363 //luminosity of the run of interest (*10^34)
 double expectedLum = 1.15; //expected luminosity of 2016 runs (*10^34)
 
-void rates(bool newConditions, const std::string& inputFileDirectory);
+void rates(std::string sampleType, const std::string& inputFileDirectory);
 
 int main(int argc, char *argv[])
 {
-  bool newConditions = true;
   std::string ntuplePath("");
-
+  std::string sampleType("");
   if (argc != 3) {
     std::cout << "Usage: rates.exe [new/def] [path to ntuples]\n"
 	      << "[new/def] indicates new or default (existing) conditions" << std::endl;
@@ -49,16 +48,18 @@ int main(int argc, char *argv[])
   else {
     std::string par1(argv[1]);
     std::transform(par1.begin(), par1.end(), par1.begin(), ::tolower);
-    if(par1.compare("new") == 0) newConditions = true;
-    else if(par1.compare("def") == 0) newConditions = false;
-    else {
-      std::cout << "First parameter must be \"new\" or \"def\"" << std::endl;
-      exit(1);
-    }
+    if(par1.compare("llp") == 0) sampleType = "LLP";
+    else if(par1.compare("nugun") == 0) sampleType = "NuGun";
+    else if(par1.compare("qcd") == 0) sampleType = "QCD";
+    else
+      {
+	std::cout << "Sample must be of type LLP, NuGun, or QCD. You entered " << par1 << std::endl;
+	exit(1);
+      }
     ntuplePath = argv[2];
   }
 
-  rates(newConditions, ntuplePath);
+  rates(sampleType, ntuplePath);
 
   return 0;
 }
@@ -75,7 +76,7 @@ bool isGoodLumiSection(int lumiBlock)
   return false;
 }
 
-void rates(bool newConditions, const std::string& inputFileDirectory){
+void rates(std::string sampleType, const std::string& inputFileDirectory){
   
   bool hwOn = true;   //are we using data from hardware? (upgrade trigger had to be running!!!)
   bool emuOn = true;  //are we using data from emulator?
@@ -86,10 +87,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   }
 
   std::string inputFile(inputFileDirectory);
-  inputFile += "/L1Ntuple_*.root";
+  //  inputFile += "/L1Ntuple_*.root";
   std::string outputDirectory = "emu";  //***runNumber, triggerType, version, hw/emu/both***MAKE SURE IT EXISTS
-  std::string outputFilename = "rates_def.root";
-  if(newConditions) outputFilename = "rates_new_cond.root";
+  std::string outputFilename = "rates_hoe_"+sampleType+".root";
+  std::cout << "Will write to " << outputFilename << std::endl;
   TFile* kk = TFile::Open( outputFilename.c_str() , "recreate");
   // if (kk!=0){
   //   cout << "TERMINATE: not going to overwrite file " << outputFilename << endl;
@@ -260,9 +261,10 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
   TH1F* hcalTP_hw = new TH1F("hcalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
-  TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,1000);
+  TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,700);
   //  std::vector<TString> ratioStrings = {"HOvE","HOvE3","HOvE9","H3OvE3","H9OvE9"};
   TH1D * hJetEta = new TH1D("jetEta","jetEta",50,-5,5);
+  TH1D * hNJets = new TH1D("njets","njets",20,0,20);
   TH1F* HovEtotal_1x1_emu = new TH1F("HovEtotal_1x1_emu", "HCAL energy / ECAL+HCAL energy for Jets (1x1);H/E;# Entries", 50,0,1);
   TH1F* HovEtotal_3x3_emu = new TH1F("HovEtotal_3x3_emu", "HCAL energy / ECAL+HCAL energy for Jets (3x3);H/E;# Entries", 50,0,1);
   TH1F* HovEtotal_1x1_emu_AllJets = new TH1F("HovEtotal_1x1_emu_AllJets", "HCAL energy / ECAL+HCAL energy for All Jets (1x1);H/E;# Entries", 50,0,1);
@@ -393,6 +395,7 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
       double towHademu(0), towEmemu(0), towEtaemu(0), towPhiemu(0), nTowemu(0);
       nTowemu = l1Towemu_->nTower;
       nJetemu = l1emu_->nJets;
+      hNJets->Fill(nJetemu);
       //std::cout << "nTower emu = " << nTowemu << " and nJet emu = " << nJetemu << std::endl;
       std::map<const TString, std::vector<double> > hadVariablesAllJets;
       std::map<const TString, std::vector<double> > emVariablesAllJets;
@@ -757,6 +760,8 @@ void rates(bool newConditions, const std::string& inputFileDirectory){
     metHFSumRates_emu->Write();
 
     hJetEta->Write();
+    hJetEt->Write();
+    hNJets->Write();
     HovEtotal_1x1_emu->Write();
     HovEtotal_3x3_emu->Write();
     HovEtotal_1x1_emu_AllJets->Write();
