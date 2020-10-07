@@ -386,9 +386,10 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       int seedTowerIEta(-1);
       int seedTowerIPhi(-1);
       int maxTowerEndcap = 28;
-      int maxTowerBarrel = 16;
-      int minTowerForHOvE = maxTowerBarrel+1;
+      //      int maxTowerBarrel = 16;
+      int minTowerForHOvE = -999; //maxTowerBarrel+1;
       int maxTowerForHOvE = maxTowerEndcap;
+      
       uint nJetemu(0);
       //towEtamu not used for now
       //      double towEtemu(0), towHademu(0), towEmemu(0), towEtaemu(0), towPhiemu(0), nTowemu(0);

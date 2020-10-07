@@ -7,7 +7,7 @@ ROOT.gROOT.SetBatch(True)
 ROOT.TH1.AddDirectory(0)
 path = "/afs/cern.ch/user/a/amercald/private/HCAL/Validation_10_6_X/CMSSW_10_6_0/src/HcalTrigger/Validation/HoE_studies/"
 variableplots = ["jetEta", "jetET", "njets"]
-file = ROOT.TFile.Open(path+"NuGunRates_def.root")
+#file = ROOT.TFile.Open(path+"NuGunRates_def.root")
 file_list = ["LLP", "QCD", "NuGun"]
 colors = [ROOT.kRed, ROOT.kBlue, ROOT.kGreen+2]
 
@@ -93,7 +93,7 @@ def plotHoE(histname, filename):
     hist.SetLineWidth(3)
     
     hist.GetXaxis().SetTitle("H/(H+E)")
-    hist.SetStats(0)
+    #hist.SetStats(0)
     hist.Draw("h")    
     c1.SaveAs(outpath+histname+"_"+filename+".pdf")
 
@@ -108,7 +108,7 @@ def plotHoESame(histname):
     
     ROOT.gPad.SetGridy()
     ROOT.gPad.SetTicks()
-
+    legend = ROOT.TLegend(0.7, 0.82, 0.9, 0.92)
     for f in range(len(file_list)):
         file = ROOT.TFile.Open(path+"rates_hoe_"+file_list[f]+".root")
         hist = file.Get(histname)
@@ -120,10 +120,12 @@ def plotHoESame(histname):
         hist.SetLineColor(colors[f])
         hist.GetXaxis().SetTitle("H/(H+E)")
         hist.SetStats(0)
+        legend.AddEntry(hist, file_list[f], "l")
         if f == 0:
             hist.Draw("h")    
         else:
             hist.Draw("h same")
+    legend.Draw("same")
     c1.SaveAs(outpath+histname+"_All.pdf")
 
     
@@ -210,7 +212,12 @@ if __name__ == "__main__":
         plotvariable(f)
         plotHoE("HovEtotal_1x1_emu_AllJets", f)
         plotHoE("HovEtotal_3x3_emu_AllJets", f)
+        plotHoE("HovEtotal_1x1_emu", f)
+        plotHoE("HovEtotal_3x3_emu", f)
+
 
     plotvariablesame()
     plotHoESame("HovEtotal_1x1_emu_AllJets")
     plotHoESame("HovEtotal_3x3_emu_AllJets")
+    plotHoESame("HovEtotal_1x1_emu")
+    plotHoESame("HovEtotal_3x3_emu")
