@@ -41,21 +41,11 @@ int main(int argc, char *argv[])
   std::string ntuplePath("");
   std::string sampleType("");
   if (argc != 3) {
-    std::cout << "Usage: rates.exe [new/def] [path to ntuples]\n"
-	      << "[new/def] indicates new or default (existing) conditions" << std::endl;
+    std::cout << "Usage: rates_hoe.exe [sample type] [path to ntuples]\n" << std::endl;
     exit(1);
   }
   else {
-    std::string par1(argv[1]);
-    std::transform(par1.begin(), par1.end(), par1.begin(), ::tolower);
-    if(par1.compare("llp") == 0) sampleType = "LLP";
-    else if(par1.compare("nugun") == 0) sampleType = "NuGun";
-    else if(par1.compare("qcd") == 0) sampleType = "QCD";
-    else
-      {
-	std::cout << "Sample must be of type LLP, NuGun, or QCD. You entered " << par1 << std::endl;
-	exit(1);
-      }
+    sampleType = argv[1];
     ntuplePath = argv[2];
   }
 
@@ -261,20 +251,58 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   TH1F* hcalTP_hw = new TH1F("hcalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
-  TH1D * hJetEt = new TH1D("jetET",";ET;",100,0,700);
+  TH1D * hJetEt = new TH1D("jetET",";ET;",50,0,700);
   //  std::vector<TString> ratioStrings = {"HOvE","HOvE3","HOvE9","H3OvE3","H9OvE9"};
-  TH1D * hJetEta = new TH1D("jetEta","jetEta",50,-5,5);
+  TH1D * hJetEta = new TH1D("jetEta","jetEta",25,-5,5);
   TH1D * hNJets = new TH1D("njets","njets",20,0,20);
   TH1F* HovEtotal_1x1_emu = new TH1F("HovEtotal_1x1_emu", "HCAL energy / ECAL+HCAL energy for Jets (1x1);H/E;# Entries", 50,0,1);
   TH1F* HovEtotal_3x3_emu = new TH1F("HovEtotal_3x3_emu", "HCAL energy / ECAL+HCAL energy for Jets (3x3);H/E;# Entries", 50,0,1);
   TH1F* HovEtotal_1x1_emu_AllJets = new TH1F("HovEtotal_1x1_emu_AllJets", "HCAL energy / ECAL+HCAL energy for All Jets (1x1);H/E;# Entries", 50,0,1);
   TH1F* HovEtotal_3x3_emu_AllJets = new TH1F("HovEtotal_3x3_emu_AllJets", "HCAL energy / ECAL+HCAL energy for All Jets (3x3);H/E;# Entries", 50,0,1);
-  TH1F* HEnergytotal_1x1_emu_AllJets = new TH1F("HEnergytotal_1x1_emu_AllJet", "HCAL Energy for All Jets;# Entries", 50,0,50);
-  TH1F* EEnergytotal_1x1_emu_AllJets = new TH1F("EEnergytotal_1x1_emu_AllJet", "ECAL Energy for All Jets;# Entries", 50,0,50);
-  TH1F* EEnergytotal_3x3_emu_AllJets = new TH1F("EEnergytotal_3x3_emu_AllJets", "Ecal Energy for All Jets (3x3);H/E;# Entries", 50,0,50);
-  TH1F* HEnergytotal_3x3_emu_AllJets = new TH1F("HEnergytotal_3x3_emu_AllJets", "Hcal Energy for All Jets (3x3);H/E;# Entries", 50,0,50);
-  TH2F* HEEnergytotal_1x1_emu_AllJets = new TH2F("HEEnergytotal_1x1_emu_AllJet", "HCAL vs ECAL Energy for All Jets", 50, 0, 50, 50, 0, 50);
-  TH2F* HEEnergytotal_3x3_emu_AllJets = new TH2F("HEEnergytotal_3x3_emu_AllJet", "HCAL vs ECAL Energy for All Jets", 50, 0, 50, 50, 0, 50);
+  TH1F* HEnergytotal_1x1_emu_AllJets = new TH1F("HEnergytotal_1x1_emu_AllJet", "HCAL Energy for All Jets;# Entries", 150,0,150);
+  TH1F* EEnergytotal_1x1_emu_AllJets = new TH1F("EEnergytotal_1x1_emu_AllJet", "ECAL Energy for All Jets;# Entries", 150,0,150);
+  TH1F* EEnergytotal_3x3_emu_AllJets = new TH1F("EEnergytotal_3x3_emu_AllJets", "Ecal Energy for All Jets (3x3);H/E;# Entries", 150,0,150);
+  TH1F* HEnergytotal_3x3_emu_AllJets = new TH1F("HEnergytotal_3x3_emu_AllJets", "Hcal Energy for All Jets (3x3);H/E;# Entries", 150,0,150);
+  TH2F* HEEnergytotal_1x1_emu_AllJets = new TH2F("HEEnergytotal_1x1_emu_AllJet", "HCAL vs ECAL Energy for All Jets", 100, 0, 400, 100, 0, 400);
+  TH2F* HEEnergytotal_3x3_emu_AllJets = new TH2F("HEEnergytotal_3x3_emu_AllJet", "HCAL vs ECAL Energy for All Jets", 100, 0, 400, 100, 0, 400);
+
+  TH1D * hJetEtaLeading1 = new TH1D("jetEtaLeading1", "#eta for leading jet 1", 50, -5, 5);
+  TH1D * hJetEtaLeading2 = new TH1D("jetEtaLeading2", "#eta for leading jet 2", 50, -5, 5);
+  TH1D * hJetEtaLeading3 = new TH1D("jetEtaLeading3", "#eta for leading jet 3", 50, -5, 5);
+  TH1D * hJetEtaLeading4 = new TH1D("jetEtaLeading4", "#eta for leading jet 4", 50, -5, 5);
+
+  TH1D * hJetETLeading1 = new TH1D("jetETLeading1", "E_{T} for leading jet 1", 70, 0, 700);
+  TH1D * hJetETLeading2 = new TH1D("jetETLeading2", "E_{T} for leading jet 2", 70, 0, 700);
+  TH1D * hJetETLeading3 = new TH1D("jetETLeading3", "E_{T} for leading jet 3", 70, 0, 700);
+  TH1D * hJetETLeading4 = new TH1D("jetETLeading4", "E_{T} for leading jet 4", 70, 0, 700);
+
+  TH1F* HovEtotal_1x1_emu_Leading1 = new TH1F("HovEtotal_1x1_emu_Leading1", "HCAL energy / ECAL+HCAL energy for Leading Jet 1 (1x1);H/E;# Entries", 25,0,1);
+  TH1F* HovEtotal_1x1_emu_Leading2 = new TH1F("HovEtotal_1x1_emu_Leading2", "HCAL energy / ECAL+HCAL energy for Leading Jet 2 (1x1);H/E;# Entries", 25,0,1);
+  TH1F* HovEtotal_1x1_emu_Leading3 = new TH1F("HovEtotal_1x1_emu_Leading3", "HCAL energy / ECAL+HCAL energy for Leading Jet 3 (1x1);H/E;# Entries", 25,0,1);
+  TH1F* HovEtotal_1x1_emu_Leading4 = new TH1F("HovEtotal_1x1_emu_Leading4", "HCAL energy / ECAL+HCAL energy for Leading Jet 4 (1x1);H/E;# Entries", 25,0,1);
+  TH1F* HovEtotal_3x3_emu_Leading1 = new TH1F("HovEtotal_3x3_emu_Leading1", "HCAL energy / ECAL+HCAL energy for Leading Jet 1 (3x3);H/E;# Entries", 25,0,1);
+  TH1F* HovEtotal_3x3_emu_Leading2 = new TH1F("HovEtotal_3x3_emu_Leading2", "HCAL energy / ECAL+HCAL energy for Leading Jet 2 (3x3);H/E;# Entries", 25,0,1);
+  TH1F* HovEtotal_3x3_emu_Leading3 = new TH1F("HovEtotal_3x3_emu_Leading3", "HCAL energy / ECAL+HCAL energy for Leading Jet 3 (3x3);H/E;# Entries", 25,0,1);
+  TH1F* HovEtotal_3x3_emu_Leading4 = new TH1F("HovEtotal_3x3_emu_Leading4", "HCAL energy / ECAL+HCAL energy for Leading Jet 4 (3x3);H/E;# Entries", 25,0,1);
+  //  TH1F* HovEtotal_5x5_emu_Leading1 = new TH1F("HovEtotal_5x5_emu_Leading1", "HCAL energy / ECAL+HCAL energy for Leading Jet 1 (5x5);H/E;# Entries", 25,0,1);
+  //TH1F* HovEtotal_5x5_emu_Leading2 = new TH1F("HovEtotal_5x5_emu_Leading2", "HCAL energy / ECAL+HCAL energy for Leading Jet 2 (5x5);H/E;# Entries", 25,0,1);
+  //TH1F* HovEtotal_5x5_emu_Leading3 = new TH1F("HovEtotal_5x5_emu_Leading3", "HCAL energy / ECAL+HCAL energy for Leading Jet 3 (5x5);H/E;# Entries", 25,0,1);
+  //TH1F* HovEtotal_5x5_emu_Leading4 = new TH1F("HovEtotal_5x5_emu_Leading4", "HCAL energy / ECAL+HCAL energy for Leading Jet 4 (5x5);H/E;# Entries", 25,0,1);
+
+  //Binning in ET
+
+  TH2F* HEEnergytotal_1x1_emu_Leading1 = new TH2F("HEEnergytotal_1x1_emu_Leading1", "HCAL vs ECAL Energy for Leading 1", 100, 0, 300, 100, 0, 300);
+  TH2F* HEEnergytotal_1x1_emu_Leading2 = new TH2F("HEEnergytotal_1x1_emu_Leading2", "HCAL vs ECAL Energy for Leading 2", 100, 0, 300, 100, 0, 300);
+  TH2F* HEEnergytotal_1x1_emu_Leading3 = new TH2F("HEEnergytotal_1x1_emu_Leading3", "HCAL vs ECAL Energy for Leading 3", 100, 0, 300, 100, 0, 300);
+  TH2F* HEEnergytotal_1x1_emu_Leading4 = new TH2F("HEEnergytotal_1x1_emu_Leading4", "HCAL vs ECAL Energy for Leading 4", 100, 0, 300, 100, 0, 300);
+  TH2F* HEEnergytotal_3x3_emu_Leading1 = new TH2F("HEEnergytotal_3x3_emu_Leading1", "HCAL vs ECAL Energy for Leading 1", 100, 0, 400, 100, 0, 400);
+  TH2F* HEEnergytotal_3x3_emu_Leading2 = new TH2F("HEEnergytotal_3x3_emu_Leading2", "HCAL vs ECAL Energy for Leading 2", 100, 0, 400, 100, 0, 400);
+  TH2F* HEEnergytotal_3x3_emu_Leading3 = new TH2F("HEEnergytotal_3x3_emu_Leading3", "HCAL vs ECAL Energy for Leading 3", 100, 0, 400, 100, 0, 400);
+  TH2F* HEEnergytotal_3x3_emu_Leading4 = new TH2F("HEEnergytotal_3x3_emu_Leading4", "HCAL vs ECAL Energy for Leading 4", 100, 0, 400, 100, 0, 400);
+  //TH2F* HEEnergytotal_5x5_emu_Leading1 = new TH2F("HEEnergytotal_5x5_emu_Leading1", "HCAL vs ECAL Energy for Leading 1", 100, 0, 400, 100, 0, 400);
+  //TH2F* HEEnergytotal_5x5_emu_Leading2 = new TH2F("HEEnergytotal_5x5_emu_Leading2", "HCAL vs ECAL Energy for Leading 2", 100, 0, 400, 100, 0, 400);
+  //TH2F* HEEnergytotal_5x5_emu_Leading3 = new TH2F("HEEnergytotal_5x5_emu_Leading3", "HCAL vs ECAL Energy for Leading 3", 100, 0, 400, 100, 0, 400);
+  //TH2F* HEEnergytotal_5x5_emu_Leading4 = new TH2F("HEEnergytotal_5x5_emu_Leading4", "HCAL vs ECAL Energy for Leading 4", 100, 0, 400, 100, 0, 400);
 
   /////////////////////////////////
   // loop through all the entries//
@@ -406,7 +434,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	hJetEta ->Fill(l1emu_->jetEta[jetIt]);
 	seedTowerIPhi = l1emu_->jetTowerIPhi[jetIt];
 	seedTowerIEta = l1emu_->jetTowerIEta[jetIt];
-	double seedTowerHad(0), seedTowerEm(0), seedTower3x3Em(0), seedTower3x3Had(0), seedTower9x9Em(0), seedTower9x9Had(0);
+	double seedTowerHad(0), seedTowerEm(0), seedTower3x3Em(0), seedTower3x3Had(0), seedTower5x5Em(0), seedTower5x5Had(0), seedTower9x9Em(0), seedTower9x9Had(0);
 	for (int towIt = 0; towIt < nTowemu; towIt++){
 	  //towEtemu  = l1Towemu_->iet[towIt];
 	  towHademu = l1Towemu_->ihad[towIt];
@@ -420,9 +448,9 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	    }
 	    for (int iSeedTowerIEta = -4; iSeedTowerIEta <= 4; ++iSeedTowerIEta){
 	      for (int iSeedTowerIPhi = -4; iSeedTowerIPhi <= 4; ++iSeedTowerIPhi){
-		int wrappedIPhi = seedTowerIPhi+iSeedTowerIPhi;
-		if (wrappedIPhi > 72) wrappedIPhi -= 72;
-		if (wrappedIPhi < 0) wrappedIPhi += 72;
+		int wrappedIPhi = (seedTowerIPhi+iSeedTowerIPhi % 72) + 1;
+		//if (wrappedIPhi > 72) wrappedIPhi -= 72;
+		//if (wrappedIPhi < 0) wrappedIPhi += 72;
 		if (towEtaemu == seedTowerIEta+iSeedTowerIEta && towPhiemu == wrappedIPhi){
 		  seedTower9x9Em += towEmemu;
 		  seedTower9x9Had += towHademu;
@@ -430,11 +458,16 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 		    seedTower3x3Em += towEmemu;
 		    seedTower3x3Had += towHademu;
 		  }
+		  if (abs(iSeedTowerIPhi) <= 2 && abs(iSeedTowerIEta) <= 2){
+		    seedTower5x5Em += towEmemu;
+		    seedTower5x5Had += towHademu;
+		  }
 		}
 	      }
 	    }
 	  } // closing min max tower statement
 	} // closing seed tower loop
+	if ( (seedTowerHad / seedTower5x5Had) <= 0.2) continue;
 	hadVariablesAllJets["HOvE"].push_back(seedTowerHad);
 	hadVariablesAllJets["HOvE3"].push_back(seedTowerHad);
 	hadVariablesAllJets["HOvE9"].push_back(seedTowerHad);
@@ -457,6 +490,44 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	    HEnergytotal_3x3_emu_AllJets->Fill( seedTower3x3Had );
 	    HEEnergytotal_1x1_emu_AllJets->Fill(seedTowerEm, seedTowerHad);
 	    HEEnergytotal_3x3_emu_AllJets->Fill(seedTower3x3Em, seedTower3x3Had);
+	  }
+	if (jetIt == 0) 
+	  {
+	    hJetEtaLeading1->Fill(l1emu_->jetEta[jetIt]);
+	    hJetETLeading1->Fill(l1emu_->jetEt[jetIt]);
+	    HEEnergytotal_1x1_emu_Leading1->Fill(seedTowerEm, seedTowerHad);
+	    HEEnergytotal_3x3_emu_Leading1->Fill(seedTower3x3Em, seedTower3x3Had);	   
+	    HovEtotal_1x1_emu_Leading1->Fill(seedTowerHad / (seedTowerHad + seedTowerEm) );
+	    HovEtotal_3x3_emu_Leading1->Fill(seedTower3x3Had / (seedTower3x3Had + seedTower3x3Em) );
+	  }
+	else if (jetIt == 1) 
+	  {
+	    hJetEtaLeading2->Fill(l1emu_->jetEta[jetIt]);
+	    hJetETLeading2->Fill(l1emu_->jetEt[jetIt]);
+	    HEEnergytotal_1x1_emu_Leading2->Fill(seedTowerEm, seedTowerHad);
+	    HEEnergytotal_3x3_emu_Leading2->Fill(seedTower3x3Em, seedTower3x3Had);	    
+	    HovEtotal_1x1_emu_Leading2->Fill(seedTowerHad / (seedTowerHad + seedTowerEm) );
+	    HovEtotal_3x3_emu_Leading2->Fill(seedTower3x3Had / (seedTower3x3Had + seedTower3x3Em) );
+	  }
+	else if (jetIt == 2)
+	  { 
+	    hJetEtaLeading3->Fill(l1emu_->jetEta[jetIt]);
+	    hJetETLeading3->Fill(l1emu_->jetEt[jetIt]);
+	    HEEnergytotal_1x1_emu_Leading3->Fill(seedTowerEm, seedTowerHad);
+	    HEEnergytotal_3x3_emu_Leading3->Fill(seedTower3x3Em, seedTower3x3Had);
+	    HovEtotal_1x1_emu_Leading3->Fill(seedTowerHad / (seedTowerHad + seedTowerEm) );
+	    HovEtotal_3x3_emu_Leading3->Fill(seedTower3x3Had / (seedTower3x3Had + seedTower3x3Em) );
+
+	  }
+	else if (jetIt == 3) 
+	  {
+	  hJetEtaLeading4->Fill(l1emu_->jetEta[jetIt]);
+	  hJetETLeading4->Fill(l1emu_->jetEt[jetIt]);
+	  HEEnergytotal_1x1_emu_Leading4->Fill(seedTowerEm, seedTowerHad);
+	  HEEnergytotal_3x3_emu_Leading4->Fill(seedTower3x3Em, seedTower3x3Had);
+	  HovEtotal_1x1_emu_Leading4->Fill(seedTowerHad / (seedTowerHad + seedTowerEm) );
+	  HovEtotal_3x3_emu_Leading4->Fill(seedTower3x3Had / (seedTower3x3Had + seedTower3x3Em) );
+
 	  }
       } // Closing the jet loop
       HovEtotal_1x1_emu->Fill((hadVariablesAllJets["HOvE"][0])/(hadVariablesAllJets["HOvE"][0]+emVariablesAllJets["HOvE"][0]));
@@ -773,6 +844,35 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     EEnergytotal_3x3_emu_AllJets->Write();
     HEEnergytotal_1x1_emu_AllJets->Write();
     HEEnergytotal_3x3_emu_AllJets->Write();
+
+    //Leading 4 jet histograms
+    HovEtotal_1x1_emu_Leading1->Write();
+    HovEtotal_3x3_emu_Leading1->Write();
+    HovEtotal_1x1_emu_Leading2->Write();
+    HovEtotal_3x3_emu_Leading2->Write();
+    HovEtotal_1x1_emu_Leading3->Write();
+    HovEtotal_3x3_emu_Leading3->Write();
+    HovEtotal_1x1_emu_Leading4->Write();
+    HovEtotal_3x3_emu_Leading4->Write();
+
+    hJetEtaLeading1->Write();
+    hJetEtaLeading2->Write();
+    hJetEtaLeading3->Write();
+    hJetEtaLeading4->Write();
+
+    hJetETLeading1->Write();
+    hJetETLeading2->Write();
+    hJetETLeading3->Write();
+    hJetETLeading4->Write();
+
+    HEEnergytotal_1x1_emu_Leading1->Write();
+    HEEnergytotal_3x3_emu_Leading1->Write();
+    HEEnergytotal_1x1_emu_Leading2->Write();
+    HEEnergytotal_3x3_emu_Leading2->Write();
+    HEEnergytotal_1x1_emu_Leading3->Write();
+    HEEnergytotal_3x3_emu_Leading3->Write();
+    HEEnergytotal_1x1_emu_Leading4->Write();
+    HEEnergytotal_3x3_emu_Leading4->Write();
   }
 
   if (hwOn){
