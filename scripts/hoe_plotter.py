@@ -6,10 +6,11 @@ XCANVAS = 2400; YCANVAS = 2400
 ROOT.gROOT.SetBatch(True)
 ROOT.TH1.AddDirectory(0)
 path = "/afs/cern.ch/user/a/amercald/private/HCAL/Validation_10_6_X/CMSSW_10_6_0/src/HcalTrigger/Validation/HoE_studies/"
-variableplots = ["jetEta", "jetET", "njets"]
+variableplots = ["jetEta", "jetET", "jetEtaLeading1", "jetEtaLeading2", "jetEtaLeading3", "jetEtaLeading4", "njets", "jetETLeading1", "jetETLeading2", "jetETLeading3", "jetETLeading4"]
 #file = ROOT.TFile.Open(path+"NuGunRates_def.root")
-file_list = ["LLP", "QCD", "NuGun"]
-colors = [ROOT.kRed, ROOT.kBlue, ROOT.kGreen+2]
+#file_list = ["LLP", "QCD", "NuGun"]
+file_list = ["LLP_10000mm", "LLP_1000mm", "LLP_500mm", "QCD"]
+colors = [ROOT.kRed, ROOT.kBlue, ROOT.kGreen+2, ROOT.kBlack]
 
 def plotHEEnergy(histname, filename):
     print("opening "+path+"rates_hoe_"+filename+".root")
@@ -31,6 +32,9 @@ def plotHEEnergy(histname, filename):
     hist.SetStats(0)
     hist.GetXaxis().SetTitle("ECAL Energy")
     hist.GetYaxis().SetTitle("HCAL Energy")
+    if filename == "NuGun":
+        hist.GetXaxis().SetRangeUser(0, 100)
+        hist.GetYaxis().SetRangeUser(0, 100)
     
     hist.Draw("colz")
 
@@ -108,7 +112,7 @@ def plotHoESame(histname):
     
     ROOT.gPad.SetGridy()
     ROOT.gPad.SetTicks()
-    legend = ROOT.TLegend(0.7, 0.82, 0.9, 0.92)
+    legend = ROOT.TLegend(0.15, 0.77, 0.4, 0.92)
     for f in range(len(file_list)):
         file = ROOT.TFile.Open(path+"rates_hoe_"+file_list[f]+".root")
         hist = file.Get(histname)
@@ -120,7 +124,10 @@ def plotHoESame(histname):
         hist.SetLineColor(colors[f])
         hist.GetXaxis().SetTitle("H/(H+E)")
         hist.SetStats(0)
-        legend.AddEntry(hist, file_list[f], "l")
+        legendentr = file_list[f]
+        if file_list[f][:3] == "LLP":
+            legendentr = "LLP c#tau = "+file_list[f][4:]
+        legend.AddEntry(hist, legendentr, "l")
         if f == 0:
             hist.Draw("h")    
         else:
@@ -160,7 +167,6 @@ def plotvariable(filename):
         del c4
 
 def plotvariablesame():
-    file_list = ["LLP", "QCD", "NuGun"]
     for var in variableplots:
         print("plotting variable "+var)
         c5 = ROOT.TCanvas("%s"%(var), "%s"%(var), XCANVAS, YCANVAS);
@@ -170,10 +176,10 @@ def plotvariablesame():
         ROOT.gPad.SetRightMargin(magicMargins["R"])
         ROOT.gPad.SetGridy()
         ROOT.gPad.SetTicks()
-        if var != "jetEta":
+        if not "Eta" in var:
             ROOT.gPad.SetLogy()
 #        legend = ROOT.TLegend(0.12, 0.82, 0.55, 0.92)
-        legend = ROOT.TLegend(0.7, 0.82, 0.9, 0.92)
+        legend = ROOT.TLegend(0.65, 0.77, 0.9, 0.92)
         
         for f in range(len(file_list)):
             print("opening "+path+"rates_hoe_"+file_list[f]+".root")
@@ -181,11 +187,11 @@ def plotvariablesame():
             varhist = file.Get(var)
             varhist.SetStats(0)
             xtitle = ""
-            if var == "jetEta":
+            if "jetEta" in var:
                 xtitle = "#eta"
-            elif var == "jetET":
+            elif "jetET" in var:
                 xtitle = "E_{T}"
-            elif var == "njets":
+            elif "njets" in var:
                 xtitle = "N_{jets}"
             varhist.SetMarkerStyle(20)
             varhist.SetMarkerSize(1.7)
@@ -197,7 +203,10 @@ def plotvariablesame():
                 varhist.Draw("h")
             else:
                 varhist.Draw("h same")
-            legend.AddEntry(varhist, file_list[f], "l")
+            legendentr = file_list[f]
+            if file_list[f][:3] == "LLP":
+                legendentr = "LLP c#tau = "+file_list[f][4:]
+            legend.AddEntry(varhist, legendentr, "l")
         legend.Draw("same")
         c5.SaveAs(outpath+var+"_All.pdf")
         del c5
@@ -209,15 +218,29 @@ if __name__ == "__main__":
     for f in file_list:
         plotHEEnergy("HEEnergytotal_1x1_emu_AllJet", f)
         plotHEEnergy("HEEnergytotal_3x3_emu_AllJet", f)
-        plotvariable(f)
+        #plotvariable(f)
         plotHoE("HovEtotal_1x1_emu_AllJets", f)
         plotHoE("HovEtotal_3x3_emu_AllJets", f)
         plotHoE("HovEtotal_1x1_emu", f)
         plotHoE("HovEtotal_3x3_emu", f)
-
+        plotHEEnergy("HEEnergytotal_1x1_emu_Leading1", f)
+        plotHEEnergy("HEEnergytotal_3x3_emu_Leading1", f)        
+        plotHEEnergy("HEEnergytotal_1x1_emu_Leading2", f)
+        plotHEEnergy("HEEnergytotal_3x3_emu_Leading2", f)        
+        plotHEEnergy("HEEnergytotal_1x1_emu_Leading3", f)
+        plotHEEnergy("HEEnergytotal_3x3_emu_Leading3", f)
+        plotHEEnergy("HEEnergytotal_1x1_emu_Leading4", f)
+        plotHEEnergy("HEEnergytotal_3x3_emu_Leading4", f)                
 
     plotvariablesame()
     plotHoESame("HovEtotal_1x1_emu_AllJets")
     plotHoESame("HovEtotal_3x3_emu_AllJets")
-    plotHoESame("HovEtotal_1x1_emu")
-    plotHoESame("HovEtotal_3x3_emu")
+    plotHoESame("HovEtotal_1x1_emu_Leading1")
+    plotHoESame("HovEtotal_1x1_emu_Leading2")
+    plotHoESame("HovEtotal_1x1_emu_Leading3")
+    plotHoESame("HovEtotal_1x1_emu_Leading4")
+    plotHoESame("HovEtotal_3x3_emu_Leading1")
+    plotHoESame("HovEtotal_3x3_emu_Leading2")
+    plotHoESame("HovEtotal_3x3_emu_Leading3")
+    plotHoESame("HovEtotal_3x3_emu_Leading4")
+
