@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
   std::string sampleType("");
   if (argc != 3) {
     std::cout << "Usage: rates_hoe.exe [sample type] [path to ntuples]\n" << std::endl;
-    exit(1);
+    //    exit(1);
   }
   else {
     sampleType = argv[1];
@@ -65,6 +65,37 @@ bool isGoodLumiSection(int lumiBlock)
   }
 
   return false;
+}
+
+double DeltaR(double phi1, double phi2, double eta1, double eta2)
+{
+  double phidiff = phi1 - phi2;
+  double etadiff = eta1 - eta2;
+  return sqrt(phidiff*phidiff + etadiff*etadiff);
+}
+
+double etaVal(int ieta) { // calculate eta given ieta
+  double etavl;
+  if (ieta <= -24){
+    etavl = .1695*ieta + 1.9931;
+  }
+  else if (ieta <= -1){
+    etavl = .0875*ieta + .0489;
+  }
+  else if (ieta < 24){
+    etavl = .0875*ieta - .0489;
+  }
+  else {
+    etavl = .1695*ieta - 1.9931;
+  }
+  return etavl;
+}
+double phiVal(int iphi) { // calculate phi given iphi
+  double phiBins=72.;
+  double phivl;
+  phivl=double(iphi)*(2.*TMath::Pi()/phiBins);
+  if (iphi > 36) phivl -= 2.*TMath::Pi();
+  return phivl;
 }
 
 void rates(std::string sampleType, const std::string& inputFileDirectory){
@@ -264,6 +295,15 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   TH2F* energyDepth_Barrel = new TH2F("energyDepth_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F* energyDepth_Endcap = new TH2F("energyDepth_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
 
+  TH2F* energyDepth_Jet1_Barrel = new TH2F("energyDepth_Jet1_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet2_Barrel = new TH2F("energyDepth_Jet2_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet3_Barrel = new TH2F("energyDepth_Jet3_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet4_Barrel = new TH2F("energyDepth_Jet4_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet1_Endcap = new TH2F("energyDepth_Jet1_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet2_Endcap = new TH2F("energyDepth_Jet2_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet3_Endcap = new TH2F("energyDepth_Jet3_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet4_Endcap = new TH2F("energyDepth_Jet4_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
+
   /////////////////////////////////
   // loop through all the entries//
   /////////////////////////////////
@@ -281,6 +321,8 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     if (emuOn){
 
       treeL1TPemu->GetEntry(jentry);
+      treeL1CaloTPemu->GetEntry(jentry);
+      treeL1emu->GetEntry(jentry);
       double tpEt(0.);
       
       for(int i=0; i < l1TPemu_->nHCALTP; i++){
@@ -371,33 +413,56 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       }
 
       //Begin depth profiles part
-
+      
       int nCaloTPemu = l1CaloTPemu_->nHCALTP;
       std::vector<std::vector<double>> hcalTPdepth;
       for (int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
 	{
 	  std::vector<double> depth_vector(7, 0);
-	  depth_vector[0] = l1CaloTPemu_->hcalTPDepth1[TPIt];
-	  depth_vector[1] = l1CaloTPemu_->hcalTPDepth2[TPIt];
-	  depth_vector[2] = l1CaloTPemu_->hcalTPDepth3[TPIt];
-	  depth_vector[3] = l1CaloTPemu_->hcalTPDepth4[TPIt];
-	  depth_vector[4] = l1CaloTPemu_->hcalTPDepth5[TPIt];
-	  depth_vector[5] = l1CaloTPemu_->hcalTPDepth6[TPIt];
-	  depth_vector[6] = l1CaloTPemu_->hcalTPDepth7[TPIt];
+	  depth_vector.at(0) = l1CaloTPemu_->hcalTPDepth1[TPIt];
+	
+	  depth_vector.at(1) = l1CaloTPemu_->hcalTPDepth2[TPIt];
+	  depth_vector.at(2) = l1CaloTPemu_->hcalTPDepth3[TPIt];
+	  depth_vector.at(3) = l1CaloTPemu_->hcalTPDepth4[TPIt];
+	  depth_vector.at(4) = l1CaloTPemu_->hcalTPDepth5[TPIt];
+	  depth_vector.at(5) = l1CaloTPemu_->hcalTPDepth6[TPIt];
+	  depth_vector.at(6) = l1CaloTPemu_->hcalTPDepth7[TPIt];
 
 	  hcalTPdepth.push_back(depth_vector);
 	}
 
-      //int nJetemu = l1emu_->nJets;
-
       int nDepth = 0;
       double tpiEtaemu = 0, tpEtemu = 0, scaledEDepth = 0;
       std::vector<double> depthTPIt;
+      
+      //Match TP to leading jets
+      std::map<int, int> jet_TP_map;
+      int nJetemu = l1emu_->nJets;
+      for(int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
+	{
+	  double minDR = 100;
+	  int minDRjet = -1;
+	  double TPeta = etaVal(l1CaloTPemu_->hcalTPieta[TPIt]);
+	  double TPphi = etaVal(l1CaloTPemu_->hcalTPiphi[TPIt]);
+	  for(int jetIt = 0; jetIt < nJetemu && jetIt < 4; jetIt++)
+	    {
+	      double jetEta = l1emu_->jetEta[jetIt];
+	      double jetPhi = l1emu_->jetPhi[jetIt];
+	      double deltaRIt = DeltaR(jetPhi, TPphi, jetEta, TPeta);
+	      if (deltaRIt < minDR)
+		{
+		  minDR = deltaRIt;
+		  minDRjet = jetIt;
+		}
+	    }
+	  jet_TP_map.insert(std::pair<int, int>(TPIt, minDRjet));
+	}
 
+      //Fill histograms
       for(int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
 	{
 	  nDepth = l1CaloTPemu_->hcalTPnDepths[TPIt];
-	  std::cout << nDepth << std::endl;
+	  
 	  tpiEtaemu = l1CaloTPemu_->hcalTPieta[TPIt];
 	  tpEtemu = l1CaloTPemu_->hcalTPet[TPIt];
 	  depthTPIt = hcalTPdepth[TPIt];
@@ -409,15 +474,22 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	      if (abs(tpiEtaemu) < 16)
 		{
 		  energyDepth_Barrel->Fill(depthIt+1, scaledEDepth);
+		  if (jet_TP_map[TPIt] == 0) energyDepth_Jet1_Barrel->Fill(depthIt+1, scaledEDepth);
+		  else if (jet_TP_map[TPIt] == 1) energyDepth_Jet2_Barrel->Fill(depthIt+1, scaledEDepth);
+		  else if (jet_TP_map[TPIt] == 2) energyDepth_Jet3_Barrel->Fill(depthIt+1, scaledEDepth);
+		  else if (jet_TP_map[TPIt] == 3) energyDepth_Jet4_Barrel->Fill(depthIt+1, scaledEDepth);
 		}
 	      else if (abs(tpiEtaemu) > 16 && abs(tpiEtaemu) < 29)
 		{
 		  energyDepth_Endcap->Fill(depthIt+1, scaledEDepth);
+		  if (jet_TP_map[TPIt] == 0) energyDepth_Jet1_Endcap->Fill(depthIt+1, scaledEDepth);
+		  else if (jet_TP_map[TPIt] == 1) energyDepth_Jet2_Endcap->Fill(depthIt+1, scaledEDepth);
+		  else if (jet_TP_map[TPIt] == 2) energyDepth_Jet3_Endcap->Fill(depthIt+1, scaledEDepth);
+		  else if (jet_TP_map[TPIt] == 3) energyDepth_Jet4_Endcap->Fill(depthIt+1, scaledEDepth);
 		}
 	    }
-	} 
-
-
+	}
+      std::cout << "-------------------------" << std::endl;
       // for each bin fill according to whether our object has a larger corresponding energy
       for(int bin=0; bin<nJetBins; bin++){
         if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
@@ -724,6 +796,16 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 
     energyDepth_Barrel->Write();
     energyDepth_Endcap->Write();
+
+    energyDepth_Jet1_Barrel->Write();
+    energyDepth_Jet2_Barrel->Write();
+    energyDepth_Jet3_Barrel->Write();
+    energyDepth_Jet4_Barrel->Write();
+    energyDepth_Jet1_Endcap->Write();
+    energyDepth_Jet2_Endcap->Write();
+    energyDepth_Jet3_Endcap->Write();
+    energyDepth_Jet4_Endcap->Write();
+
   }
 
   if (hwOn){
