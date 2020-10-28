@@ -67,9 +67,77 @@ bool isGoodLumiSection(int lumiBlock)
   return false;
 }
 
+// this is a correction function for the eta phi value of the intersection of a particle not resulting from the IP       
+// used since the b quark is matched to the TP based on eta phi, but the b quark results from a LLP decay so has a different vertex 
+// from HcalCompareUpgradeChains intersect function https://github.com/gk199/cms-hcal-debug/blob/PulseShape/plugins/HcalCompareUpgradeChains.cc#L961
+std::vector<double> intersect(double vx, double vy,double vz, double px, double py, double pz) {
+  double lightSpeed = 29979245800;
+  double radius = 179; // 130 for calorimeters (ECAL + HCAL)
+  double length = 388; // 300 for calorimeters (ECAL + HCAL)
+  double energy = sqrt(px*px + py*py + pz*pz);
+  // First work out intersection with cylinder (barrel)        
+  double a = (px*px + py*py)*lightSpeed*lightSpeed/(energy*energy);
+  double b = 2*(vx*px + vy*py)*lightSpeed/energy;
+  double c = (vx*vx + vy*vy) - radius*radius;
+  double sqrt_disc = sqrt(b*b - 4*a*c);
+  double tCircle1 = (-b + sqrt_disc)/(2*a);
+  double tCircle2 = (-b - sqrt_disc)/(2*a);
+  // If intersection in the past it doesn't count         
+  if (tCircle1 < 0) tCircle1 = 1E9;
+  if (tCircle2 < 0) tCircle2 = 1E9;
+  // If the intsersection occurs outside the barrel length it doesn't count                       
+  double zPosCircle1 = tCircle1*(pz/energy)*lightSpeed + vz;
+  double zPosCircle2 = tCircle2*(pz/energy)*lightSpeed + vz;
+  if (zPosCircle1 > length) tCircle1 = 1E9;
+  if (zPosCircle2 > length) tCircle2 = 1E9;
+  // Now work out if it intersects the endcap                      
+  double tPlane1 = (length-vz)*energy/(pz*lightSpeed);
+  double tPlane2 = (-length-vz)*energy/(pz*lightSpeed);
+  // If intersection in the past it doesn't count                     
+  if (tPlane1 < 0) tPlane1 = 1E9;
+  if (tPlane2 < 0) tPlane2 = 1E9;
+  double xPosPlane1 = tPlane1*(px/energy)*lightSpeed + vx;
+  double yPosPlane1 = tPlane1*(py/energy)*lightSpeed + vy;
+  double xPosPlane2 = tPlane2*(px/energy)*lightSpeed + vx;
+  double yPosPlane2 = tPlane2*(py/energy)*lightSpeed + vy;
+  // If the intsersection occurs outside the endcap radius it doesn't count     
+  if (sqrt(xPosPlane1*xPosPlane1 + yPosPlane1*yPosPlane1) > radius) tPlane1 = 1E9;
+  if (sqrt(xPosPlane2*xPosPlane2+yPosPlane2*yPosPlane2) > radius) tPlane2 = 1E9;
+  // Find the first intersection                          
+  double tInter = std::min({tCircle1,tCircle2,tPlane1,tPlane2});
+  // Return 1000,1000 if not intersection with barrel or endcap             
+  std::vector<double> etaphi;
+  if (tInter > 1E6)
+    {
+      etaphi.push_back(1000);
+      etaphi.push_back(1000);
+      return etaphi;
+    }
+  // Find position of intersection                          
+  double xPos = tInter*(px/energy)*lightSpeed + vx;
+  double yPos = tInter*(py/energy)*lightSpeed + vy;
+  double zPos = tInter*(pz/energy)*lightSpeed + vz;
+  // Find eta/phi of intersection                          
+  double phi = atan2(yPos,xPos); // return the arc tan in radians                                                                                                                               
+  double theta = acos(zPos/sqrt(xPos*xPos + yPos*yPos + zPos*zPos));
+  double eta = -log(tan(theta/2.));
+  etaphi.push_back(eta);
+  etaphi.push_back(phi);
+  return etaphi;
+}
+  
+
+double deltaPhi(double phi1, double phi2) { 
+  double result = phi1 - phi2;
+  if(fabs(result) > 9999) return result;
+  while (result > TMath::Pi()) result -= 2*TMath::Pi();
+  while (result <= -TMath::Pi()) result += 2*TMath::Pi();
+  return result;
+}
+
 double DeltaR(double phi1, double phi2, double eta1, double eta2)
 {
-  double phidiff = phi1 - phi2;
+  double phidiff = deltaPhi(phi1, phi2);
   double etadiff = eta1 - eta2;
   return sqrt(phidiff*phidiff + etadiff*etadiff);
 }
@@ -97,6 +165,8 @@ double phiVal(int iphi) { // calculate phi given iphi
   if (iphi > 36) phivl -= 2.*TMath::Pi();
   return phivl;
 }
+
+bool sort_jets (int i,int j) { return (i<j); }
 
 void rates(std::string sampleType, const std::string& inputFileDirectory){
   
@@ -143,6 +213,8 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   }
   TChain * eventTree = new TChain("l1EventTree/L1EventTree");
   eventTree->Add(inputFile.c_str());
+  TChain * genTree = new TChain("l1GeneratorTree/L1GenTree");
+  genTree->Add(inputFile.c_str());
 
   // In case you want to include PU info
   // TChain * vtxTree = new TChain("l1RecoTree/RecoTree");
@@ -171,6 +243,8 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   treeL1CaloTPemu->SetBranchAddress("CaloTP", &l1CaloTPemu_);
   L1Analysis::L1AnalysisEventDataFormat    *event_ = new L1Analysis::L1AnalysisEventDataFormat();
   eventTree->SetBranchAddress("Event", &event_);
+  L1Analysis::L1AnalysisGeneratorDataFormat    *generator_ = new L1Analysis::L1AnalysisGeneratorDataFormat();
+  genTree->SetBranchAddress("Generator", &generator_);
   // L1Analysis::L1AnalysisRecoVertexDataFormat    *vtx_ = new L1Analysis::L1AnalysisRecoVertexDataFormat();
   // vtxTree->SetBranchAddress("Vertex", &vtx_);
 
@@ -292,17 +366,27 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   TH1F* hcalTP_hw = new TH1F("hcalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
-  TH2F* energyDepth_Barrel = new TH2F("energyDepth_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_Endcap = new TH2F("energyDepth_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Barrel = new TH2F("energyDepth_Barrel", "Depth profile, inclusive, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Endcap = new TH2F("energyDepth_Endcap", "Depth profile, inclusive, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
-  TH2F* energyDepth_Jet1_Barrel = new TH2F("energyDepth_Jet1_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_Jet2_Barrel = new TH2F("energyDepth_Jet2_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_Jet3_Barrel = new TH2F("energyDepth_Jet3_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_Jet4_Barrel = new TH2F("energyDepth_Jet4_Barrel", "", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_Jet1_Endcap = new TH2F("energyDepth_Jet1_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_Jet2_Endcap = new TH2F("energyDepth_Jet2_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_Jet3_Endcap = new TH2F("energyDepth_Jet3_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_Jet4_Endcap = new TH2F("energyDepth_Jet4_Endcap", "", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet1_Barrel = new TH2F("energyDepth_Jet1_Barrel", "Depth profile, leading jet 1, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet2_Barrel = new TH2F("energyDepth_Jet2_Barrel", "Depth profile, leading jet 2, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet3_Barrel = new TH2F("energyDepth_Jet3_Barrel", "Depth profile, leading jet 3, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet4_Barrel = new TH2F("energyDepth_Jet4_Barrel", "Depth profile, leading jet 4, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet1_Endcap = new TH2F("energyDepth_Jet1_Endcap", "Depth profile, leading jet 1, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet2_Endcap = new TH2F("energyDepth_Jet2_Endcap", "Depth profile, leading jet 2, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet3_Endcap = new TH2F("energyDepth_Jet3_Endcap", "Depth profile, leading jet 3, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_Jet4_Endcap = new TH2F("energyDepth_Jet4_Endcap", "Depth profile, leading jet 4, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+
+  TH2F* energyDepth_genMatchJet1_Barrel = new TH2F("energyDepth_genMatchJet1_Barrel", "Depth profile, leading jet 1, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchJet2_Barrel = new TH2F("energyDepth_genMatchJet2_Barrel", "Depth profile, leading jet 2, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchJet3_Barrel = new TH2F("energyDepth_genMatchJet3_Barrel", "Depth profile, leading jet 3, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchJet4_Barrel = new TH2F("energyDepth_genMatchJet4_Barrel", "Depth profile, leading jet 4, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchJet1_Endcap = new TH2F("energyDepth_genMatchJet1_Endcap", "Depth profile, leading jet 1, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchJet2_Endcap = new TH2F("energyDepth_genMatchJet2_Endcap", "Depth profile, leading jet 2, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchJet3_Endcap = new TH2F("energyDepth_genMatchJet3_Endcap", "Depth profile, leading jet 3, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchJet4_Endcap = new TH2F("energyDepth_genMatchJet4_Endcap", "Depth profile, leading jet 4, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+
 
   /////////////////////////////////
   // loop through all the entries//
@@ -323,6 +407,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       treeL1TPemu->GetEntry(jentry);
       treeL1CaloTPemu->GetEntry(jentry);
       treeL1emu->GetEntry(jentry);
+      genTree->GetEntry(jentry);
       double tpEt(0.);
       
       for(int i=0; i < l1TPemu_->nHCALTP; i++){
@@ -415,6 +500,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       //Begin depth profiles part
       
       int nCaloTPemu = l1CaloTPemu_->nHCALTP;
+      int nJetemu = l1emu_->nJets;
       std::vector<std::vector<double>> hcalTPdepth;
       for (int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
 	{
@@ -430,14 +516,72 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 
 	  hcalTPdepth.push_back(depth_vector);
 	}
+      
+      int nGenPart = generator_->nPart;
+      std::vector<bool> goodGenParticles(nGenPart, false);
+      std::vector<bool> matchedJet(nJetemu, false);
+      int nGoodGen = 0;
+      int nOkayGen = 0;
+      int nHad = 0;
+      int nMatched = 0;
+      for(int genpart = 0; genpart < nGenPart; genpart++)
+      {
+	double Vz = generator_->partVz[genpart];
+       	double Vx = generator_->partVx[genpart];
+	double Vy = generator_->partVy[genpart];
+	//	double Pz = generator_->partPz[genpart];
+       	//double Px = generator_->partPx[genpart];
+	//double Py = generator_->partPy[genpart];
+	double radius = sqrt(Vx*Vx + Vy*Vy);
+	int pdgId = generator_->partId[genpart];
+	bool inEndcap = abs(Vz) > 388 && abs(Vz) < 568 && radius < 568;
+	bool inBarrel = abs(Vz) < 388 && radius > 179 && radius < 295;
+	bool inHCAL = inEndcap || inBarrel;
+	bool isQuarkorGluon = abs(pdgId) <=5  || abs(pdgId) == 21;
+	if (inHCAL && isQuarkorGluon)
+	  {
+	    double minDR = 0.3;
+	    int minDRjet = -1;
+	    //std::vector<double> intersection = intersect(Vx, Vy, Vz, Px, Py, Pz);
+	    double genEta = generator_->partEta[genpart];
+	    double genPhi = generator_->partPhi[genpart];
+	    //double genEta = intersection.at(0);
+	    //double genPhi = intersection.at(1);
+	    for (int jetIt = 0; jetIt < nJetemu; jetIt++)
+	      {
+		double jetEta = l1emu_->jetEta[jetIt];
+		double jetPhi = l1emu_->jetPhi[jetIt];
+		double deltaRIt = DeltaR(jetPhi, genPhi, jetEta, genEta);
 
+		if (deltaRIt < minDR)
+		  {
+		    minDR = deltaRIt;
+		    minDRjet = jetIt;
+		  } 
+	      }
+	    if (minDRjet != -1) 
+	      {
+		matchedJet.at(minDRjet) = true;
+		nMatched += 1;
+	      }
+	    goodGenParticles.at(genpart) = true;
+	    nGoodGen += 1;
+
+	  }
+	  if (inHCAL) nOkayGen += 1;
+	  if (isQuarkorGluon) nHad += 1;
+      }
+      //std::cout << nGoodGen << " " << nJetemu << " " << nMatched << std::endl;
+      //      std::cout << nGoodGen << " " << nOkayGen << " " << nHad << " " << nGenPart << std::endl << "--------------------------" << std::endl;
       int nDepth = 0;
       double tpiEtaemu = 0, tpEtemu = 0, scaledEDepth = 0;
       std::vector<double> depthTPIt;
       
       //Match TP to leading jets
       std::map<int, int> jet_TP_map;
-      int nJetemu = l1emu_->nJets;
+      std::map<int, int> jetgen_TP_map;
+      std::vector<int> four_jet_list;
+
       for(int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
 	{
 	  double minDR = 100;
@@ -455,9 +599,31 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 		  minDRjet = jetIt;
 		}
 	    }
-	  jet_TP_map.insert(std::pair<int, int>(TPIt, minDRjet));
+	  jet_TP_map.insert(std::pair<int, int>(TPIt, minDRjet));	
+	  double minDRgen = 100;
+	  int minDRjetgen = -1;
+	  for(int jetIt = 0; jetIt < nJetemu; jetIt++)
+	    {
+	      double jetEta = l1emu_->jetEta[jetIt];
+	      double jetPhi = l1emu_->jetPhi[jetIt];
+	      double deltaRIt = DeltaR(jetPhi, TPphi, jetEta, TPeta);
+	      if (matchedJet.at(jetIt) && deltaRIt < minDRgen)
+		{
+		  minDRgen = deltaRIt;
+		  minDRjetgen = jetIt;
+		}
+	    }
+	  bool alreadyCounted = false;
+	  for (int j : four_jet_list) if (minDRjetgen == j) alreadyCounted = true;
+	  if (!alreadyCounted && four_jet_list.size() < 4 && minDRjetgen != -1) four_jet_list.push_back(minDRjetgen);
+	  jetgen_TP_map.insert(std::pair<int, int>(TPIt, minDRjetgen));
 	}
 
+      std::sort (four_jet_list.begin(), four_jet_list.end(), sort_jets);
+      
+      //      std::cout << four_jet_list.size() << std::endl;
+      //for (int j : four_jet_list) std::cout << j << std::endl;
+      std::cout << "------------------------" << std::endl;
       //Fill histograms
       for(int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
 	{
@@ -472,24 +638,36 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	    {
 	      scaledEDepth = depthTPIt[depthIt]/tpEtemu;
 	      if (abs(tpiEtaemu) < 16)
-		{
+		{ 
+		  std::cout << "Filling barrel histograms with fjl.size()=" << four_jet_list.size() << " map size=" << jetgen_TP_map.size() << std::endl;
 		  energyDepth_Barrel->Fill(depthIt+1, scaledEDepth);
 		  if (jet_TP_map[TPIt] == 0) energyDepth_Jet1_Barrel->Fill(depthIt+1, scaledEDepth);
 		  else if (jet_TP_map[TPIt] == 1) energyDepth_Jet2_Barrel->Fill(depthIt+1, scaledEDepth);
 		  else if (jet_TP_map[TPIt] == 2) energyDepth_Jet3_Barrel->Fill(depthIt+1, scaledEDepth);
 		  else if (jet_TP_map[TPIt] == 3) energyDepth_Jet4_Barrel->Fill(depthIt+1, scaledEDepth);
+
+		  if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 1 ? four_jet_list.at(0) : -1)) energyDepth_Jet1_Barrel->Fill(depthIt+1, scaledEDepth);
+		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 2 ? four_jet_list.at(1) : -1)) energyDepth_Jet2_Barrel->Fill(depthIt+1, scaledEDepth);
+		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 3 ? four_jet_list.at(2) : -1)) energyDepth_Jet3_Barrel->Fill(depthIt+1, scaledEDepth);
+		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 4 ? four_jet_list.at(3) : -1)) energyDepth_Jet4_Barrel->Fill(depthIt+1, scaledEDepth);
 		}
 	      else if (abs(tpiEtaemu) > 16 && abs(tpiEtaemu) < 29)
 		{
+		  std::cout << "Filling endcap histograms with fjl.size()=" << four_jet_list.size() << " map size=" << jetgen_TP_map.size() << std::endl;
 		  energyDepth_Endcap->Fill(depthIt+1, scaledEDepth);
 		  if (jet_TP_map[TPIt] == 0) energyDepth_Jet1_Endcap->Fill(depthIt+1, scaledEDepth);
 		  else if (jet_TP_map[TPIt] == 1) energyDepth_Jet2_Endcap->Fill(depthIt+1, scaledEDepth);
 		  else if (jet_TP_map[TPIt] == 2) energyDepth_Jet3_Endcap->Fill(depthIt+1, scaledEDepth);
 		  else if (jet_TP_map[TPIt] == 3) energyDepth_Jet4_Endcap->Fill(depthIt+1, scaledEDepth);
+
+		  if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 1 ? four_jet_list.at(0) : -1)) energyDepth_Jet1_Endcap->Fill(depthIt+1, scaledEDepth);
+		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 2 ? four_jet_list.at(1) : -1)) energyDepth_Jet2_Endcap->Fill(depthIt+1, scaledEDepth);
+		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 3 ? four_jet_list.at(2) : -1)) energyDepth_Jet3_Endcap->Fill(depthIt+1, scaledEDepth);
+		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 4 ? four_jet_list.at(3) : -1)) energyDepth_Jet4_Endcap->Fill(depthIt+1, scaledEDepth);
 		}
 	    }
 	}
-      std::cout << "-------------------------" << std::endl;
+
       // for each bin fill according to whether our object has a larger corresponding energy
       for(int bin=0; bin<nJetBins; bin++){
         if( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
@@ -805,6 +983,15 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     energyDepth_Jet2_Endcap->Write();
     energyDepth_Jet3_Endcap->Write();
     energyDepth_Jet4_Endcap->Write();
+
+    energyDepth_genMatchJet1_Barrel->Write();
+    energyDepth_genMatchJet2_Barrel->Write();
+    energyDepth_genMatchJet3_Barrel->Write();
+    energyDepth_genMatchJet4_Barrel->Write();
+    energyDepth_genMatchJet1_Endcap->Write();
+    energyDepth_genMatchJet2_Endcap->Write();
+    energyDepth_genMatchJet3_Endcap->Write();
+    energyDepth_genMatchJet4_Endcap->Write();
 
   }
 
