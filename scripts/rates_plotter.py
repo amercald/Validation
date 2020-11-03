@@ -65,6 +65,7 @@ def plotRatesHoEcut(histname, currentlist):
 #    pad2.SetGridy()
     pad2.SetTicks()
 #    pad2.SetLogy()
+    pad2.SetGrid()
     pad2.Draw()
     
     legend = ROOT.TLegend(0.65, 0.77, 0.9, 0.92)
@@ -92,7 +93,7 @@ def plotRatesHoEcut(histname, currentlist):
             ratiohist.GetYaxis().SetTitle("cut/no cut")
             ratiohist_list.append(ratiohist)
 
-        hist.GetYaxis().SetRangeUser(10**3 - 1, 10**7)
+#        hist.GetYaxis().SetRangeUser(10**3 - 1, 10**7)
         hist.GetYaxis().SetTitle("Rate (Hz)")
         hist.GetXaxis().SetTitle("Jet Threshold")
         legend.AddEntry(hist, filename["legendlabel"], "l")
@@ -121,5 +122,11 @@ def plotRatesHoEcut(histname, currentlist):
 if __name__ == "__main__":
     
     plotRatesHoEcut("singleJetRates_emu", file_list)
+    plotRatesHoEcut("doubleJetRates_emu", file_list)
+    plotRatesHoEcut("tripleJetRates_emu", file_list)
+    plotRatesHoEcut("quadJetRates_emu", file_list)
     plotRatesHoEcut("singleJetRates_emu", file_list_3x3)
+    plotRatesHoEcut("doubleJetRates_emu", file_list_3x3)
+    plotRatesHoEcut("tripleJetRates_emu", file_list_3x3)
+    plotRatesHoEcut("quadJetRates_emu", file_list_3x3)
 

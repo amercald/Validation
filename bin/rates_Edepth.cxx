@@ -521,6 +521,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       
       int nGenPart = generator_->nPart;
       std::vector<bool> goodGenParticles(nGenPart, false);
+      std::vector<double> genParticlesEta, genParticlesPhi;
       std::vector<bool> matchedJet(nJetemu, false);
       int nGoodGen = 0;
       int nOkayGen = 0;
@@ -531,53 +532,55 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	double Vz = generator_->partVz[genpart];
        	double Vx = generator_->partVx[genpart];
 	double Vy = generator_->partVy[genpart];
-	//	double Pz = generator_->partPz[genpart];
-       	//double Px = generator_->partPx[genpart];
-	//double Py = generator_->partPy[genpart];
+	double Pz = generator_->partPz[genpart];
+       	double Px = generator_->partPx[genpart];
+	double Py = generator_->partPy[genpart];
 	double radius = sqrt(Vx*Vx + Vy*Vy);
 	int pdgId = generator_->partId[genpart];
 	bool inEndcap = abs(Vz) > 388 && abs(Vz) < 568 && radius < 568;
 	bool inBarrel = abs(Vz) < 388 && radius > 179 && radius < 295;
 	bool inHCAL = inEndcap || inBarrel;
 	bool isQuarkorGluon = abs(pdgId) <=5  || abs(pdgId) == 21;
-	if (inHCAL && isQuarkorGluon && generator_->partHardProcess[genpart] != 0 )
-	  {
-	    double minDR = 0.3;
-	    int minDRjet = -1;
-	    //std::vector<double> intersection = intersect(Vx, Vy, Vz, Px, Py, Pz);
-	    double genEta = generator_->partEta[genpart];
-	    double genPhi = generator_->partPhi[genpart];
-	    //double genEta = intersection.at(0);
-	    //double genPhi = intersection.at(1);
-	    for (int jetIt = 0; jetIt < nJetemu; jetIt++)
-	      {
-		double jetEta = l1emu_->jetEta[jetIt];
-		double jetPhi = l1emu_->jetPhi[jetIt];
-		double deltaRIt = DeltaR(jetPhi, genPhi, jetEta, genEta);
 
-		if (deltaRIt < minDR)
-		  {
-		    minDR = deltaRIt;
-		    minDRjet = jetIt;
-		  } 
-	      }
-	    if (minDRjet != -1) 
-	      {
-		matchedJet.at(minDRjet) = true;
-		nMatched += 1;
-	      }
+	std::vector<double> intersection = intersect(Vx, Vy, Vz, Px, Py, Pz);
+	genParticlesEta.push_back(intersection.at(0));
+	genParticlesPhi.push_back(intersection.at(1));
+	if (isQuarkorGluon && inHCAL && generator_->partHardProcess[genpart] != 0)
+	  {	    
 	    goodGenParticles.at(genpart) = true;
 	    nGoodGen += 1;
-
 	  }
-	  if (inHCAL) nOkayGen += 1;
-	  if (isQuarkorGluon) nHad += 1;
+	if (inHCAL) nOkayGen += 1;
+	if (isQuarkorGluon) nHad += 1;
       }
-      //std::cout << nGoodGen << " " << nJetemu << " " << nMatched << std::endl;
-      //      std::cout << nGoodGen << " " << nOkayGen << " " << nHad << " " << nGenPart << std::endl << "--------------------------" << std::endl;
+    
+      //match gen particles directly to TPs
+     
+
+      for(int jetIt = 0; jetIt < nJetemu; jetIt++)
+	{
+	  double jetEta = l1emu_->jetEta[jetIt];
+	  double jetPhi = l1emu_->jetPhi[jetIt];
+	  for(int genpart = 0; genpart < nGenPart; genpart++)
+	  {
+	    //double genEta = generator_->partEta[genpart];
+	    //double genPhi = generator_->partPhi[genpart];
+	    double genEta = genParticlesEta.at(genpart);
+	    double genPhi = genParticlesPhi.at(genpart);
+	    double genpartDeltaR = DeltaR(jetPhi, genPhi, jetEta, genEta);
+	    if (goodGenParticles.at(genpart) && genpartDeltaR < 1) 
+	      {
+		matchedJet.at(jetIt) = true;
+	      }
+	  }	
+	  if (matchedJet.at(jetIt)) nMatched += 1;
+	}
+      std::cout << nGoodGen << " " << nJetemu << " " << nMatched << std::endl;
+      std::cout << nGoodGen << " " << nOkayGen << " " << nHad << " " << nGenPart << std::endl << "--------------------------" << std::endl;
       int nDepth = 0;
       double tpiEtaemu = 0, tpEtemu = 0, scaledEDepth = 0;
       std::vector<double> depthTPIt;
+      
       
       //Match TP to leading jets
       std::map<int, int> jet_TP_map;
