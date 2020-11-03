@@ -461,7 +461,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       //std::cout << "nTower emu = " << nTowemu << " and nJet emu = " << nJetemu << std::endl;
       std::map<const TString, std::vector<double> > hadVariablesAllJets;
       std::map<const TString, std::vector<double> > emVariablesAllJets;
-      if (nJetemu ==0) continue;
+      //      if (nJetemu ==0) continue;
       for(uint jetIt=0; jetIt<nJetemu; jetIt++){
 	hJetEt->Fill(l1emu_->jetEt[jetIt]);
 	hJetEta ->Fill(l1emu_->jetEta[jetIt]);
@@ -481,9 +481,9 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	    }
 	    for (int iSeedTowerIEta = -4; iSeedTowerIEta <= 4; ++iSeedTowerIEta){
 	      for (int iSeedTowerIPhi = -4; iSeedTowerIPhi <= 4; ++iSeedTowerIPhi){
-		int wrappedIPhi = (seedTowerIPhi+iSeedTowerIPhi % 72) + 1;
-		//if (wrappedIPhi > 72) wrappedIPhi -= 72;
-		//if (wrappedIPhi < 0) wrappedIPhi += 72;
+		int wrappedIPhi = (seedTowerIPhi+iSeedTowerIPhi) //% 72) + 1;
+		if (wrappedIPhi > 72) wrappedIPhi -= 72;
+		if (wrappedIPhi < 0) wrappedIPhi += 72;
 		if (towEtaemu == seedTowerIEta+iSeedTowerIEta && towPhiemu == wrappedIPhi){
 		  seedTower9x9Em += towEmemu;
 		  seedTower9x9Had += towHademu;
@@ -500,7 +500,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	    }
 	  } // closing min max tower statement
 	} // closing seed tower loop
-	//if ( (seedTowerHad / seedTower5x5Had) <= 0.2) continue; //Calibration fix
+	if ( (seedTowerHad / seedTower5x5Had) <= 0.2) continue; //requirement for throwing out junk jets
 	double HoE_value_1x1 = 0, HoE_value_3x3 = 0;
 	if (seedTowerHad != 0 || seedTowerEm != 0) HoE_value_1x1 = seedTowerHad / (seedTowerHad + seedTowerEm);
 	if (seedTower3x3Had != 0 || seedTower3x3Em != 0) HoE_value_3x3 = seedTower3x3Had / (seedTower3x3Had + seedTower3x3Em);
@@ -602,7 +602,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       HovEtotal_3x3_emu->Fill((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]));
 
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((hadVariablesAllJets["H3OvE3"].at(0))/(hadVariablesAllJets["H3OvE3"].at(0)+emVariablesAllJets["H3OvE3"].at(0)) > 0.9) && ( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( ((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]) > 0.9) && ( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       } 
       for(int bin=0; bin<nJetBins; bin++){
         if( ((hadVariablesAllJets["H3OvE3"][1])/(hadVariablesAllJets["H3OvE3"][1]+emVariablesAllJets["H3OvE3"][1]) > 0.9) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
