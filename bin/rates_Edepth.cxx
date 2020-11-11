@@ -366,6 +366,10 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   TH1F* hcalTP_hw = new TH1F("hcalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
+  TH1F* betagammaLLP = new TH1F("betagammaLLP", ";#beta#gamma; # Entries", 100, 0, 10);
+  //  TH2F* flightlength_eta_Barrel = new TH2F("flightlength_eta_Barrel", ";#eta; # Flight length", 100, -3, 3, 100, 0, 1500);
+  //TH2F* flightlength_eta_Barrel = new TH2F("flightlength_eta_Barrel", ";#eta; # Flight length", 100, -3, 3, 100, 0, 1500);
+
   TH2F* energyDepth_Barrel = new TH2F("energyDepth_Barrel", "Depth profile, inclusive, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F* energyDepth_Endcap = new TH2F("energyDepth_Endcap", "Depth profile, inclusive, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
@@ -525,6 +529,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       int nOkayGen = 0;
       int nHad = 0;
       int nMatched = 0;
+      double LLPcounter = 0;
       for(int genpart = 0; genpart < nGenPart; genpart++)
       {
 	double Vz = generator_->partVz[genpart];
@@ -533,12 +538,16 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	double Pz = generator_->partPz[genpart];
        	double Px = generator_->partPx[genpart];
 	double Py = generator_->partPy[genpart];
+	double energy = generator_->partE[genpart];
 	double radius = sqrt(Vx*Vx + Vy*Vy);
 	int pdgId = generator_->partId[genpart];
 	bool inEndcap = abs(Vz) > 388 && abs(Vz) < 568 && radius < 568;
 	bool inBarrel = abs(Vz) < 388 && radius > 179 && radius < 295;
 	bool inHCAL = inEndcap || inBarrel;
 	bool isQuarkorGluon = abs(pdgId) <=5  || abs(pdgId) == 21;
+
+	bool isLLP = pdgId == 6000113;
+	//if (generator_->partHardProcess[genpart] != 0) std::cout << pdgId << " " << generator_->partParent[genpart] << std::endl;
 
 	std::vector<double> intersection = intersect(Vx, Vy, Vz, Px, Py, Pz);
 	genParticlesEta.push_back(intersection.at(0));
@@ -550,17 +559,25 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	  }
 	if (inHCAL) nOkayGen += 1;
 	if (isQuarkorGluon) nHad += 1;
+
+	if (isLLP)
+	  {
+	    double total_momentum = sqrt(Pz*Pz + Px*Px + Py*Py);
+	    double betagamma = total_momentum / sqrt(energy*energy - total_momentum*total_momentum);
+	    betagammaLLP->Fill(betagamma);
+	    LLPcounter += 1;
+	  }
       }
+      //std::cout << LLPcounter << std::endl;
 
       std::vector<bool> matchedDirectTP(nCaloTPemu, false);
-    
       //match gen particles directly to TPs
       for(int tpIt = 0; tpIt < nCaloTPemu; tpIt++)
        {
 	 for(int genpart = 0; genpart < nGenPart; genpart++)
 	   {	  	  
 	     double TPeta = etaVal(l1CaloTPemu_->hcalTPieta[tpIt]);
-	     double TPphi = etaVal(l1CaloTPemu_->hcalTPiphi[tpIt]);
+	     double TPphi = phiVal(l1CaloTPemu_->hcalTPiphi[tpIt]);
 	     double deltaRIt = DeltaR(genParticlesPhi.at(genpart), TPphi, genParticlesEta.at(genpart), TPeta);
 
 	     if (goodGenParticles.at(genpart) && deltaRIt < 0.5)
@@ -569,8 +586,9 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	       }	       
 	       
 	   }
+	 //	 if (matchedDirectTP.at(tpIt)) std::cout << "Match! " << l1CaloTPemu_->hcalTPieta[tpIt] << " " << l1CaloTPemu_->hcalTPet[tpIt] << std::endl;
        }
-
+      //std::cout << "-----------------" << std::endl;
       //match gen particles to jets, save four leading ones
       
       for(int jetIt = 0; jetIt < nJetemu; jetIt++)
@@ -599,7 +617,6 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       
       
       //Fill histograms
-      std::map<int, int> TP_jet_map;
       for(int jetIt = 0; jetIt < nJetemu && jetIt < 4; jetIt++)
 	{
 	  double jetEta = l1emu_->jetEta[jetIt];
@@ -607,14 +624,14 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	  for(int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
 	    {
 	      double TPeta = etaVal(l1CaloTPemu_->hcalTPieta[TPIt]);
-	      double TPphi = etaVal(l1CaloTPemu_->hcalTPiphi[TPIt]);
+	      double TPphi = phiVal(l1CaloTPemu_->hcalTPiphi[TPIt]);
 	      double deltaRIt = DeltaR(jetPhi, TPphi, jetEta, TPeta);	  
 	      if (deltaRIt < 0.5)
 		{
 		  nDepth = l1CaloTPemu_->hcalTPnDepths[TPIt];
 		  depthTPIt = hcalTPdepth[TPIt];
 		  tpEtemu = l1CaloTPemu_->hcalTPet[TPIt];
-
+		  tpiEtaemu = l1CaloTPemu_->hcalTPieta[TPIt];
 		  if (tpEtemu < 5 || nDepth == 0) continue;
 		  for(int depthIt = 0; depthIt < nDepth; depthIt++)
 		    {
@@ -646,7 +663,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	    }	 
 	}
 
-
+      //plot beta gamma
 
       // for each bin fill according to whether our object has a larger corresponding energy
       for(int bin=0; bin<nJetBins; bin++){
@@ -951,6 +968,8 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     etSumRates_emu->Write();
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
+
+    betagammaLLP->Write();
 
     energyDepth_Barrel->Write();
     energyDepth_Endcap->Write();

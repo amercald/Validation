@@ -104,6 +104,8 @@ int main()
     
     pad1.back()->cd();
     
+    rateHists_def[iplot.second.front()]->GetYaxis()->SetRangeUser(1, 100000000);
+    //    rateHists_def[iplot.second.front()]->GetXaxis()->SetRangeUser(0, 1200);
     rateHists_def[iplot.second.front()]->Draw("hist");
     TLegend *leg = new TLegend(0.55, 0.9 - 0.1*iplot.second.size(), 0.95, 0.93);
     for(auto hist : iplot.second) {
