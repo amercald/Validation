@@ -28,11 +28,20 @@ LLP500_350_dict = {"name" : "350_LLP_500",
 LLP1000_350_dict = {"name" : "350_LLP_1000",
                "color" : ROOT.kBlue,
                "legendlabel" : "LLP c#tau = 1000 mm"}
+LLP500_250_dict = {"name" : "250_LLP_500",
+               "color" : ROOT.kGreen+2,
+               "legendlabel" : "LLP c#tau = 500 mm"}
+LLP1000_250_dict = {"name" : "250_LLP_1000",
+               "color" : ROOT.kBlue,
+               "legendlabel" : "LLP c#tau = 1000 mm"}
+
+
 
 file_list = [LLP500_dict, LLP1000_dict, QCD_dict]#, LLP10000_dict]
 #file_list = [LLP500_dict, QCD_dict]
 file_list_gen = [LLP500_dict, LLP1000_dict]
 file_list_350 = [LLP500_350_dict, LLP1000_350_dict, QCD_dict]
+file_list_250 = [LLP500_250_dict, LLP1000_250_dict, QCD_dict]
 #file_list_350= [LLP500_350_dict, QCD_dict]
 
 def plotDepthProfile(histname):
@@ -80,6 +89,7 @@ def plotGenDepthProfile(currentlist, histname, bghistname_barrel, bghistname_end
     
     if currentlist == file_list: mass = "1000"
     elif currentlist == file_list_350 : mass = "350"
+    elif currentlist == file_list_250 : mass = "250"
     else: mass = "UNKNOWN_MASS"
 
     c1 = ROOT.TCanvas("c1", "c1", XCANVAS, YCANVAS);
@@ -211,6 +221,7 @@ if __name__ == "__main__":
     for g in hist_list_genmatch:
         plotGenDepthProfile(file_list, g, "energyDepth_Barrel", "energyDepth_Endcap")
         plotGenDepthProfile(file_list_350, g, "energyDepth_Barrel", "energyDepth_Endcap")
+        plotGenDepthProfile(file_list_250, g, "energyDepth_Barrel", "energyDepth_Endcap")
 
     plotTPenergy(file_list, "hcalTP_emu")
     plotTPenergy(file_list_350, "hcalTP_emu")
