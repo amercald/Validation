@@ -174,7 +174,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   // htSum bins
   int nHtSumBins = 600;
   float htSumLo = 0.;
-  float htSumHi = 600.;
+  float htSumHi = 1600.;
   float htSumBinWidth = (htSumHi-htSumLo)/nHtSumBins;
 
   // mhtSum bins
@@ -186,7 +186,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   // etSum bins
   int nEtSumBins = 600;
   float etSumLo = 0.;
-  float etSumHi = 600.;
+  float etSumHi = 1600.;
   float etSumBinWidth = (etSumHi-etSumLo)/nEtSumBins;
 
   // metSum bins
@@ -481,7 +481,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	    }
 	    for (int iSeedTowerIEta = -4; iSeedTowerIEta <= 4; ++iSeedTowerIEta){
 	      for (int iSeedTowerIPhi = -4; iSeedTowerIPhi <= 4; ++iSeedTowerIPhi){
-		int wrappedIPhi = (seedTowerIPhi+iSeedTowerIPhi) //% 72) + 1;
+		int wrappedIPhi = (seedTowerIPhi+iSeedTowerIPhi); //% 72) + 1;
 		if (wrappedIPhi > 72) wrappedIPhi -= 72;
 		if (wrappedIPhi < 0) wrappedIPhi += 72;
 		if (towEtaemu == seedTowerIEta+iSeedTowerIEta && towPhiemu == wrappedIPhi){
@@ -600,18 +600,22 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       } // Closing the jet loop
       HovEtotal_1x1_emu->Fill((hadVariablesAllJets["HOvE"][0])/(hadVariablesAllJets["HOvE"][0]+emVariablesAllJets["HOvE"][0]));
       HovEtotal_3x3_emu->Fill((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]));
-
+      std::vector<bool> pass_HoE(4, false);
+      for (unsigned int ijet = 0; ijet < pass_HoE.size(); ijet++)
+	{
+	  if ((hadVariablesAllJets["H3OvE3"].at(ijet))/(hadVariablesAllJets["H3OvE3"].at(ijet)+emVariablesAllJets["H3OvE3"].at(ijet)) > 0.85) pass_HoE.at(ijet) = true;
+	}
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]) > 0.9) && ( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (pass_HoE[0]) && ( (jetEt_1) >= jetLo + (bin*jetBinWidth) ) ) singleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       } 
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((hadVariablesAllJets["H3OvE3"][1])/(hadVariablesAllJets["H3OvE3"][1]+emVariablesAllJets["H3OvE3"][1]) > 0.9) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (pass_HoE[1]) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((hadVariablesAllJets["H3OvE3"][2])/(hadVariablesAllJets["H3OvE3"][2]+emVariablesAllJets["H3OvE3"][2]) > 0.9) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (pass_HoE[2]) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
       for(int bin=0; bin<nJetBins; bin++){
-        if( ((hadVariablesAllJets["H3OvE3"][3])/(hadVariablesAllJets["H3OvE3"][3]+emVariablesAllJets["H3OvE3"][3]) > 0.9) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+        if( (pass_HoE[3]) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
       }  
       for(int bin=0; bin<nEgBins; bin++){
         if( (egEt_1) >= egLo + (bin*egBinWidth) ) singleEgRates_emu->Fill(egLo+(bin*egBinWidth));  //GeV
@@ -646,7 +650,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       } 
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( (pass_HoE[0] || pass_HoE[1] || pass_HoE[2] || pass_HoE[3]) && (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
       }
 
       for(int bin=0; bin<nMhtSumBins; bin++){
@@ -654,7 +658,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       }
 
       for(int bin=0; bin<nEtSumBins; bin++){
-        if( (etSum) >= etSumLo+(bin*etSumBinWidth) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV           
+        if( (pass_HoE[0] || pass_HoE[1] || pass_HoE[2] || pass_HoE[3]) && (etSum) >= etSumLo+(bin*etSumBinWidth) ) etSumRates_emu->Fill(etSumLo+(bin*etSumBinWidth)); //GeV           
       }
 
       for(int bin=0; bin<nMetSumBins; bin++){

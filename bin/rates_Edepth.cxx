@@ -366,6 +366,10 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   TH1F* hcalTP_hw = new TH1F("hcalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
   TH1F* ecalTP_hw = new TH1F("ecalTP_hw", ";TP E_{T}; # Entries", nTpBins, tpLo, tpHi);
 
+  TH1F* betagammaLLP = new TH1F("betagammaLLP", ";#beta#gamma; # Entries", 100, 0, 10);
+  //  TH2F* flightlength_eta_Barrel = new TH2F("flightlength_eta_Barrel", ";#eta; # Flight length", 100, -3, 3, 100, 0, 1500);
+  //TH2F* flightlength_eta_Barrel = new TH2F("flightlength_eta_Barrel", ";#eta; # Flight length", 100, -3, 3, 100, 0, 1500);
+
   TH2F* energyDepth_Barrel = new TH2F("energyDepth_Barrel", "Depth profile, inclusive, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F* energyDepth_Endcap = new TH2F("energyDepth_Endcap", "Depth profile, inclusive, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
@@ -378,14 +382,15 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   TH2F* energyDepth_Jet3_Endcap = new TH2F("energyDepth_Jet3_Endcap", "Depth profile, leading jet 3, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
   TH2F* energyDepth_Jet4_Endcap = new TH2F("energyDepth_Jet4_Endcap", "Depth profile, leading jet 4, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
-  TH2F* energyDepth_genMatchJet1_Barrel = new TH2F("energyDepth_genMatchJet1_Barrel", "Depth profile, leading jet 1, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_genMatchJet2_Barrel = new TH2F("energyDepth_genMatchJet2_Barrel", "Depth profile, leading jet 2, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_genMatchJet3_Barrel = new TH2F("energyDepth_genMatchJet3_Barrel", "Depth profile, leading jet 3, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_genMatchJet4_Barrel = new TH2F("energyDepth_genMatchJet4_Barrel", "Depth profile, leading jet 4, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_genMatchJet1_Endcap = new TH2F("energyDepth_genMatchJet1_Endcap", "Depth profile, leading jet 1, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_genMatchJet2_Endcap = new TH2F("energyDepth_genMatchJet2_Endcap", "Depth profile, leading jet 2, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_genMatchJet3_Endcap = new TH2F("energyDepth_genMatchJet3_Endcap", "Depth profile, leading jet 3, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
-  TH2F* energyDepth_genMatchJet4_Endcap = new TH2F("energyDepth_genMatchJet4_Endcap", "Depth profile, leading jet 4, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchInclusive_Barrel = new TH2F("energyDepth_genMatchInclusive_Barrel", "Depth profile, matched jets, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchInclusive_Endcap = new TH2F("energyDepth_genMatchInclusive_Endcap", "Depth profile, matched jets, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+
+  TH2F* energyDepth_genMatchTP_Barrel = new TH2F("energyDepth_genMatchTP_Barrel", "Depth profile, matched TPs, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+  TH2F* energyDepth_genMatchTP_Endcap = new TH2F("energyDepth_genMatchTP_Endcap", "Depth profile, matched TPs, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+
+  //depth profiles separated into ieta ranges in endcap
+
+  
 
 
   /////////////////////////////////
@@ -505,8 +510,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       for (int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
 	{
 	  std::vector<double> depth_vector(7, 0);
-	  depth_vector.at(0) = l1CaloTPemu_->hcalTPDepth1[TPIt];
-	
+	  depth_vector.at(0) = l1CaloTPemu_->hcalTPDepth1[TPIt];	
 	  depth_vector.at(1) = l1CaloTPemu_->hcalTPDepth2[TPIt];
 	  depth_vector.at(2) = l1CaloTPemu_->hcalTPDepth3[TPIt];
 	  depth_vector.at(3) = l1CaloTPemu_->hcalTPDepth4[TPIt];
@@ -519,154 +523,147 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       
       int nGenPart = generator_->nPart;
       std::vector<bool> goodGenParticles(nGenPart, false);
+      std::vector<double> genParticlesEta, genParticlesPhi;
       std::vector<bool> matchedJet(nJetemu, false);
       int nGoodGen = 0;
       int nOkayGen = 0;
       int nHad = 0;
       int nMatched = 0;
+      double LLPcounter = 0;
       for(int genpart = 0; genpart < nGenPart; genpart++)
       {
 	double Vz = generator_->partVz[genpart];
        	double Vx = generator_->partVx[genpart];
 	double Vy = generator_->partVy[genpart];
-	//	double Pz = generator_->partPz[genpart];
-       	//double Px = generator_->partPx[genpart];
-	//double Py = generator_->partPy[genpart];
+	double Pz = generator_->partPz[genpart];
+       	double Px = generator_->partPx[genpart];
+	double Py = generator_->partPy[genpart];
+	double energy = generator_->partE[genpart];
 	double radius = sqrt(Vx*Vx + Vy*Vy);
 	int pdgId = generator_->partId[genpart];
 	bool inEndcap = abs(Vz) > 388 && abs(Vz) < 568 && radius < 568;
 	bool inBarrel = abs(Vz) < 388 && radius > 179 && radius < 295;
 	bool inHCAL = inEndcap || inBarrel;
 	bool isQuarkorGluon = abs(pdgId) <=5  || abs(pdgId) == 21;
-	if (inHCAL && isQuarkorGluon)
-	  {
-	    double minDR = 0.3;
-	    int minDRjet = -1;
-	    //std::vector<double> intersection = intersect(Vx, Vy, Vz, Px, Py, Pz);
-	    double genEta = generator_->partEta[genpart];
-	    double genPhi = generator_->partPhi[genpart];
-	    //double genEta = intersection.at(0);
-	    //double genPhi = intersection.at(1);
-	    for (int jetIt = 0; jetIt < nJetemu; jetIt++)
-	      {
-		double jetEta = l1emu_->jetEta[jetIt];
-		double jetPhi = l1emu_->jetPhi[jetIt];
-		double deltaRIt = DeltaR(jetPhi, genPhi, jetEta, genEta);
 
-		if (deltaRIt < minDR)
-		  {
-		    minDR = deltaRIt;
-		    minDRjet = jetIt;
-		  } 
-	      }
-	    if (minDRjet != -1) 
-	      {
-		matchedJet.at(minDRjet) = true;
-		nMatched += 1;
-	      }
+	bool isLLP = pdgId == 6000113;
+	//if (generator_->partHardProcess[genpart] != 0) std::cout << pdgId << " " << generator_->partParent[genpart] << std::endl;
+
+	std::vector<double> intersection = intersect(Vx, Vy, Vz, Px, Py, Pz);
+	genParticlesEta.push_back(intersection.at(0));
+	genParticlesPhi.push_back(intersection.at(1));
+	if (isQuarkorGluon && inHCAL && generator_->partHardProcess[genpart] != 0)
+	  {	    
 	    goodGenParticles.at(genpart) = true;
 	    nGoodGen += 1;
-
 	  }
-	  if (inHCAL) nOkayGen += 1;
-	  if (isQuarkorGluon) nHad += 1;
+	if (inHCAL) nOkayGen += 1;
+	if (isQuarkorGluon) nHad += 1;
+
+	if (isLLP)
+	  {
+	    double total_momentum = sqrt(Pz*Pz + Px*Px + Py*Py);
+	    double betagamma = total_momentum / sqrt(energy*energy - total_momentum*total_momentum);
+	    betagammaLLP->Fill(betagamma);
+	    LLPcounter += 1;
+	  }
       }
-      //std::cout << nGoodGen << " " << nJetemu << " " << nMatched << std::endl;
-      //      std::cout << nGoodGen << " " << nOkayGen << " " << nHad << " " << nGenPart << std::endl << "--------------------------" << std::endl;
+      //std::cout << LLPcounter << std::endl;
+
+      std::vector<bool> matchedDirectTP(nCaloTPemu, false);
+      //match gen particles directly to TPs
+      for(int tpIt = 0; tpIt < nCaloTPemu; tpIt++)
+       {
+	 for(int genpart = 0; genpart < nGenPart; genpart++)
+	   {	  	  
+	     double TPeta = etaVal(l1CaloTPemu_->hcalTPieta[tpIt]);
+	     double TPphi = phiVal(l1CaloTPemu_->hcalTPiphi[tpIt]);
+	     double deltaRIt = DeltaR(genParticlesPhi.at(genpart), TPphi, genParticlesEta.at(genpart), TPeta);
+
+	     if (goodGenParticles.at(genpart) && deltaRIt < 0.5)
+	       {
+		 matchedDirectTP.at(tpIt) = true;
+	       }	       
+	       
+	   }
+	 //	 if (matchedDirectTP.at(tpIt)) std::cout << "Match! " << l1CaloTPemu_->hcalTPieta[tpIt] << " " << l1CaloTPemu_->hcalTPet[tpIt] << std::endl;
+       }
+      //std::cout << "-----------------" << std::endl;
+      //match gen particles to jets, save four leading ones
+      
+      for(int jetIt = 0; jetIt < nJetemu; jetIt++)
+	{
+	  double jetEta = l1emu_->jetEta[jetIt];
+	  double jetPhi = l1emu_->jetPhi[jetIt];
+	  for(int genpart = 0; genpart < nGenPart; genpart++)
+	  {
+	    //double genEta = generator_->partEta[genpart];
+	    //double genPhi = generator_->partPhi[genpart];
+	    double genEta = genParticlesEta.at(genpart);
+	    double genPhi = genParticlesPhi.at(genpart);
+	    double genpartDeltaR = DeltaR(jetPhi, genPhi, jetEta, genEta);
+	    if (goodGenParticles.at(genpart) && genpartDeltaR < 0.3) 
+	      {
+		matchedJet.at(jetIt) = true;
+	      }
+	  }	
+	  if (matchedJet.at(jetIt)) nMatched += 1;
+	}
+      //      std::cout << nGoodGen << " " << nJetemu << " " << nMatched << std::endl;
+      //std::cout << nGoodGen << " " << nOkayGen << " " << nHad << " " << nGenPart << std::endl << "--------------------------" << std::endl;
       int nDepth = 0;
       double tpiEtaemu = 0, tpEtemu = 0, scaledEDepth = 0;
       std::vector<double> depthTPIt;
       
-      //Match TP to leading jets
-      std::map<int, int> jet_TP_map;
-      std::map<int, int> jetgen_TP_map;
-      std::vector<int> four_jet_list;
-
-      for(int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
-	{
-	  double minDR = 100;
-	  int minDRjet = -1;
-	  double TPeta = etaVal(l1CaloTPemu_->hcalTPieta[TPIt]);
-	  double TPphi = etaVal(l1CaloTPemu_->hcalTPiphi[TPIt]);
-	  for(int jetIt = 0; jetIt < nJetemu && jetIt < 4; jetIt++)
-	    {
-	      double jetEta = l1emu_->jetEta[jetIt];
-	      double jetPhi = l1emu_->jetPhi[jetIt];
-	      double deltaRIt = DeltaR(jetPhi, TPphi, jetEta, TPeta);
-	      if (deltaRIt < minDR)
-		{
-		  minDR = deltaRIt;
-		  minDRjet = jetIt;
-		}
-	    }
-	  jet_TP_map.insert(std::pair<int, int>(TPIt, minDRjet));	
-	  double minDRgen = 100;
-	  int minDRjetgen = -1;
-	  for(int jetIt = 0; jetIt < nJetemu; jetIt++)
-	    {
-	      double jetEta = l1emu_->jetEta[jetIt];
-	      double jetPhi = l1emu_->jetPhi[jetIt];
-	      double deltaRIt = DeltaR(jetPhi, TPphi, jetEta, TPeta);
-	      if (matchedJet.at(jetIt) && deltaRIt < minDRgen)
-		{
-		  minDRgen = deltaRIt;
-		  minDRjetgen = jetIt;
-		}
-	    }
-	  bool alreadyCounted = false;
-	  for (int j : four_jet_list) if (minDRjetgen == j) alreadyCounted = true;
-	  if (!alreadyCounted && four_jet_list.size() < 4 && minDRjetgen != -1) four_jet_list.push_back(minDRjetgen);
-	  jetgen_TP_map.insert(std::pair<int, int>(TPIt, minDRjetgen));
-	}
-
-      std::sort (four_jet_list.begin(), four_jet_list.end(), sort_jets);
       
-      //      std::cout << four_jet_list.size() << std::endl;
-      //for (int j : four_jet_list) std::cout << j << std::endl;
-      std::cout << "------------------------" << std::endl;
       //Fill histograms
-      for(int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
+      for(int jetIt = 0; jetIt < nJetemu && jetIt < 4; jetIt++)
 	{
-	  nDepth = l1CaloTPemu_->hcalTPnDepths[TPIt];
-	  
-	  tpiEtaemu = l1CaloTPemu_->hcalTPieta[TPIt];
-	  tpEtemu = l1CaloTPemu_->hcalTPet[TPIt];
-	  depthTPIt = hcalTPdepth[TPIt];
-
-	  if (tpEtemu < 10 || nDepth == 0) continue;
-	  for(int depthIt = 0; depthIt < nDepth; depthIt++)
+	  double jetEta = l1emu_->jetEta[jetIt];
+	  double jetPhi = l1emu_->jetPhi[jetIt];
+	  for(int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
 	    {
-	      scaledEDepth = depthTPIt[depthIt]/tpEtemu;
-	      if (abs(tpiEtaemu) < 16)
-		{ 
-		  std::cout << "Filling barrel histograms with fjl.size()=" << four_jet_list.size() << " map size=" << jetgen_TP_map.size() << std::endl;
-		  energyDepth_Barrel->Fill(depthIt+1, scaledEDepth);
-		  if (jet_TP_map[TPIt] == 0) energyDepth_Jet1_Barrel->Fill(depthIt+1, scaledEDepth);
-		  else if (jet_TP_map[TPIt] == 1) energyDepth_Jet2_Barrel->Fill(depthIt+1, scaledEDepth);
-		  else if (jet_TP_map[TPIt] == 2) energyDepth_Jet3_Barrel->Fill(depthIt+1, scaledEDepth);
-		  else if (jet_TP_map[TPIt] == 3) energyDepth_Jet4_Barrel->Fill(depthIt+1, scaledEDepth);
-
-		  if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 1 ? four_jet_list.at(0) : -1)) energyDepth_Jet1_Barrel->Fill(depthIt+1, scaledEDepth);
-		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 2 ? four_jet_list.at(1) : -1)) energyDepth_Jet2_Barrel->Fill(depthIt+1, scaledEDepth);
-		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 3 ? four_jet_list.at(2) : -1)) energyDepth_Jet3_Barrel->Fill(depthIt+1, scaledEDepth);
-		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 4 ? four_jet_list.at(3) : -1)) energyDepth_Jet4_Barrel->Fill(depthIt+1, scaledEDepth);
-		}
-	      else if (abs(tpiEtaemu) > 16 && abs(tpiEtaemu) < 29)
+	      double TPeta = etaVal(l1CaloTPemu_->hcalTPieta[TPIt]);
+	      double TPphi = phiVal(l1CaloTPemu_->hcalTPiphi[TPIt]);
+	      double deltaRIt = DeltaR(jetPhi, TPphi, jetEta, TPeta);	  
+	      if (deltaRIt < 0.5)
 		{
-		  std::cout << "Filling endcap histograms with fjl.size()=" << four_jet_list.size() << " map size=" << jetgen_TP_map.size() << std::endl;
-		  energyDepth_Endcap->Fill(depthIt+1, scaledEDepth);
-		  if (jet_TP_map[TPIt] == 0) energyDepth_Jet1_Endcap->Fill(depthIt+1, scaledEDepth);
-		  else if (jet_TP_map[TPIt] == 1) energyDepth_Jet2_Endcap->Fill(depthIt+1, scaledEDepth);
-		  else if (jet_TP_map[TPIt] == 2) energyDepth_Jet3_Endcap->Fill(depthIt+1, scaledEDepth);
-		  else if (jet_TP_map[TPIt] == 3) energyDepth_Jet4_Endcap->Fill(depthIt+1, scaledEDepth);
+		  nDepth = l1CaloTPemu_->hcalTPnDepths[TPIt];
+		  depthTPIt = hcalTPdepth[TPIt];
+		  tpEtemu = l1CaloTPemu_->hcalTPet[TPIt];
+		  tpiEtaemu = l1CaloTPemu_->hcalTPieta[TPIt];
+		  if (tpEtemu < 5 || nDepth == 0) continue;
+		  for(int depthIt = 0; depthIt < nDepth; depthIt++)
+		    {
+		      scaledEDepth = depthTPIt[depthIt]/tpEtemu;
+		      if (abs(tpiEtaemu) < 16)
+			{
+			  energyDepth_Barrel->Fill(depthIt+1, scaledEDepth);
+			  if (jetIt == 0) energyDepth_Jet1_Barrel->Fill(depthIt+1, scaledEDepth);
+			  else if (jetIt == 1) energyDepth_Jet2_Barrel->Fill(depthIt+1, scaledEDepth);
+			  else if (jetIt == 2) energyDepth_Jet3_Barrel->Fill(depthIt+1, scaledEDepth);
+			  else if (jetIt == 3) energyDepth_Jet4_Barrel->Fill(depthIt+1, scaledEDepth);
 
-		  if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 1 ? four_jet_list.at(0) : -1)) energyDepth_Jet1_Endcap->Fill(depthIt+1, scaledEDepth);
-		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 2 ? four_jet_list.at(1) : -1)) energyDepth_Jet2_Endcap->Fill(depthIt+1, scaledEDepth);
-		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 3 ? four_jet_list.at(2) : -1)) energyDepth_Jet3_Endcap->Fill(depthIt+1, scaledEDepth);
-		  else if (jetgen_TP_map[TPIt] == (four_jet_list.size() >= 4 ? four_jet_list.at(3) : -1)) energyDepth_Jet4_Endcap->Fill(depthIt+1, scaledEDepth);
+			  if (matchedJet.at(jetIt)) energyDepth_genMatchInclusive_Barrel->Fill(depthIt+1, scaledEDepth);
+			  if (matchedDirectTP.at(TPIt)) energyDepth_genMatchTP_Barrel->Fill(depthIt+1, scaledEDepth);
+			} 
+		      else if (abs(tpiEtaemu) > 16 && abs(tpiEtaemu) < 29)
+			{
+			  energyDepth_Endcap->Fill(depthIt+1, scaledEDepth);
+			  if (jetIt == 0) energyDepth_Jet1_Endcap->Fill(depthIt+1, scaledEDepth);
+			  else if (jetIt == 1) energyDepth_Jet2_Endcap->Fill(depthIt+1, scaledEDepth);
+			  else if (jetIt == 2) energyDepth_Jet3_Endcap->Fill(depthIt+1, scaledEDepth);
+			  else if (jetIt == 3) energyDepth_Jet4_Endcap->Fill(depthIt+1, scaledEDepth);
+			  
+			  if (matchedJet.at(jetIt)) energyDepth_genMatchInclusive_Endcap->Fill(depthIt+1, scaledEDepth);
+			  if (matchedDirectTP.at(TPIt)) energyDepth_genMatchTP_Endcap->Fill(depthIt+1, scaledEDepth);
+			}
+		    }
 		}
-	    }
+	    }	 
 	}
+
+      //plot beta gamma
 
       // for each bin fill according to whether our object has a larger corresponding energy
       for(int bin=0; bin<nJetBins; bin++){
@@ -972,6 +969,8 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     metSumRates_emu->Write();
     metHFSumRates_emu->Write();
 
+    betagammaLLP->Write();
+
     energyDepth_Barrel->Write();
     energyDepth_Endcap->Write();
 
@@ -984,14 +983,11 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     energyDepth_Jet3_Endcap->Write();
     energyDepth_Jet4_Endcap->Write();
 
-    energyDepth_genMatchJet1_Barrel->Write();
-    energyDepth_genMatchJet2_Barrel->Write();
-    energyDepth_genMatchJet3_Barrel->Write();
-    energyDepth_genMatchJet4_Barrel->Write();
-    energyDepth_genMatchJet1_Endcap->Write();
-    energyDepth_genMatchJet2_Endcap->Write();
-    energyDepth_genMatchJet3_Endcap->Write();
-    energyDepth_genMatchJet4_Endcap->Write();
+    energyDepth_genMatchInclusive_Barrel->Write();
+    energyDepth_genMatchInclusive_Endcap->Write();
+
+    energyDepth_genMatchTP_Barrel->Write();
+    energyDepth_genMatchTP_Endcap->Write();
 
   }
 
