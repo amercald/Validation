@@ -483,6 +483,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 
       treeL1TPemu->GetEntry(jentry);
       treeL1CaloTPemu->GetEntry(jentry);
+      treeL1Towemu->GetEntry(jentry);
       treeL1emu->GetEntry(jentry);
       genTree->GetEntry(jentry);
       double tpEt(0.);
@@ -578,20 +579,6 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       
       int nCaloTPemu = l1CaloTPemu_->nHCALTP;
       int nJetemu = l1emu_->nJets;
-      std::vector<std::vector<double>> hcalTPdepth;
-      for (int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
-	{
-	  std::vector<double> depth_vector(7, 0);
-	  depth_vector.at(0) = l1CaloTPemu_->hcalTPDepth1[TPIt];	
-	  depth_vector.at(1) = l1CaloTPemu_->hcalTPDepth2[TPIt];
-	  depth_vector.at(2) = l1CaloTPemu_->hcalTPDepth3[TPIt];
-	  depth_vector.at(3) = l1CaloTPemu_->hcalTPDepth4[TPIt];
-	  depth_vector.at(4) = l1CaloTPemu_->hcalTPDepth5[TPIt];
-	  depth_vector.at(5) = l1CaloTPemu_->hcalTPDepth6[TPIt];
-	  depth_vector.at(6) = l1CaloTPemu_->hcalTPDepth7[TPIt];
-
-	  hcalTPdepth.push_back(depth_vector);
-	}
       
       int nGenPart = generator_->nPart;
       std::vector<bool> goodGenParticles(nGenPart, false);
@@ -642,6 +629,21 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       }
       //std::cout << LLPcounter << std::endl;
 
+      std::vector<std::vector<double>> hcalTPdepth;
+      for (int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
+	{
+	  std::vector<double> depth_vector(7, 0);
+	  depth_vector.at(0) = l1CaloTPemu_->hcalTPDepth1[TPIt];
+	  depth_vector.at(1) = l1CaloTPemu_->hcalTPDepth2[TPIt];
+	  depth_vector.at(2) = l1CaloTPemu_->hcalTPDepth3[TPIt];
+	  depth_vector.at(3) = l1CaloTPemu_->hcalTPDepth4[TPIt];
+	  depth_vector.at(4) = l1CaloTPemu_->hcalTPDepth5[TPIt];
+	  depth_vector.at(5) = l1CaloTPemu_->hcalTPDepth6[TPIt];
+	  depth_vector.at(6) = l1CaloTPemu_->hcalTPDepth7[TPIt];
+
+	  hcalTPdepth.push_back(depth_vector);
+	}
+
       std::vector<bool> matchedDirectTP(nCaloTPemu, false);
       //match gen particles directly to TPs
       for(int genpart = 0; genpart < nGenPart; genpart++)
@@ -657,10 +659,9 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 		  matchedDirectTP.at(tpIt) = true;
 		}	       	      
 	    }
-	  //	 if (matchedDirectTP.at(tpIt)) std::cout << "Match! " << l1CaloTPemu_->hcalTPieta[tpIt] << " " << l1CaloTPemu_->hcalTPet[tpIt] << std::endl;
 	}
-      //std::cout << "-----------------" << std::endl;
-      //match gen particles to jets, save four leading ones
+
+      //match gen particles to jets
       
       for(int genpart = 0; genpart < nGenPart; genpart++)
 	{
@@ -692,18 +693,13 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	    {
 	      matchedJet.at(minjet) = true;
 	    }
-
 	}
 
-
-
-      //      std::cout << nGoodGen << " " << nJetemu << " " << nMatched << std::endl;
-      //std::cout << nGoodGen << " " << nOkayGen << " " << nHad << " " << nGenPart << std::endl << "--------------------------" << std::endl;
       int nDepth = 0;
       double tpiEtaemu = 0, tpEtemu = 0, scaledEDepth = 0;
       std::vector<double> depthTPIt;
-      
-      
+      std::vector<bool> usedTP(nCaloTPemu, false);
+
       //Fill histograms
       for(int jetIt = 0; jetIt < nJetemu; jetIt++)
 	{
@@ -714,8 +710,9 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	      double TPeta = etaVal(l1CaloTPemu_->hcalTPieta[TPIt]);
 	      double TPphi = phiVal(l1CaloTPemu_->hcalTPiphi[TPIt]);
 	      double deltaRIt = DeltaR(jetPhi, TPphi, jetEta, TPeta);	  
-	      if (deltaRIt < 0.5)
+	      if (deltaRIt < 0.5 && !usedTP.at(TPIt))
 		{
+		  usedTP.at(TPIt) = true;
 		  nDepth = l1CaloTPemu_->hcalTPnDepths[TPIt];
 		  depthTPIt = hcalTPdepth[TPIt];
 		  tpEtemu = l1CaloTPemu_->hcalTPet[TPIt];
@@ -915,8 +912,9 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       }
       HovEtotal_1x1_emu->Fill((hadVariablesAllJets["HOvE"][0])/(hadVariablesAllJets["HOvE"][0]+emVariablesAllJets["HOvE"][0]));
       HovEtotal_3x3_emu->Fill((hadVariablesAllJets["H3OvE3"][0])/(hadVariablesAllJets["H3OvE3"][0]+emVariablesAllJets["H3OvE3"][0]));
-      std::vector<bool> pass_HoE(4, false);
-      for (unsigned int ijet = 0; ijet < pass_HoE.size(); ijet++)
+      int nPassedJets = hadVariablesAllJets["H3OvE3"].size();
+      std::vector<bool> pass_HoE(std::max(nPassedJets, 4) , false);
+      for (unsigned int ijet = 0; ijet < hadVariablesAllJets["H3OvE3"].size(); ijet++)
 	{
 	  if ((hadVariablesAllJets["H3OvE3"].at(ijet))/(hadVariablesAllJets["H3OvE3"].at(ijet)+emVariablesAllJets["H3OvE3"].at(ijet)) > 0.85) pass_HoE.at(ijet) = true;
 	}
@@ -971,7 +969,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       } 
 
       for(int bin=0; bin<nHtSumBins; bin++){
-        if( (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
+        if( (pass_HoE.at(0) || pass_HoE.at(1) || pass_HoE.at(2) || pass_HoE.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) ) htSumRates_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV
       }
 
       for(int bin=0; bin<nMhtSumBins; bin++){
