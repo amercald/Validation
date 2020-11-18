@@ -9,29 +9,29 @@ ROOT.TH1.AddDirectory(0)
 ROOT.TH2.AddDirectory(0)
 ROOT.TProfile.AddDirectory(0)
 #ROOT.TProfile.SetDefaultSumw2()
-path = "/afs/cern.ch/user/a/amercald/private/HCAL/test/g14_merge/CMSSW_10_6_0/src/HcalTrigger/Validation/depth_studies/"
+path = "/afs/cern.ch/user/a/amercald/private/HCAL/test/g14_merge/CMSSW_10_6_0/src/HcalTrigger/Validation/result_rates/"
 QCD_dict = {"name" : "QCD",
             "color" : ROOT.kBlack,
             "legendlabel" : " QCD"}
-LLP500_dict = {"name" : "LLP_500",
+LLP500_dict = {"name" : "LLP_MH1000_Ctau500",
                "color" : ROOT.kGreen+2,
                "legendlabel" : "LLP c#tau = 500 mm"}
-LLP1000_dict = {"name" : "LLP_1000",
+LLP1000_dict = {"name" : "LLP_MH1000_Ctau1000",
                "color" : ROOT.kBlue,
                "legendlabel" : "LLP c#tau = 1000 mm"}
 LLP10000_dict = {"name" : "LLP_10000",
                "color" : ROOT.kRed,
                "legendlabel" : "LLP c#tau = 10000 mm"}
-LLP500_350_dict = {"name" : "350_LLP_500",
+LLP500_350_dict = {"name" : "LLP_MH350_Ctau500",
                "color" : ROOT.kGreen+2,
                "legendlabel" : "LLP c#tau = 500 mm"}
-LLP1000_350_dict = {"name" : "350_LLP_1000",
+LLP1000_350_dict = {"name" : "LLP_MH350_Ctau1000",
                "color" : ROOT.kBlue,
                "legendlabel" : "LLP c#tau = 1000 mm"}
-LLP500_250_dict = {"name" : "250_LLP_500",
+LLP500_250_dict = {"name" : "LLP_MH250_Ctau500",
                "color" : ROOT.kGreen+2,
                "legendlabel" : "LLP c#tau = 500 mm"}
-LLP1000_250_dict = {"name" : "250_LLP_1000",
+LLP1000_250_dict = {"name" : "LLP_MH250_Ctau1000",
                "color" : ROOT.kBlue,
                "legendlabel" : "LLP c#tau = 1000 mm"}
 
@@ -59,8 +59,8 @@ def plotDepthProfile(histname):
     print("plotting "+histname)
 
     for filename in file_list:
-#        print("using rates_depth_"+filename["nam+".root"+" with color "+str(filename["color"]))
-        file = ROOT.TFile.Open(path+"rates_depth_"+filename["name"]+".root")
+#        print("using rates_"+filename["nam+".root"+" with color "+str(filename["color"]))
+        file = ROOT.TFile.Open(path+"rates_"+filename["name"]+".root")
         hist = file.Get(histname)
         profilehist = hist.ProfileX()
         profilehist.SetLineColor(filename["color"])
@@ -105,8 +105,8 @@ def plotGenDepthProfile(currentlist, histname, bghistname_barrel, bghistname_end
     print("plotting "+histname)
 
     for filename in currentlist:
-#        print("using rates_depth_"+filename["nam+".root"+" with color "+str(filename["color"]))
-        file = ROOT.TFile.Open(path+"rates_depth_"+filename["name"]+".root")
+#        print("using rates_"+filename["nam+".root"+" with color "+str(filename["color"]))
+        file = ROOT.TFile.Open(path+"rates_"+filename["name"]+".root")
         if filename["name"] == "QCD":
             if "Endcap" in histname: adjustedhistname = bghistname_endcap
             elif "Barrel" in histname: adjustedhistname = bghistname_barrel
@@ -156,7 +156,7 @@ def plotTPenergy(currentlist, histname):
     legend = ROOT.TLegend(0.65, 0.77, 0.9, 0.92)
     histcounter = 0
     for filename in currentlist:
-        file = ROOT.TFile.Open(path+"rates_depth_"+filename["name"]+".root")
+        file = ROOT.TFile.Open(path+"rates_"+filename["name"]+".root")
         hist = file.Get(histname)
         hist.SetLineColor(filename["color"])
         hist.SetMarkerColor(filename["color"])
@@ -193,7 +193,7 @@ def plotBetaGamma(currentlist, histname):
     histcounter = 0
     for filename in currentlist:
         if filename == QCD_dict: continue
-        file = ROOT.TFile.Open(path+"rates_depth_"+filename["name"]+".root")
+        file = ROOT.TFile.Open(path+"rates_"+filename["name"]+".root")
         hist = file.Get(histname)
         hist.SetLineColor(filename["color"])
         hist.SetMarkerColor(filename["color"])

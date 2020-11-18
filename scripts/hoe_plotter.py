@@ -7,20 +7,20 @@ ROOT.gROOT.SetBatch(True)
 ROOT.TH1.AddDirectory(0)
 ROOT.TH1.SetDefaultSumw2()
 ROOT.TProfile.SetDefaultSumw2()
-path = "/afs/cern.ch/user/a/amercald/private/HCAL/test/g14_merge/CMSSW_10_6_0/src/HcalTrigger/Validation/hoe_studies/"
+path = "/afs/cern.ch/user/a/amercald/private/HCAL/test/g14_merge/CMSSW_10_6_0/src/HcalTrigger/Validation/result_rates/"
 #variableplots = ["jetEta", "jetET", "jetEtaLeading1", "jetEtaLeading2", "jetEtaLeading3", "jetEtaLeading4", "njets", "jetETLeading1", "jetETLeading2", "jetETLeading3", "jetETLeading4"]
 variableplots = ["hJet1x1ov5x5"]
 
 QCD_dict = {"filename" : "QCD", "color" : ROOT.kBlack, "legendlabel" : "QCD"}
 
-LLP_m1000_500_dict = {"filename" : "LLP_500", "color" : ROOT.kRed, "legendlabel" : "LLP c#tau = 500 mm"}
-LLP_m1000_1000_dict = {"filename" : "LLP_1000", "color" : ROOT.kBlue, "legendlabel" : "LLP c#tau = 1000 mm"}
+LLP_m1000_500_dict = {"filename" : "LLP_MH1000_Ctau500", "color" : ROOT.kRed, "legendlabel" : "LLP c#tau = 500 mm"}
+LLP_m1000_1000_dict = {"filename" : "LLP_MH1000_Ctau1000", "color" : ROOT.kBlue, "legendlabel" : "LLP c#tau = 1000 mm"}
 
-LLP_m350_500_dict = {"filename" : "350_LLP_500", "color" : ROOT.kRed, "legendlabel" : "LLP c#tau = 500 mm"}
-LLP_m350_1000_dict = {"filename" : "350_LLP_1000", "color" : ROOT.kBlue, "legendlabel" : "LLP c#tau = 1000 mm"}
+LLP_m350_500_dict = {"filename" : "LLP_MH350_Ctau500", "color" : ROOT.kRed, "legendlabel" : "LLP c#tau = 500 mm"}
+LLP_m350_1000_dict = {"filename" : "LLP_MH350_Ctau1000", "color" : ROOT.kBlue, "legendlabel" : "LLP c#tau = 1000 mm"}
 
-LLP_m250_500_dict = {"filename" : "250_LLP_500", "color" : ROOT.kRed, "legendlabel" : "LLP c#tau = 500 mm"}
-LLP_m250_1000_dict = {"filename" : "250_LLP_1000", "color" : ROOT.kBlue, "legendlabel" : "LLP c#tau = 1000 mm"}
+LLP_m250_500_dict = {"filename" : "LLP_MH250_Ctau500", "color" : ROOT.kRed, "legendlabel" : "LLP c#tau = 500 mm"}
+LLP_m250_1000_dict = {"filename" : "LLP_MH250_Ctau1000", "color" : ROOT.kBlue, "legendlabel" : "LLP c#tau = 1000 mm"}
 
 file_list_1000 = { "list" : [QCD_dict, LLP_m1000_500_dict, LLP_m1000_1000_dict], "name" : "MH_1000"}
 file_list_350 = { "list" : [QCD_dict, LLP_m350_500_dict, LLP_m350_1000_dict], "name" : "MH_350"}
@@ -30,8 +30,8 @@ colors = [ROOT.kRed, ROOT.kBlue, ROOT.kBlack]
 hist_dict = {}
 
 def plotHEEnergy(histname, filename):
-    print("opening "+path+"rates_hoe_"+filename["filename"]+".root")
-    file = ROOT.TFile.Open(path+"rates_hoe_"+filename["filename"]+".root")
+    print("opening "+path+"rates_"+filename["filename"]+".root")
+    file = ROOT.TFile.Open(path+"rates_"+filename["filename"]+".root")
     print("getting "+histname)
     hist = file.Get(histname)
     HCALhist = hist.ProjectionX()
@@ -97,7 +97,7 @@ def plotHEEnergy(histname, filename):
     c3.SaveAs(outpath+histname+"_HCAL_"+filename["filename"]+".pdf")
 
 def plotHoE(histname, filename):
-    file = ROOT.TFile.Open(path+"rates_hoe_"+filename["filename"]+".root")
+    file = ROOT.TFile.Open(path+"rates_"+filename["filename"]+".root")
     hist = file.Get(histname)
     c1 = ROOT.TCanvas("%s"%(histname), "%s"%(histname), XCANVAS, YCANVAS);
     ROOT.gPad.SetLogy()
@@ -120,7 +120,7 @@ def plotHoE(histname, filename):
     c1.SaveAs(outpath+histname+"_"+filename["filename"]+".pdf")
 
 def plotHoEShape(histname, filename):
-    file = ROOT.TFile.Open(path+"rates_hoe_"+filename+".root")
+    file = ROOT.TFile.Open(path+"rates_"+filename+".root")
     hist = file.Get(histname)
     c1 = ROOT.TCanvas("%s"%(histname), "%s"%(histname), XCANVAS, YCANVAS);
     ROOT.gPad.SetLogy()
@@ -159,7 +159,7 @@ def plotHoESame(histname, file_list_dict):
     legend = ROOT.TLegend(0.15, 0.71, 0.45, 0.92)
     hcounter = 0
     for f in file_list:
-        file = ROOT.TFile.Open(path+"rates_hoe_"+f["filename"]+".root")
+        file = ROOT.TFile.Open(path+"rates_"+f["filename"]+".root")
         hist = file.Get(histname)
     
         hist.SetMarkerStyle(20)
@@ -169,7 +169,7 @@ def plotHoESame(histname, file_list_dict):
         hist.SetLineColor(f["color"])
         hist.GetXaxis().SetTitle("H/(H+E)")
         hist.SetStats(0)
-        hist.GetYaxis().SetRangeUser(1, 10**3)
+#        hist.GetYaxis().SetRangeUser(1, 10**3)
 #        hist.Rebin(2)
         legendentr = f["legendlabel"]
         legend.AddEntry(hist, legendentr, "l")
@@ -185,7 +185,7 @@ def plotHoESame(histname, file_list_dict):
 
     
 def plotvariable(filename):
-    file = ROOT.TFile.Open(path+"rates_hoe_"+filename+".root")
+    file = ROOT.TFile.Open(path+"rates_"+filename+".root")
     for var in variableplots:
         print("plotting variable "+var)
         c4 = ROOT.TCanvas("%s"%(var), "%s"%(var), XCANVAS, YCANVAS);
@@ -234,7 +234,7 @@ def plotvariablesame(file_list_dict):
         
         hcounter = 0
         for f in file_list:
-            file = ROOT.TFile.Open(path+"rates_hoe_"+f["filename"]+".root")
+            file = ROOT.TFile.Open(path+"rates_"+f["filename"]+".root")
             varhist = file.Get(var)
             varhist.SetStats(0)
             xtitle = ""
@@ -278,7 +278,7 @@ def plotETRatio(histname, histcutname):
     ROOT.gPad.SetTicks()
     legend = ROOT.TLegend(0.15, 0.77, 0.4, 0.92)
     for f in range(len(file_list)):
-        file = ROOT.TFile.Open(path+"rates_hoe_"+file_list[f]+".root")
+        file = ROOT.TFile.Open(path+"rates_"+file_list[f]+".root")
         histnocut = file.Get(histname)    
         hist = file.Get(histcutname)
         hist.Divide(histnocut)
@@ -305,8 +305,8 @@ def plotETRatio(histname, histcutname):
     
 
 def plotHoEvsET(histname, filename):
-    print("opening "+path+"rates_hoe_"+filename["filename"]+".root")
-    file = ROOT.TFile.Open(path+"rates_hoe_"+filename["filename"]+".root")
+    print("opening "+path+"rates_"+filename["filename"]+".root")
+    file = ROOT.TFile.Open(path+"rates_"+filename["filename"]+".root")
     hist = file.Get(histname)
 
     c1 = ROOT.TCanvas("%s"%(histname), "%s"%(histname), XCANVAS, YCANVAS);
@@ -434,18 +434,21 @@ if __name__ == "__main__":
 #    draw_hist_dict()
     for l in file_list_list:
         plotvariablesame(l)
-#        plotHoESame("HovEtotal_1x1_emu")
-#        plotHoESame("HovEtotal_3x3_emu")
-        plotHoESame("HovEtotal_1x1_emu_AllJets", l)
-        plotHoESame("HovEtotal_3x3_emu_AllJets", l)
         plotHoESame("HovEtotal_1x1_emu_Leading1", l)
         plotHoESame("HovEtotal_1x1_emu_Leading2", l)
         plotHoESame("HovEtotal_1x1_emu_Leading3", l)
         plotHoESame("HovEtotal_1x1_emu_Leading4", l)
+        plotHoESame("HovEtotal_1x1_emu_GenMatchedJets", l)
         plotHoESame("HovEtotal_3x3_emu_Leading1", l)
         plotHoESame("HovEtotal_3x3_emu_Leading2", l)
         plotHoESame("HovEtotal_3x3_emu_Leading3", l)
         plotHoESame("HovEtotal_3x3_emu_Leading4", l)
+        plotHoESame("HovEtotal_3x3_emu_GenMatchedJets", l)
+
+#        plotHoESame("HovEtotal_1x1_emu")
+#        plotHoESame("HovEtotal_3x3_emu")
+#        plotHoESame("HovEtotal_1x1_emu_AllJets", l)
+#        plotHoESame("HovEtotal_3x3_emu_AllJets", l)   
 
 #    plotETRatio("jetETLeading1", "jetET_cutHoE_1x1_Leading1")
 #    plotETRatio("jetETLeading1", "jetET_cutHoE_3x3_Leading1")
