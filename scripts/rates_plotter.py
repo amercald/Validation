@@ -38,8 +38,8 @@ cut099_3x3_dict = {"name" : "rate_099_3x3",
                "color" : ROOT.kMagenta,
                "legendlabel" : "H/(H+E) > 0.99"}
 
-file_list = [nocut_dict, cut09_dict, cut085_dict, cut095_dict]
-file_list_3x3 = [nocut_dict, cut09_3x3_dict, cut085_3x3_dict, cut095_3x3_dict]
+file_list = [nocut_dict, cut085_dict, cut09_dict, cut095_dict]
+file_list_3x3 = [nocut_dict, cut085_3x3_dict, cut09_3x3_dict, cut095_3x3_dict]
 
 
 def plotRatesHoEcut(histname, xrange, currentlist):
@@ -116,7 +116,7 @@ def plotRatesHoEcut(histname, xrange, currentlist):
             ihist.GetYaxis().SetTitleSize(0.075)
             ihist.GetYaxis().SetLabelSize(0.066)
             ihist.GetXaxis().SetTitleSize(0.07)
-            ihist.GetXaxis().SetLabelSize(0.06)
+            ihist.GetXaxis().SetLabelSize(0.066)
             ihist.GetXaxis().SetTitle("")
             ihist.Draw("hist")
         else:
