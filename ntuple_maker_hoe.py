@@ -21,12 +21,13 @@ process.load('Configuration.StandardSequences.EndOfProcess_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000)
+    input = cms.untracked.int32(-1)
 )
 
 # Input source
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('/store/user/lowang/LLP_htobbbb/step1/MH-350_MFF-160_CTau-1000mm_step1.root'),
+#    fileNames = cms.untracked.vstring('/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_2.root'),
+fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_2.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_4.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_5.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_7.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_8.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_9.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -36,7 +37,7 @@ process.options = cms.untracked.PSet(
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('l1Ntuple nevts:10'),
+    annotation = cms.untracked.string('l1Ntuple nevts:-1'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
@@ -67,10 +68,12 @@ from L1Trigger.Configuration.customiseReEmul import L1TReEmulFromRAWsimHcalTP
 process = L1TReEmulFromRAWsimHcalTP(process)
 
 # Automatic addition of the customisation function from L1Trigger.L1TNtuples.customiseL1Ntuple
-from L1Trigger.L1TNtuples.customiseL1Ntuple import L1NtupleRAWEMU 
+from L1Trigger.L1TNtuples.customiseL1Ntuple import L1NtupleRAWEMU
+from L1Trigger.L1TNtuples.customiseL1Ntuple import L1NtupleGEN 
 
 #call to customisation function L1NtupleRAWEMU imported from L1Trigger.L1TNtuples.customiseL1Ntuple
 process = L1NtupleRAWEMU(process)
+process = L1NtupleGEN(process)
 
 # End of customisation functions
 
