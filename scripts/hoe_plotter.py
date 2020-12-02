@@ -9,9 +9,10 @@ ROOT.TH1.SetDefaultSumw2()
 ROOT.TProfile.SetDefaultSumw2()
 path = "/afs/cern.ch/user/a/amercald/private/HCAL/test/g14_merge/CMSSW_10_6_0/src/HcalTrigger/Validation/result_rates/"
 #variableplots = ["jetEta", "jetET", "jetEtaLeading1", "jetEtaLeading2", "jetEtaLeading3", "jetEtaLeading4", "njets", "jetETLeading1", "jetETLeading2", "jetETLeading3", "jetETLeading4"]
-variableplots = ["hJet1x1ov5x5"]
+variableplots = ["hJet1x1ov5x5", "DeltaRLLP", "nGenParticles"]
 
 QCD_dict = {"filename" : "QCD", "color" : ROOT.kBlack, "legendlabel" : "QCD"}
+NuGun_dict = {"filename" : "NuGun", "color" : ROOT.kBlack+1, "legendlabel" : "NuGun"}
 
 LLP_m1000_500_dict = {"filename" : "LLP_MH1000_Ctau500", "color" : ROOT.kRed, "legendlabel" : "LLP c#tau = 500 mm"}
 LLP_m1000_1000_dict = {"filename" : "LLP_MH1000_Ctau1000", "color" : ROOT.kBlue, "legendlabel" : "LLP c#tau = 1000 mm"}
@@ -143,6 +144,51 @@ def plotHoEShape(histname, filename):
     c1.SaveAs(outpath+histname+"_"+filename+"_Normalized.pdf")
 
 
+def plotHoEGenSame(histname, bghistname, file_list_dict):
+
+    file_list = file_list_dict["list"]
+    mh = file_list_dict["name"]
+    c1 = ROOT.TCanvas("%s"%(histname), "%s"%(histname), XCANVAS, YCANVAS);
+    ROOT.gPad.SetLogy()
+    ROOT.gPad.SetTopMargin(magicMargins["T"])
+    ROOT.gPad.SetBottomMargin(magicMargins["B"])
+    ROOT.gPad.SetLeftMargin(magicMargins["L"])
+    ROOT.gPad.SetRightMargin(magicMargins["R"])
+    
+    #ROOT.gPad.SetGridy()
+    ROOT.gPad.SetTicks()
+    legend = ROOT.TLegend(0.15, 0.71, 0.45, 0.92)
+    hcounter = 0
+    for f in file_list:
+        file = ROOT.TFile.Open(path+"rates_"+f["filename"]+".root")
+        if "qcd" in f["filename"].lower():
+            hist = file.Get(bghistname)
+        else:
+            hist = file.Get(histname)
+    
+        hist.SetMarkerStyle(20)
+        hist.SetMarkerSize(1.7)
+        hist.SetLineWidth(3)
+        hist.SetMarkerColor(f["color"])
+        hist.SetLineColor(f["color"])
+        hist.GetXaxis().SetTitle("H/(H+E)")
+        hist.SetStats(0)
+        hist.GetYaxis().SetRangeUser(1, 10**4)
+        #hist.GetXaxis().SetRangeUser(0, 1)
+#        hist.Rebin(2)
+        legendentr = f["legendlabel"]
+        legend.AddEntry(hist, legendentr, "l")
+        if hcounter == 0:
+            hist.Draw("h")    
+        else:
+            hist.Draw("h same")
+        hcounter += 1
+    legend.SetBorderSize(0)
+    legend.SetTextSize(0.035)
+    legend.Draw("same")
+    c1.SaveAs(outpath+histname+"_"+mh+"_All.pdf")
+
+
 def plotHoESame(histname, file_list_dict):
 
     file_list = file_list_dict["list"]
@@ -169,7 +215,8 @@ def plotHoESame(histname, file_list_dict):
         hist.SetLineColor(f["color"])
         hist.GetXaxis().SetTitle("H/(H+E)")
         hist.SetStats(0)
-#        hist.GetYaxis().SetRangeUser(1, 10**3)
+        hist.GetYaxis().SetRangeUser(1, 10**4)
+       # hist.GetXaxis().SetRangeUser(0, 1)
 #        hist.Rebin(2)
         legendentr = f["legendlabel"]
         legend.AddEntry(hist, legendentr, "l")
@@ -404,15 +451,15 @@ if __name__ == "__main__":
 #            plotHoE("HovEtotal_3x3_emu", f)
 #            plotHoEShape("HovEtotal_1x1_emu", f)
 #            plotHoEShape("HovEtotal_3x3_emu", f)
-            plotHEEnergy("HEEnergytotal_1x1_emu_Leading1", f)
-            plotHEEnergy("HEEnergytotal_3x3_emu_Leading1", f)        
-            plotHEEnergy("HEEnergytotal_1x1_emu_Leading2", f)
-            plotHEEnergy("HEEnergytotal_3x3_emu_Leading2", f)        
-            plotHEEnergy("HEEnergytotal_1x1_emu_Leading3", f)
-            plotHEEnergy("HEEnergytotal_3x3_emu_Leading3", f)
-            plotHEEnergy("HEEnergytotal_1x1_emu_Leading4", f)
-            plotHEEnergy("HEEnergytotal_3x3_emu_Leading4", f)                
-            
+            #plotHEEnergy("HEEnergytotal_1x1_emu_Leading1", f)
+            #plotHEEnergy("HEEnergytotal_3x3_emu_Leading1", f)        
+#            plotHEEnergy("HEEnergytotal_1x1_emu_Leading2", f)
+#            plotHEEnergy("HEEnergytotal_3x3_emu_Leading2", f)        
+#            plotHEEnergy("HEEnergytotal_1x1_emu_Leading3", f)
+#            plotHEEnergy("HEEnergytotal_3x3_emu_Leading3", f)
+#            plotHEEnergy("HEEnergytotal_1x1_emu_Leading4", f)
+ #           plotHEEnergy("HEEnergytotal_3x3_emu_Leading4", f)                
+#            
             #plotHoE("HovEtotal_1x1_emu_Leading1", f)
             #plotHoE("HovEtotal_3x3_emu_Leading1", f)        
             #plotHoE("HovEtotal_1x1_emu_Leading2", f)
@@ -437,16 +484,28 @@ if __name__ == "__main__":
         plotHoESame("HovEtotal_1x1_emu_Leading1", l)
         plotHoESame("HovEtotal_1x1_emu_Leading2", l)
         plotHoESame("HovEtotal_1x1_emu_Leading3", l)
-        plotHoESame("HovEtotal_1x1_emu_Leading4", l)
-        plotHoESame("HovEtotal_1x1_emu_GenMatchedJets", l)
+        plotHoESame("HovEtotal_1x1_emu_Leading4", l)        
+        plotHoESame("HovEtotalLog_1x1_emu", l)
+        plotHoEGenSame("HovEtotal_1x1_emu_GenMatchedJets", "HovEtotal_1x1_emu", l)
+        plotHoEGenSame("HovEtotal_1x1_emu_GenMatchedJets_Barrel", "HovEtotal_1x1_emu_Barrel", l)
+        plotHoEGenSame("HovEtotal_1x1_emu_GenMatchedJets_Endcap", "HovEtotal_1x1_emu_Endcap", l)
         plotHoESame("HovEtotal_3x3_emu_Leading1", l)
         plotHoESame("HovEtotal_3x3_emu_Leading2", l)
         plotHoESame("HovEtotal_3x3_emu_Leading3", l)
         plotHoESame("HovEtotal_3x3_emu_Leading4", l)
-        plotHoESame("HovEtotal_3x3_emu_GenMatchedJets", l)
+        plotHoESame("HovEtotalLog_3x3_emu", l)
+        plotHoEGenSame("HovEtotal_3x3_emu_GenMatchedJets", "HovEtotal_3x3_emu", l)
+        plotHoEGenSame("HovEtotal_3x3_emu_GenMatchedJets_Barrel", "HovEtotal_3x3_emu_Barrel", l)
+        plotHoEGenSame("HovEtotal_3x3_emu_GenMatchedJets_Endcap", "HovEtotal_3x3_emu_Endcap", l)
 
-#        plotHoESame("HovEtotal_1x1_emu")
-#        plotHoESame("HovEtotal_3x3_emu")
+        plotHoESame("HovEtotal_1x1_emu", l)
+        plotHoESame("HovEtotal_3x3_emu", l)
+        plotHoESame("HovEtotal_1x1_emu_Barrel", l)
+        plotHoESame("HovEtotal_3x3_emu_Barrel", l)
+        plotHoESame("HovEtotal_1x1_emu_Endcap", l)
+        plotHoESame("HovEtotal_3x3_emu_Endcap", l)
+
+
 #        plotHoESame("HovEtotal_1x1_emu_AllJets", l)
 #        plotHoESame("HovEtotal_3x3_emu_AllJets", l)   
 
