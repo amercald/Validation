@@ -1,4 +1,4 @@
-//Script for calculating rate histograms
+//Script for calculating %rate histograms
 // Originally from Aaron Bundock
 #include "TMath.h"
 #include "TFile.h"
@@ -381,6 +381,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
   TH1F * hJetETLeading4 = new TH1F("jetETLeading4", "E_{T} for leading jet 4", 14, 0, 700);
 
   TH1F* betagammaLLP = new TH1F("betagammaLLP", ";#beta#gamma; # Entries", 100, 0, 10);
+  TH1F* h_nGenParticles = new TH1F("nGenParticles", ";# Generator Particles; # Entries", 11, -0.5, 10.5);
   //  TH2F* flightlength_eta_Barrel = new TH2F("flightlength_eta_Barrel", ";#eta; # Flight length", 100, -3, 3, 100, 0, 1500);
    //TH2F* flightlength_eta_Barrel = new TH2F("flightlength_eta_Barrel", ";#eta; # Flight length", 100, -3, 3, 100, 0, 1500);
 
@@ -397,38 +398,54 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 
   TH1D * hJet1x1ov5x5 = new TH1D("hJet1x1ov5x5 ", "1#times1/5#times5", 50, 0, 1);
 
-  TH1F* HovEtotal_1x1_emu = new TH1F("HovEtotal_1x1_emu", "HCAL energy / ECAL+HCAL energy for Jets (1x1);H/E;# Entries", 50,0,1);
-  TH1F* HovEtotal_3x3_emu = new TH1F("HovEtotal_3x3_emu", "HCAL energy / ECAL+HCAL energy for Jets (3x3);H/E;# Entries", 50,0,1);
+  TH1F* HovEtotal_1x1_emu = new TH1F("HovEtotal_1x1_emu", "HCAL energy / ECAL+HCAL energy for Jets (1x1);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu = new TH1F("HovEtotal_3x3_emu", "HCAL energy / ECAL+HCAL energy for Jets (3x3);H/E;# Entries", 24,0,1.2);
 
-  TH1F* HovEtotal_1x1_emu_Leading1 = new TH1F("HovEtotal_1x1_emu_Leading1", "HCAL energy / ECAL+HCAL energy for Leading Jet 1 (1x1);H/E;# Entries", 20,0,1);
-  TH1F* HovEtotal_1x1_emu_Leading2 = new TH1F("HovEtotal_1x1_emu_Leading2", "HCAL energy / ECAL+HCAL energy for Leading Jet 2 (1x1);H/E;# Entries", 20,0,1);
-  TH1F* HovEtotal_1x1_emu_Leading3 = new TH1F("HovEtotal_1x1_emu_Leading3", "HCAL energy / ECAL+HCAL energy for Leading Jet 3 (1x1);H/E;# Entries", 20,0,1);
-  TH1F* HovEtotal_1x1_emu_Leading4 = new TH1F("HovEtotal_1x1_emu_Leading4", "HCAL energy / ECAL+HCAL energy for Leading Jet 4 (1x1);H/E;# Entries", 20,0,1);
-  TH1F* HovEtotal_3x3_emu_Leading1 = new TH1F("HovEtotal_3x3_emu_Leading1", "HCAL energy / ECAL+HCAL energy for Leading Jet 1 (3x3);H/E;# Entries", 20,0,1);
-  TH1F* HovEtotal_3x3_emu_Leading2 = new TH1F("HovEtotal_3x3_emu_Leading2", "HCAL energy / ECAL+HCAL energy for Leading Jet 2 (3x3);H/E;# Entries", 20,0,1);
-  TH1F* HovEtotal_3x3_emu_Leading3 = new TH1F("HovEtotal_3x3_emu_Leading3", "HCAL energy / ECAL+HCAL energy for Leading Jet 3 (3x3);H/E;# Entries", 20,0,1);
-  TH1F* HovEtotal_3x3_emu_Leading4 = new TH1F("HovEtotal_3x3_emu_Leading4", "HCAL energy / ECAL+HCAL energy for Leading Jet 4 (3x3);H/E;# Entries", 20,0,1);
-  //  TH1F* HovEtotal_5x5_emu_Leading1 = new TH1F("HovEtotal_5x5_emu_Leading1", "HCAL energy / ECAL+HCAL energy for Leading Jet 1 (5x5);H/E;# Entries", 20,0,1);
-  //TH1F* HovEtotal_5x5_emu_Leading2 = new TH1F("HovEtotal_5x5_emu_Leading2", "HCAL energy / ECAL+HCAL energy for Leading Jet 2 (5x5);H/E;# Entries", 20,0,1);
-  //TH1F* HovEtotal_5x5_emu_Leading3 = new TH1F("HovEtotal_5x5_emu_Leading3", "HCAL energy / ECAL+HCAL energy for Leading Jet 3 (5x5);H/E;# Entries", 20,0,1);
+  TH1F* HovEtotal_1x1_emu_Barrel = new TH1F("HovEtotal_1x1_emu_Barrel", "HCAL energy / ECAL+HCAL energy for Jets (1x1) in Barrel;H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu_Barrel = new TH1F("HovEtotal_3x3_emu_Barrel", "HCAL energy / ECAL+HCAL energy for Jets (3x3) in Barrel;H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_1x1_emu_Endcap = new TH1F("HovEtotal_1x1_emu_Endcap", "HCAL energy / ECAL+HCAL energy for Jets (1x1) in Endcap;H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu_Endcap = new TH1F("HovEtotal_3x3_emu_Endcap", "HCAL energy / ECAL+HCAL energy for Jets (3x3) in Endcap;H/E;# Entries", 24,0,1.2);
+
+
+  TH1F* HovEtotalLog_1x1_emu = new TH1F("HovEtotalLog_1x1_emu", "log(H/E) for Jets (1x1);log_{10}(H/E);# Entries", 40,-10,10);
+  TH1F* HovEtotalLog_3x3_emu = new TH1F("HovEtotalLog_3x3_emu", "log(H/E) for Jets (1x1);log_{10}(H/E) (3x3);H/E;# Entries", 40,-10,10);
+
+
+  TH1F* HovEtotal_1x1_emu_Leading1 = new TH1F("HovEtotal_1x1_emu_Leading1", "HCAL energy / ECAL+HCAL energy for Leading Jet 1 (1x1);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_1x1_emu_Leading2 = new TH1F("HovEtotal_1x1_emu_Leading2", "HCAL energy / ECAL+HCAL energy for Leading Jet 2 (1x1);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_1x1_emu_Leading3 = new TH1F("HovEtotal_1x1_emu_Leading3", "HCAL energy / ECAL+HCAL energy for Leading Jet 3 (1x1);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_1x1_emu_Leading4 = new TH1F("HovEtotal_1x1_emu_Leading4", "HCAL energy / ECAL+HCAL energy for Leading Jet 4 (1x1);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu_Leading1 = new TH1F("HovEtotal_3x3_emu_Leading1", "HCAL energy / ECAL+HCAL energy for Leading Jet 1 (3x3);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu_Leading2 = new TH1F("HovEtotal_3x3_emu_Leading2", "HCAL energy / ECAL+HCAL energy for Leading Jet 2 (3x3);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu_Leading3 = new TH1F("HovEtotal_3x3_emu_Leading3", "HCAL energy / ECAL+HCAL energy for Leading Jet 3 (3x3);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu_Leading4 = new TH1F("HovEtotal_3x3_emu_Leading4", "HCAL energy / ECAL+HCAL energy for Leading Jet 4 (3x3);H/E;# Entries", 24,0,1.2);
+  //  TH1F* HovEtotal_5x5_emu_Leading1 = new TH1F("HovEtotal_5x5_emu_Leading1", "HCAL energy / ECAL+HCAL energy for Leading Jet 1 (5x5);H/E;# Entries", 24,0,1.2);
+  //TH1F* HovEtotal_5x5_emu_Leading2 = new TH1F("HovEtotal_5x5_emu_Leading2", "HCAL energy / ECAL+HCAL energy for Leading Jet 2 (5x5);H/E;# Entries", 24,0,1.2);
+  //TH1F* HovEtotal_5x5_emu_Leading3 = new TH1F("HovEtotal_5x5_emu_Leading3", "HCAL energy / ECAL+HCAL energy for Leading Jet 3 (5x5);H/E;# Entries", 24,0,1.2);
   //TH1F* HovEtotal_5x5_emu_Leading4 = new TH1F("HovEtotal_5x5_emu_
 
-  TH1F* HovEtotal_1x1_emu_GenMatchedJets = new TH1F("HovEtotal_1x1_emu_GenMatchedJets", "HCAL energy / ECAL+HCAL energy for Gen Matched Jets 1 (1x1);H/E;# Entries", 20,0,1);
-  TH1F* HovEtotal_3x3_emu_GenMatchedJets = new TH1F("HovEtotal_3x3_emu_GenMatchedJets", "HCAL energy / ECAL+HCAL energy for Gen Matched Jets 1 (1x1);H/E;# Entries", 20,0,1);
+  TH1F* HovEtotal_1x1_emu_GenMatchedJets = new TH1F("HovEtotal_1x1_emu_GenMatchedJets", "HCAL energy / ECAL+HCAL energy for Gen Matched Jets 1 (1x1);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu_GenMatchedJets = new TH1F("HovEtotal_3x3_emu_GenMatchedJets", "HCAL energy / ECAL+HCAL energy for Gen Matched Jets 1 (1x1);H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_1x1_emu_GenMatchedJets_Barrel = new TH1F("HovEtotal_1x1_emu_GenMatchedJets_Barrel", "HCAL energy / ECAL+HCAL energy for Gen Matched Jets 1 (1x1) in Barrel;H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu_GenMatchedJets_Barrel = new TH1F("HovEtotal_3x3_emu_GenMatchedJets_Barrel", "HCAL energy / ECAL+HCAL energy for Gen Matched Jets 1 (1x1) in Barrel;H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_1x1_emu_GenMatchedJets_Endcap = new TH1F("HovEtotal_1x1_emu_GenMatchedJets_Endcap", "HCAL energy / ECAL+HCAL energy for Gen Matched Jets 1 (1x1) in Endcap;H/E;# Entries", 24,0,1.2);
+  TH1F* HovEtotal_3x3_emu_GenMatchedJets_Endcap = new TH1F("HovEtotal_3x3_emu_GenMatchedJets_Endcap", "HCAL energy / ECAL+HCAL energy for Gen Matched Jets 1 (1x1) in Endcap;H/E;# Entries", 24,0,1.2);
+
+
 
   //Binning in ET
-  TH2F* HovEtotal_1x1_ET_emu_Leading1 = new TH2F("HovEtotal_1x1_ET_emu_Leading1", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 1 (1x1);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  TH2F* HovEtotal_1x1_ET_emu_Leading2 = new TH2F("HovEtotal_1x1_ET_emu_Leading2", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 2 (1x1);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  TH2F* HovEtotal_1x1_ET_emu_Leading3 = new TH2F("HovEtotal_1x1_ET_emu_Leading3", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 3 (1x1);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  TH2F* HovEtotal_1x1_ET_emu_Leading4 = new TH2F("HovEtotal_1x1_ET_emu_Leading4", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 4 (1x1);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  TH2F* HovEtotal_3x3_ET_emu_Leading1 = new TH2F("HovEtotal_3x3_ET_emu_Leading1", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 1 (3x3);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  TH2F* HovEtotal_3x3_ET_emu_Leading2 = new TH2F("HovEtotal_3x3_ET_emu_Leading2", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 2 (3x3);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  TH2F* HovEtotal_3x3_ET_emu_Leading3 = new TH2F("HovEtotal_3x3_ET_emu_Leading3", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 3 (3x3);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  TH2F* HovEtotal_3x3_ET_emu_Leading4 = new TH2F("HovEtotal_3x3_ET_emu_Leading4", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 4 (3x3);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  //  TH2F* HovEtotal_5x5_ETemu_Leading1 = new TH2F("HovEtotal_5x5_ETemu_Leading1", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 1 (5x5);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  //TH2F* HovEtotal_5x5_ETemu_Leading2 = new TH2F("HovEtotal_5x5_ETemu_Leading2", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 2 (5x5);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  //TH2F* HovEtotal_5x5_ETemu_Leading3 = new TH2F("HovEtotal_5x5_ETemu_Leading3", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 3 (5x5);H/E;# Entries", 10, 0, 500, 20, 0, 1);
-  //TH2F* HovEtotal_5x5_ETemu_Leading4 = new TH2F("HovEtotal_5x5_ETemu_Leading4", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 4 (5x5);H/E;# Entries", 10, 0, 500, 20, 0, 1);
+  TH2F* HovEtotal_1x1_ET_emu_Leading1 = new TH2F("HovEtotal_1x1_ET_emu_Leading1", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 1 (1x1);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  TH2F* HovEtotal_1x1_ET_emu_Leading2 = new TH2F("HovEtotal_1x1_ET_emu_Leading2", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 2 (1x1);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  TH2F* HovEtotal_1x1_ET_emu_Leading3 = new TH2F("HovEtotal_1x1_ET_emu_Leading3", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 3 (1x1);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  TH2F* HovEtotal_1x1_ET_emu_Leading4 = new TH2F("HovEtotal_1x1_ET_emu_Leading4", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 4 (1x1);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  TH2F* HovEtotal_3x3_ET_emu_Leading1 = new TH2F("HovEtotal_3x3_ET_emu_Leading1", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 1 (3x3);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  TH2F* HovEtotal_3x3_ET_emu_Leading2 = new TH2F("HovEtotal_3x3_ET_emu_Leading2", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 2 (3x3);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  TH2F* HovEtotal_3x3_ET_emu_Leading3 = new TH2F("HovEtotal_3x3_ET_emu_Leading3", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 3 (3x3);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  TH2F* HovEtotal_3x3_ET_emu_Leading4 = new TH2F("HovEtotal_3x3_ET_emu_Leading4", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 4 (3x3);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  //  TH2F* HovEtotal_5x5_ETemu_Leading1 = new TH2F("HovEtotal_5x5_ETemu_Leading1", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 1 (5x5);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  //TH2F* HovEtotal_5x5_ETemu_Leading2 = new TH2F("HovEtotal_5x5_ETemu_Leading2", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 2 (5x5);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  //TH2F* HovEtotal_5x5_ETemu_Leading3 = new TH2F("HovEtotal_5x5_ETemu_Leading3", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 3 (5x5);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
+  //TH2F* HovEtotal_5x5_ETemu_Leading4 = new TH2F("HovEtotal_5x5_ETemu_Leading4", "HCAL energy / ECAL+HCAL energy vs ET for Leading Jet 4 (5x5);H/E;# Entries", 10, 0, 500, 24, 0, 1.2);
   
 
   TH2F* HEEnergytotal_1x1_emu_Leading1 = new TH2F("HEEnergytotal_1x1_emu_Leading1", "HCAL vs ECAL Energy for Leading 1", 100, 0, 300, 100, 0, 300);
@@ -593,6 +610,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
       int nOkayGen = 0;
       int nHad = 0;
       int nMatched = 0;
+
       double LLPcounter = 0;
       for(int genpart = 0; genpart < nGenPart; genpart++)
       {
@@ -616,7 +634,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	std::vector<double> intersection = intersect(Vx, Vy, Vz, Px, Py, Pz);
 	genParticlesEta.push_back(intersection.at(0));
 	genParticlesPhi.push_back(intersection.at(1));
-	if (isQuarkorGluon && inHCAL && generator_->partHardProcess[genpart] != 0 && abs(intersection.at(0)) < 2.4)
+	if (isQuarkorGluon && inHCAL && generator_->partHardProcess[genpart] != 0)// && abs(intersection.at(0)) < 2.4)
 	  {	    
 	    goodGenParticles.at(genpart) = true;
 	    nGoodGen += 1;
@@ -633,6 +651,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	  }
       }
       //std::cout << LLPcounter << std::endl;
+      h_nGenParticles->Fill(nGoodGen);
 
       std::vector<std::vector<double>> hcalTPdepth;
       for (int TPIt = 0; TPIt < nCaloTPemu; TPIt++)
@@ -668,36 +687,25 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 
       //match gen particles to jets
       
-      for(int genpart = 0; genpart < nGenPart; genpart++)
+      for(int jetIt = 0; jetIt < nJetemu; jetIt++)
 	{
-	  if (!goodGenParticles.at(genpart)) continue;
-	  //double genEta = generator_->partEta[genpart];
-	  //double genPhi = generator_->partPhi[genpart];
-	  double genEta = genParticlesEta.at(genpart);
-	  double genPhi = genParticlesPhi.at(genpart);
-	  double minDR = 100;
-	  int minjet = -1;
-	  for(int jetIt = 0; jetIt < nJetemu; jetIt++)
+	  double jetEta = l1emu_->jetEta[jetIt];
+	  double jetPhi = l1emu_->jetPhi[jetIt];
+
+	  for(int genpart = 0; genpart < nGenPart; genpart++)
 	    {
-	      double jetEta = l1emu_->jetEta[jetIt];
-	      double jetPhi = l1emu_->jetPhi[jetIt];
+	      //if (!goodGenParticles.at(genpart)) continue;
+	      double genEta = generator_->partEta[genpart];
+	      double genPhi = generator_->partPhi[genpart];
+	      //double genEta = genParticlesEta.at(genpart);
+	      //double genPhi = genParticlesPhi.at(genpart);
 	      double genpartDeltaR = DeltaR(jetPhi, genPhi, jetEta, genEta);
-	      if (genpartDeltaR < minDR)
-		{
-		  minDR = genpartDeltaR;		
-		}	      
-	      if (genpartDeltaR < 0.5) 
+	      if (nGoodGen > 0 && genpartDeltaR < 0.2 && generator_->partId[genpart] == 6000113) 
 		{
 		  matchedJet.at(jetIt) = true;
-		  minjet = jetIt;
 		}
-	      if (matchedJet.at(jetIt)) nMatched += 1;
 	    }
-	  if (minDR < 100) DeltaRLLP->Fill(minDR);
-	  if (minDR < 0.5 && minjet != -1) 
-	    {
-	      matchedJet.at(minjet) = true;
-	    }
+	  if (matchedJet.at(jetIt)) nMatched += 1;
 	}
 
       int nDepth = 0;
@@ -834,16 +842,17 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 		}
 	      }
 	    }
-	  } // closing min max tower statement
+	  } // closing m%in max tower statement
 	} // closing seed tower loop
 	
-	hJet1x1ov5x5->Fill(seedTowerHad / seedTower5x5Had);
+	if (jetIt < 4) hJet1x1ov5x5->Fill(seedTowerHad / seedTower5x5Had);
 
-	if ( (seedTowerHad / seedTower5x5Had) > 0.2)  //requirement for throwing out junk jets
+	if ( (seedTowerHad / seedTower5x5Had) > 0.1 && seedTower3x3Had > 30)  //requirement for throwing out junk jets
 	  {
 	
 	    jetVariablesAllJets["ET"].push_back(l1emu_->jetEt[jetIt]);
 	    jetVariablesAllJets["eta"].push_back(l1emu_->jetEta[jetIt]);
+	    jetVariablesAllJets["ieta"].push_back(seedTowerIEta);
 	    
 	    hadVariablesAllJets["HOvE"].push_back(seedTowerHad);
 	    hadVariablesAllJets["HOvE3"].push_back(seedTowerHad);
@@ -859,10 +868,11 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	    
 	    nPassedJets++;
 	    
-	    if (matchedJet.at(jetIt))
+	    if (matchedJet.at(jetIt) && nGoodGen > 0)
 	      {
 		jetVariablesGenMatchedJets["ET"].push_back(l1emu_->jetEt[jetIt]);
 		jetVariablesGenMatchedJets["eta"].push_back(l1emu_->jetEta[jetIt]);
+		jetVariablesGenMatchedJets["ieta"].push_back(seedTowerIEta);
 		
 		hadVariablesGenMatchedJets["HOvE"].push_back(seedTowerHad);
 		hadVariablesGenMatchedJets["HOvE3"].push_back(seedTowerHad);
@@ -901,19 +911,50 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 	        
 	  HovE_1x1_ET_hists.at(pjet)->Fill(jetVariablesAllJets["ET"].at(pjet), hadVariablesAllJets["HOvE"].at(pjet) / (hadVariablesAllJets["HOvE"].at(pjet) + emVariablesAllJets["HOvE"].at(pjet)) );
 	  HovE_3x3_ET_hists.at(pjet)->Fill(jetVariablesAllJets["ET"].at(pjet), hadVariablesAllJets["H3OvE3"].at(pjet) / (hadVariablesAllJets["H3OvE3"].at(pjet) + emVariablesAllJets["H3OvE3"].at(pjet)) );
+
+	  HovEtotal_1x1_emu->Fill(hadVariablesAllJets["HOvE"].at(pjet) / (hadVariablesAllJets["HOvE"].at(pjet) + emVariablesAllJets["HOvE"].at(pjet)));
+	  HovEtotal_3x3_emu->Fill(hadVariablesAllJets["H3OvE3"].at(pjet) / (hadVariablesAllJets["H3OvE3"].at(pjet) + emVariablesAllJets["H3OvE3"].at(pjet)));
+	  double logHovE = emVariablesAllJets["HOvE"].at(pjet) > 0 ? log10(hadVariablesAllJets["HOvE"].at(pjet)/emVariablesAllJets["HOvE"].at(pjet)) : 10;
+	  double logHovE_3x3 = emVariablesAllJets["H3OvE3"].at(pjet) > 0 ? log10(hadVariablesAllJets["H3OvE3"].at(pjet)/emVariablesAllJets["H3OvE3"].at(pjet)) : 10;
+	 
+	  HovEtotalLog_1x1_emu->Fill(logHovE);
+	  HovEtotalLog_3x3_emu->Fill(logHovE_3x3);
+	  if (abs(jetVariablesAllJets["ieta"].at(pjet)) < 16) 
+	    {
+	      HovEtotal_1x1_emu_Barrel->Fill(hadVariablesAllJets["HOvE"].at(pjet) / (hadVariablesAllJets["HOvE"].at(pjet) + emVariablesAllJets["HOvE"].at(pjet)));
+	      HovEtotal_3x3_emu_Barrel->Fill(hadVariablesAllJets["H3OvE3"].at(pjet) / (hadVariablesAllJets["H3OvE3"].at(pjet) + emVariablesAllJets["H3OvE3"].at(pjet)));
+	    }
+	  else if (abs(jetVariablesAllJets["ieta"].at(pjet)) > 16 && abs(jetVariablesAllJets["ieta"].at(pjet)) < 29) 
+	    {
+	      HovEtotal_1x1_emu_Endcap->Fill(hadVariablesAllJets["HOvE"].at(pjet) / (hadVariablesAllJets["HOvE"].at(pjet) + emVariablesAllJets["HOvE"].at(pjet)));
+	      HovEtotal_3x3_emu_Endcap->Fill(hadVariablesAllJets["H3OvE3"].at(pjet) / (hadVariablesAllJets["H3OvE3"].at(pjet) + emVariablesAllJets["H3OvE3"].at(pjet)));
+	    }
+
 	}
 
       for (int pgjet = 0; pgjet < nPassedGenMatchedJets && pgjet < 4; pgjet++)
 	{
+	  //std::cout << hadVariablesGenMatchedJets["HOvE"].at(pgjet) / (hadVariablesGenMatchedJets["HOvE"].at(pgjet) + emVariablesGenMatchedJets["HOvE"].at(pgjet)) << std::endl;
 	  HovEtotal_1x1_emu_GenMatchedJets->Fill(hadVariablesGenMatchedJets["HOvE"].at(pgjet) / (hadVariablesGenMatchedJets["HOvE"].at(pgjet) + emVariablesGenMatchedJets["HOvE"].at(pgjet)));
-	  HovEtotal_1x1_emu_GenMatchedJets->Fill(hadVariablesGenMatchedJets["H3OvE3"].at(pgjet) / (hadVariablesGenMatchedJets["H3OvE3"].at(pgjet) + emVariablesGenMatchedJets["H3OvE3"].at(pgjet)));	  
+	  HovEtotal_3x3_emu_GenMatchedJets->Fill(hadVariablesGenMatchedJets["H3OvE3"].at(pgjet) / (hadVariablesGenMatchedJets["H3OvE3"].at(pgjet) + emVariablesGenMatchedJets["H3OvE3"].at(pgjet)));
+	  if (abs(jetVariablesGenMatchedJets["ieta"].at(pgjet)) < 16) 
+	    {
+	      HovEtotal_1x1_emu_GenMatchedJets_Barrel->Fill(hadVariablesGenMatchedJets["HOvE"].at(pgjet) / (hadVariablesGenMatchedJets["HOvE"].at(pgjet) + emVariablesGenMatchedJets["HOvE"].at(pgjet)));
+	      HovEtotal_3x3_emu_GenMatchedJets_Barrel->Fill(hadVariablesGenMatchedJets["H3OvE3"].at(pgjet) / (hadVariablesGenMatchedJets["H3OvE3"].at(pgjet) + emVariablesGenMatchedJets["H3OvE3"].at(pgjet)));
+	    }
+	  else if (abs(jetVariablesGenMatchedJets["ieta"].at(pgjet)) > 16 && abs(jetVariablesGenMatchedJets["ieta"].at(pgjet)) < 29) 
+	    {
+	      HovEtotal_1x1_emu_GenMatchedJets_Endcap->Fill(hadVariablesGenMatchedJets["HOvE"].at(pgjet) / (hadVariablesGenMatchedJets["HOvE"].at(pgjet) + emVariablesGenMatchedJets["HOvE"].at(pgjet)));
+	      HovEtotal_3x3_emu_GenMatchedJets_Endcap->Fill(hadVariablesGenMatchedJets["H3OvE3"].at(pgjet) / (hadVariablesGenMatchedJets["H3OvE3"].at(pgjet) + emVariablesGenMatchedJets["H3OvE3"].at(pgjet)));
+	    }
 	}
+      //      if ( nPassedGenMatchedJets > 0) std::cout << "--------------" << std::endl;
 
       //      std::cout << nPassedJets << " " << nPassedGenMatchedJets << std::endl;
       std::vector<bool> pass_HoE(std::max(nPassedJets, 4) , false);
       for (unsigned int ijet = 0; ijet < hadVariablesAllJets["H3OvE3"].size(); ijet++)
 	{
-	  if ((hadVariablesAllJets["H3OvE3"].at(ijet))/(hadVariablesAllJets["H3OvE3"].at(ijet)+emVariablesAllJets["H3OvE3"].at(ijet)) > 0.85) pass_HoE.at(ijet) = true;
+	  if ((hadVariablesAllJets["H3OvE3"].at(ijet))/(hadVariablesAllJets["H3OvE3"].at(ijet)+emVariablesAllJets["H3OvE3"].at(ijet)) > -2) pass_HoE.at(ijet) = true;
 	}
 
       // for each bin fill according to whether our object has a larger corresponding energy
@@ -1236,6 +1277,7 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 
     betagammaLLP->Write();
     DeltaRLLP->Write();
+    h_nGenParticles->Write();
 
     hJetET_cutHoE_1x1_Leading1->Write();
     hJetET_cutHoE_1x1_Leading2->Write();
@@ -1251,6 +1293,9 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 
     HovEtotal_1x1_emu->Write();
     HovEtotal_3x3_emu->Write();
+
+    HovEtotalLog_1x1_emu->Write();
+    HovEtotalLog_3x3_emu->Write();
 
     //Leading 4 jet histograms
     HovEtotal_1x1_emu_Leading1->Write();
@@ -1270,9 +1315,18 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     HovEtotal_3x3_ET_emu_Leading3->Write();
     HovEtotal_1x1_ET_emu_Leading4->Write();
     HovEtotal_3x3_ET_emu_Leading4->Write();
+    HovEtotal_1x1_emu_Barrel->Write();
+    HovEtotal_3x3_emu_Barrel->Write();
+    HovEtotal_1x1_emu_Endcap->Write();
+    HovEtotal_3x3_emu_Endcap->Write();
+
 
     HovEtotal_1x1_emu_GenMatchedJets->Write();
     HovEtotal_3x3_emu_GenMatchedJets->Write();
+    HovEtotal_1x1_emu_GenMatchedJets_Barrel->Write();
+    HovEtotal_3x3_emu_GenMatchedJets_Barrel->Write();
+    HovEtotal_1x1_emu_GenMatchedJets_Endcap->Write();
+    HovEtotal_3x3_emu_GenMatchedJets_Endcap->Write();
 
     HEEnergytotal_1x1_emu_Leading1->Write();
     HEEnergytotal_3x3_emu_Leading1->Write();
