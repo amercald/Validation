@@ -29,8 +29,8 @@ file_list_350 = { "list" : [LLP_m350_1000_dict,LLP_m350_500_dict, QCD_dict], "na
 file_list_250 = { "list" : [LLP_m250_1000_dict, LLP_m250_500_dict, QCD_dict], "name" : "MH_250"}
 
 file_list_NuGun_1000 = { "list" : [LLP_m1000_1000_dict, LLP_m1000_500_dict, NuGun_dict,], "name" : "MH_1000"}
-file_list_NuGun_350 = { "list" : [NuGun_dict, LLP_m350_1000_dict,LLP_m350_500_dict], "name" : "MH_350"}
-file_list_NuGun_250 = { "list" : [NuGun_dict, LLP_m250_1000_dict, LLP_m250_500_dict], "name" : "MH_250"}
+file_list_NuGun_350 = { "list" : [LLP_m350_1000_dict,LLP_m350_500_dict, NuGun_dict], "name" : "MH_350"}
+file_list_NuGun_250 = { "list" : [LLP_m250_1000_dict, LLP_m250_500_dict, NuGun_dict], "name" : "MH_250"}
 
 colors = [ROOT.kRed, ROOT.kBlue, ROOT.kBlack]
 hist_dict = {}
@@ -268,10 +268,10 @@ def plotvariable(filename):
         c4.SaveAs(outpath+var+"_"+filename+".pdf")
         del c4
 
-def plotvariablesame(histname, bghistname, file_list_dict, log, rebin, ymax):
+def plotvariablesame(histname, bghistname, file_list_dict, log, rebin, ymax, xrange):
     file_list =file_list_dict["list"]
     mh = file_list_dict["name"]
-
+    
     c5 = ROOT.TCanvas("%s"%(histname), "%s"%(histname), XCANVAS, YCANVAS);
     ROOT.gPad.SetTopMargin(magicMargins["T"])
     ROOT.gPad.SetBottomMargin(magicMargins["B"])
@@ -279,7 +279,10 @@ def plotvariablesame(histname, bghistname, file_list_dict, log, rebin, ymax):
     ROOT.gPad.SetRightMargin(magicMargins["R"])
     #ROOT.gPad.SetGridy()
     ROOT.gPad.SetTicks()
-    if log : ROOT.gPad.SetLogy()
+    log_name = ""
+    if log : 
+        ROOT.gPad.SetLogy()
+        log_name = "Log"
 #        legend = ROOT.TLegend(0.12, 0.82, 0.55, 0.92)
     legend = ROOT.TLegend(0.65, 0.77, 0.9, 0.92)
         
@@ -297,17 +300,22 @@ def plotvariablesame(histname, bghistname, file_list_dict, log, rebin, ymax):
         varhist.SetMarkerColor(f["color"])
         varhist.SetLineColor(f["color"])
         varhist.Rebin(rebin)
-#        if log: varhist.GetYaxis().SetRangeUser(0, ymax)
-#        else: varhist.GetYaxis().SetRangeUser(1, ymax)
+        if (xrange[0] != -1): varhist.GetXaxis().SetRangeUser(xrange[0], xrange[1])
         if hcounter == 0:
-            varhist.DrawNormalized("h")
-        else:
-            varhist.DrawNormalized("h same")
+            nbins = varhist.GetNbinsX()
+            if xrange[0] == -1: xrange[0] = varhist.GetBinLowEdge(1)
+            if xrange[1] == -1: xrange[1] = varhist.GetBinLowEdge(varhist.GetMaximumBin()) + varhist.GetBinWidth(varhist.GetMaximumBin())
+            frame = ROOT.TH1F("frame", "", nbins, xrange[0], xrange[1])
+            if ymax != -1: frame.SetMaximum(ymax)
+            frame.SetStats(0)
+            frame.GetXaxis().SetTitle(varhist.GetXaxis().GetTitle())
+            frame.Draw()
+        varhist.DrawNormalized("h same")
         legendentr = f["legendlabel"]
         legend.AddEntry(varhist, legendentr, "l")
         hcounter += 1
     legend.Draw("same")
-    c5.SaveAs(outpath+histname+"_"+mh+"_All.pdf")
+    c5.SaveAs(outpath+histname+"_"+mh+"_"+log_name+"_All.pdf")
     del c5
     del legend
 
@@ -853,17 +861,69 @@ if __name__ == "__main__":
 
 #    draw_hist_dict()
     for l in file_list_list:
-        plotvariablesame("L1JetTPDR", "L1JetTPDR", l, False, 1, -1)
-        plotvariablesame("L1JetNTP", "L1JetNTP", l, True, 1, -1)
-        plotvariablesame("hJet1x1ov5x5", "hJet1x1ov5x5", l, True, 1, -1)
-        plotvariablesame("jetET", "jetET", l, True, 2, -1)
-#        plotvariablesame("jetET_Leading4", "jetET_Leading4", l, True, 2)
-#        plotvariablesame("jetET_Leading4_Matched", "jetET_Leading4", l, True, 2)
-#        plotvariablesame("njets", "njets", l, True, 1, -1)
-        plotvariablesame("L1JetTPDR", "L1JetTPDR", l, False, 1, -1)
-        plotvariablesame("jetET_L4_Gen", "jetET_L4", l, False, 1, 0.3)
-        plotvariablesame("jetET_L4_Gen_HT120", "jetET_L4_HT120", l, False, 1, 0.3)
-        plotvariablesame("jetET_L4_Gen_HT360", "jetET_L4_HT360", l, False, 1, 0.3)
+        plotvariablesame("L1JetTPDR", "L1JetTPDR", l, False, 1, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut0_5", "L1JetTPDR_cut0_5", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut1", "L1JetTPDR_cut1", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut1_5", "L1JetTPDR_cut1_5", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut2", "L1JetTPDR_cut2", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut2_5", "L1JetTPDR_cut2_5", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut3", "L1JetTPDR_cut3", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut3_5", "L1JetTPDR_cut3_5", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut4", "L1JetTPDR_cut4", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut4_5", "L1JetTPDR_cut4_5", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_cut5", "L1JetTPDR_cut5", l, False, 2, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen", "L1JetTPDR", l, False, 1, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut0_5", "L1JetTPDR_cut0_5", l, False, 4, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut1", "L1JetTPDR_cut1", l, False, 4, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut1_5", "L1JetTPDR_cut1_5", l, False, 4, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut2", "L1JetTPDR_cut2", l, False, 4, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut2_5", "L1JetTPDR_cut2_5", l, False, 4, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut3", "L1JetTPDR_cut3", l, False, 4, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut3_5", "L1JetTPDR_cut3_5", l, False, 4, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut4", "L1JetTPDR_cut4", l, False, 4, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut4_5", "L1JetTPDR_cut4_5", l, False, 4, 0.8, [0, 5])
+        plotvariablesame("L1JetTPDR_Gen_cut5", "L1JetTPDR_cut5", l, False, 4, 0.8, [0, 5])
+
+        plotvariablesame("L1JetNTP", "L1JetNTP", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut0_5", "L1JetNTP_cut0_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut1", "L1JetNTP_cut1", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut1_5", "L1JetNTP_cut1_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut2", "L1JetNTP_cut2", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut2_5", "L1JetNTP_cut2_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut3", "L1JetNTP_cut3", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut3_5", "L1JetNTP_cut3_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut4", "L1JetNTP_cut4", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut4_5", "L1JetNTP_cut4_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_cut5", "L1JetNTP_cut5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut0_5", "L1JetNTP_cut0_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut1", "L1JetNTP_cut1", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut1_5", "L1JetNTP_cut1_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut2", "L1JetNTP_cut2", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut2_5", "L1JetNTP_cut2_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut3", "L1JetNTP_cut3", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut3_5", "L1JetNTP_cut3_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut4", "L1JetNTP_cut4", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut4_5", "L1JetNTP_cut4_5", l, True, 1, 1, [0, 20])
+        plotvariablesame("L1JetNTP_Gen_cut5", "L1JetNTP_cut5", l, True, 1, 1, [0, 20])
+        plotvariablesame("hJet1x1ov5x5", "hJet1x1ov5x5", l, True, 1, 1, [-1, -1])
+        plotvariablesame("jetET", "jetET", l, True, 2, -1, [-1, -1])
+        plotvariablesame("hcalTP_nearL1Jet_emu", "hcalTP_nearL1Jet_emu", l, False, 1, -1, [0, 10])
+        plotvariablesame("hcalTP_nearL1Jet_Gen_emu", "hcalTP_nearL1Jet_emu", l, False, 1, -1, [0, 10])
+        plotvariablesame("hcalTP_emu", "hcalTP_emu", l, False, 1, -1, [0, 10])
+        plotvariablesame("jetET", "jetET", l, True, 2, -1, [-1, -1])
+        plotvariablesame("hcalTP_nearL1Jet_Overflowge10_emu", "hcalTP_nearL1Jet_Overflowge10_emu", l, False, 1, 0.6, [0, 10])
+        plotvariablesame("hcalTP_nearL1Jet_Gen_Overflowge10_emu", "hcalTP_nearL1Jet_Overflowge10_emu", l, False, 1, 0.6, [0, 10])
+        plotvariablesame("hcalTP_Overflowge10_emu", "hcalTP_Overflowge10_emu", l, False, 1, 0.6, [0, 10])
+        plotvariablesame("hcalTP_nearL1Jet_Overflowge10_emu", "hcalTP_nearL1Jet_Overflowge10_emu", l, True, 1, 1, [0, 10])
+        plotvariablesame("hcalTP_nearL1Jet_Gen_Overflowge10_emu", "hcalTP_nearL1Jet_Overflowge10_emu", l, True, 1, 1, [0, 10])
+        plotvariablesame("hcalTP_Overflowge10_emu", "hcalTP_Overflowge10_emu", l, True, 1, 1, [0, 10])
+
+#        plotvariablesame("jetET_Leading4", "jetET_Leading4", l, True, 2, [-1, -1])
+#        plotvariablesame("jetET_Leading4_Matched", "jetET_Leading4", l, True, 2, [-1, -1])
+#        plotvariablesame("njets", "njets", l, True, 1, -1, [-1, -1])
+        plotvariablesame("jetET_L4_Gen", "jetET_L4", l, False, 1, 0.3, [-1, -1])
+        plotvariablesame("jetET_L4_Gen_HT120", "jetET_L4_HT120", l, False, 1, 0.3, [-1, -1])
+        plotvariablesame("jetET_L4_Gen_HT360", "jetET_L4_HT360", l, False, 1, 0.3, [-1, -1])
         plotHoESame("HovEtotal_1x1_emu_Leading1", l)
         plotHoESame("HovEtotal_1x1_emu_Leading2", l)
         plotHoESame("HovEtotal_1x1_emu_Leading3", l)
