@@ -12,7 +12,8 @@ class rootPlotter():
         ROOT.TH1.AddDirectory(0)
 
         self.QCD_dict = {"filename" : "QCD", "color" : ROOT.kBlack, "legendlabel" : "QCD"}
-        self.NuGun_dict = {"filename" : "RelValNuGun", "color" : ROOT.kBlack, "legendlabel" : "NuGun"}
+        self.RelValNuGun_dict = {"filename" : "RelValNuGun", "color" : ROOT.kBlack, "legendlabel" : "NuGun"}
+        self.NuGun_dict = {"filename" : "NuGun", "color" : ROOT.kBlack, "legendlabel" : "NuGun"}
         
         self.LLP_m1000_500_dict = {"filename" : "LLP_MH1000_Ctau500", "color" : ROOT.kRed, "legendlabel" : "LLP c#tau = 500 mm"}
         self.LLP_m1000_1000_dict = {"filename" : "LLP_MH1000_Ctau1000", "color" : ROOT.kBlue, "legendlabel" : "LLP c#tau = 1000 mm"}
@@ -59,6 +60,11 @@ class rootPlotter():
                 hist.SetFillStyle(3002)
             else:
                 hist = file.Get(histname)
+
+            if "hHTSum" in histname:
+                int_above_360 = hist.Integral(72, 240) / hist.Integral()
+                int_above_120 = hist.Integral(24, 240) / hist.Integral()
+                print("INTEGRALS: ", int_above_360, int_above_120)
             if title:
                 hist.SetTitle(title)
             if hcounter == 0:
@@ -236,23 +242,8 @@ class rootPlotter():
             c1.SaveAs(self.outpath+histname+"_"+str(ieta)+appendname+logname+".pdf")
             del c1
 
-    def plotRatesVsEff(self, background, signal_list, effhistname, title, appendname):
+    def plotRatesVsEff(self, rateff_list, background, signal_list, effhistname, title, appendname, legendentry = ""):
         
-
-        def_dict =    {  "effbin" : 2,
-                         "rateshist" : "htSumRates_emu",
-                         "ratebin" : 360 }
-
-        HoE_TP5_dict = { "effbin" : 3,
-                         "rateshist" : "htSumRates_HoE_TP5_emu",
-                         "ratebin" : 120 }
-
-        HoE_TP05_dict = { "effbin" : 4,
-                         "rateshist" : "htSumRates_HoE_TP05_emu",
-                         "ratebin" : 120 }
-
-        rateff_list = [def_dict, HoE_TP5_dict, HoE_TP05_dict]
-
         c1 = ROOT.TCanvas("%s"%(effhistname), "%s"%(effhistname), self.XCANVAS, self.YCANVAS);
         ROOT.gPad.SetTopMargin(self.magicMargins["T"])
         ROOT.gPad.SetBottomMargin(self.magicMargins["B"])
@@ -264,7 +255,7 @@ class rootPlotter():
         ROOT.gPad.SetGrid()
         multigraph = ROOT.TMultiGraph()
         multigraph.SetMinimum(1)
-        multigraph.SetMaximum(10**7)
+        multigraph.SetMaximum(10**10)
         multigraph.GetXaxis().SetRangeUser(0, 1)
         multigraph.GetXaxis().SetTitle("LLP Signal Efficiency")
         multigraph.GetYaxis().SetTitle("Rate (Hz)")
@@ -275,9 +266,11 @@ class rootPlotter():
         for sg in signal_list:
 
             rate_list = []
-            rate_def = 0
+            rate_360_def = 0
+            rate_120_def = 0
             eff_list = []
-            eff_def = 0
+            eff_360_def = 0
+            eff_120_def = 0
             for rateff in rateff_list:
                 ratehist = bgfile.Get(rateff["rateshist"])
                 rate = ratehist.GetBinContent(rateff["ratebin"])
@@ -286,28 +279,44 @@ class rootPlotter():
                 effhist = sgfile.Get(effhistname)
                 eff = effhist.GetBinContent(rateff["effbin"])
                 if rateff["rateshist"] == "htSumRates_emu":
-                    rate_def = rate
-                    eff_def = eff
+                    if rateff["ratebin"] == 361:
+                        rate_360_def = rate
+                        eff_360_def = eff
+                    if rateff["ratebin"] == 121:
+                        rate_120_def = rate
+                        eff_120_def = eff
+
                 else:
                     rate_list.append(rate)
                     eff_list.append(eff)
 
             print(rate_list, eff_list)
-            rateff_graph_def = ROOT.TGraph(1, np.array([eff_def]), np.array([rate_def]))
-            rateff_graph_def.SetMarkerStyle(22)
-            rateff_graph_def.SetMarkerSize(7)
-            rateff_graph_def.SetMarkerColor(sg["color"])
+
+            rateff_graph_360_def = ROOT.TGraph(1, np.array([eff_360_def]), np.array([rate_360_def]))
+            rateff_graph_360_def.SetMarkerStyle(22)
+            rateff_graph_360_def.SetMarkerSize(7)
+            rateff_graph_360_def.SetMarkerColor(sg["color"])
+            multigraph.Add(rateff_graph_360_def)
+            legend.AddEntry(rateff_graph_360_def, sg["legendlabel"]+"; HT > 360", "lp")
+
+            rateff_graph_120_def = ROOT.TGraph(1, np.array([eff_120_def]), np.array([rate_120_def]))
+            rateff_graph_120_def.SetMarkerStyle(21)
+            rateff_graph_120_def.SetMarkerSize(7)
+            rateff_graph_120_def.SetMarkerColor(sg["color"])
+            multigraph.Add(rateff_graph_120_def)
+            legend.AddEntry(rateff_graph_120_def, sg["legendlabel"]+"; HT > 120", "lp")
+
             rate_arr = np.array(rate_list)
             eff_arr = np.array(eff_list)
             rateff_graph = ROOT.TGraph(len(rate_list), eff_arr, rate_arr)
             rateff_graph.SetMarkerSize(7)
-            rateff_graph.SetMarkerStyle(21)
+            rateff_graph.SetMarkerStyle(31)
             rateff_graph.SetMarkerColor(sg["color"])
             rateff_graph.SetLineColor(sg["color"])
-            legend.AddEntry(rateff_graph_def, sg["legendlabel"]+" HT > 360", "lp")
-            legend.AddEntry(rateff_graph, sg["legendlabel"]+" HT > 120 with LLP Tag or HT > 360" , "lp")
+
+            legend.AddEntry(rateff_graph, sg["legendlabel"]+";"+legendentry, "lp")
             multigraph.Add(rateff_graph)
-            multigraph.Add(rateff_graph_def)
+
 
         multigraph.Draw("ALP")
         ROOT.gPad.Modified(); ROOT.gPad.Update()
@@ -319,7 +328,7 @@ class rootPlotter():
         c1.SaveAs(self.outpath+"rateff"+appendname+".pdf")
 
 
-    def plotJetRates(self, histname):
+    def plotJetRates(self, histname, title):
         c1 = ROOT.TCanvas("c1", "c1", self.XCANVAS, self.YCANVAS)
         pad1 = ROOT.TPad("pad1", "pad1", 0, 0.3, 1, 1)
         pad1.SetTopMargin(self.magicMargins["T"])
@@ -343,21 +352,25 @@ class rootPlotter():
         legend = ROOT.TLegend(0.65, 0.77, 0.9, 0.92)
 
         rate_no_cut = {"histname" : "_emu",
-                       "legendentry" : "No LLP Tag",
+                       "legendentry" : "No LLP ID",
                        "color" : ROOT.kBlack }
 
+        rate_HoE_cut = {"histname" : "_HoE_emu",
+                       "legendentry" : "H/(H+E) > 0.9",
+                       "color" : ROOT.kGreen+2 }
+
         rate_05_cut = {"histname" : "_HoE_TP05_emu",
-                       "legendentry" : "LLP Tag E_{T,TP} > 0.5 GeV",
+                       "legendentry" : "LLP ID E_{T,TP} > 0.5 GeV",
                        "color" : ROOT.kRed }
 
         rate_5_cut = {"histname" : "_HoE_TP5_emu",
-                       "legendentry" : "LLP Tag E_{T,TP} > 5 GeV",
+                       "legendentry" : "LLP ID E_{T,TP} > 5 GeV",
                        "color" : ROOT.kBlue }
                    
 
         file = ROOT.TFile.Open(self.path+"rates_"+self.NuGun_dict["filename"]+".root")
 
-        rate_list = [rate_no_cut, rate_05_cut, rate_5_cut] 
+        rate_list = [rate_no_cut, rate_HoE_cut, rate_05_cut] 
         ratehist_list = []
         ratiohist_list = []
         for cut in rate_list:
@@ -381,6 +394,7 @@ class rootPlotter():
         for h in ratehist_list:
             if hcounter == 0:
                 h.GetYaxis().SetRangeUser(1, 10**8)
+                h.SetTitle(title)
                 h.Draw("hist")
             else:
                 h.Draw("hist same")
@@ -396,6 +410,7 @@ class rootPlotter():
                 h.GetXaxis().SetTitleSize(0.07)
                 h.GetXaxis().SetLabelSize(0.066)
                 h.GetXaxis().SetTitle("")
+
                 h.Draw("hist")
             else:
                 h.Draw("hist same")
