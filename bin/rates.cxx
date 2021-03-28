@@ -344,18 +344,38 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     TH1F* singleJetRates_HoE_emu = new TH1F("singleJetRates_HoE_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* singleJetRates_HoE_TP05_emu = new TH1F("singleJetRates_HoE_TP05_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* singleJetRates_HoE_TP5_emu = new TH1F("singleJetRates_HoE_TP5_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* singleJetRates_HoE_Ratio02_emu = new TH1F("singleJetRates_HoE_Ratio02_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* singleJetRates_HoE_Ratio06_emu = new TH1F("singleJetRates_HoE_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* singleJetRates_HoE_TP2_Ratio02_emu = new TH1F("singleJetRates_HoE_TP2_Ratio02_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* singleJetRates_HoE_TP2_Ratio06_emu = new TH1F("singleJetRates_HoE_TP2_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* singleJetRates_HoE_TP1_Ratio06_emu = new TH1F("singleJetRates_HoE_TP1_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* doubleJetRates_emu = new TH1F("doubleJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* doubleJetRates_HoE_emu = new TH1F("doubleJetRates_HoE_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* doubleJetRates_HoE_TP05_emu = new TH1F("doubleJetRates_HoE_TP05_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* doubleJetRates_HoE_TP5_emu = new TH1F("doubleJetRates_HoE_TP5_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* doubleJetRates_HoE_Ratio02_emu = new TH1F("doubleJetRates_HoE_Ratio02_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* doubleJetRates_HoE_Ratio06_emu = new TH1F("doubleJetRates_HoE_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* doubleJetRates_HoE_TP2_Ratio02_emu = new TH1F("doubleJetRates_HoE_TP2_Ratio02_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* doubleJetRates_HoE_TP2_Ratio06_emu = new TH1F("doubleJetRates_HoE_TP2_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* doubleJetRates_HoE_TP1_Ratio06_emu = new TH1F("doubleJetRates_HoE_TP1_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* tripleJetRates_emu = new TH1F("tripleJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* tripleJetRates_HoE_emu = new TH1F("tripleJetRates_HoE_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* tripleJetRates_HoE_TP05_emu = new TH1F("tripleJetRates_HoE_TP05_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* tripleJetRates_HoE_TP5_emu = new TH1F("tripleJetRates_HoE_TP5_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* tripleJetRates_HoE_Ratio02_emu = new TH1F("tripleJetRates_HoE_Ratio02_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* tripleJetRates_HoE_Ratio06_emu = new TH1F("tripleJetRates_HoE_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* tripleJetRates_HoE_TP2_Ratio02_emu = new TH1F("tripleJetRates_HoE_TP2_Ratio02_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* tripleJetRates_HoE_TP2_Ratio06_emu = new TH1F("tripleJetRates_HoE_TP2_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* tripleJetRates_HoE_TP1_Ratio06_emu = new TH1F("tripleJetRates_HoE_TP1_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* quadJetRates_emu = new TH1F("quadJetRates_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* quadJetRates_HoE_emu = new TH1F("quadJetRates_HoE_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* quadJetRates_HoE_TP05_emu = new TH1F("quadJetRates_HoE_TP05_emu", axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* quadJetRates_HoE_TP5_emu = new TH1F("quadJetRates_HoE_TP5_emu", axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* quadJetRates_HoE_Ratio02_emu = new TH1F("quadJetRates_HoE_Ratio02_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* quadJetRates_HoE_Ratio06_emu = new TH1F("quadJetRates_HoE_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* quadJetRates_HoE_TP2_Ratio02_emu = new TH1F("quadJetRates_HoE_TP2_Ratio02_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* quadJetRates_HoE_TP2_Ratio06_emu = new TH1F("quadJetRates_HoE_TP2_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
+    TH1F* quadJetRates_HoE_TP1_Ratio06_emu = new TH1F("quadJetRates_HoE_TP1_Ratio06_emu",axR.c_str(), nJetBins, jetLo, jetHi);
     TH1F* singleEgRates_emu = new TH1F("singleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
     TH1F* doubleEgRates_emu = new TH1F("doubleEgRates_emu", axR.c_str(), nEgBins, egLo, egHi);
     TH1F* singleTauRates_emu = new TH1F("singleTauRates_emu", axR.c_str(), nTauBins, tauLo, tauHi);
@@ -386,6 +406,15 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     TH1F* htSumRates_HoE_Ratio04_ORHT360_emu = new TH1F("htSumRates_HoE_Ratio04_ORHT360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
     TH1F* htSumRates_HoE_Ratio06_ORHT360_emu = new TH1F("htSumRates_HoE_Ratio06_ORHT360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
     TH1F* htSumRates_HoE_Ratio08_ORHT360_emu = new TH1F("htSumRates_HoE_Ratio08_ORHT360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+    TH1F* htSumRates_HoE_TP2_Ratio02_emu = new TH1F("htSumRates_HoE_TP2_Ratio02_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+    TH1F* htSumRates_HoE_TP2_Ratio04_emu = new TH1F("htSumRates_HoE_TP2_Ratio04_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+    TH1F* htSumRates_HoE_TP2_Ratio06_emu = new TH1F("htSumRates_HoE_TP2_Ratio06_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+    TH1F* htSumRates_HoE_TP2_Ratio08_emu = new TH1F("htSumRates_HoE_TP2_Ratio08_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+    TH1F* htSumRates_HoE_TP2_Ratio02_ORHT360_emu = new TH1F("htSumRates_HoE_TP2_Ratio02_ORHT360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+    TH1F* htSumRates_HoE_TP2_Ratio04_ORHT360_emu = new TH1F("htSumRates_HoE_TP2_Ratio04_ORHT360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+    TH1F* htSumRates_HoE_TP2_Ratio06_ORHT360_emu = new TH1F("htSumRates_HoE_TP2_Ratio06_ORHT360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+    TH1F* htSumRates_HoE_TP2_Ratio08_ORHT360_emu = new TH1F("htSumRates_HoE_TP2_Ratio08_ORHT360_emu",axR.c_str(), nHtSumBins, htSumLo, htSumHi);
+
     TH1F* mhtSumRates_emu = new TH1F("mhtSumRates_emu",axR.c_str(), nMhtSumBins, mhtSumLo, mhtSumHi);
     TH1F* etSumRates_emu = new TH1F("etSumRates_emu",axR.c_str(), nEtSumBins, etSumLo, etSumHi);
     TH1F* metSumRates_emu = new TH1F("metSumRates_emu",axR.c_str(), nMetSumBins, metSumLo, metSumHi); 
@@ -622,11 +651,11 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     TH2F* energyDepth_HT120_L1_Barrel = new TH2F("energyDepth_HT120_L1_Barrel", "Depth profile, inclusive, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
     TH2F* energyDepth_HT120_L1_Endcap = new TH2F("energyDepth_HT120_L1_Endcap", "Depth profile, inclusive, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
-    TH2F* energyDepth_TPge5_LowRatio_L1_Barrel = new TH2F("energyDepth_TPge5_LowRatio_L1_Barrel", "Depth profile, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
-    TH2F* energyDepth_TPge5_LowRatio_L1_Endcap = new TH2F("energyDepth_TPge5_LowRatio_L1_Endcap", "Depth profile, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+    TH2F* energyDepth_TPge5_LowRatio_Barrel = new TH2F("energyDepth_TPge5_LowRatio_Barrel", "Depth profile, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+    TH2F* energyDepth_TPge5_LowRatio_Endcap = new TH2F("energyDepth_TPge5_LowRatio_Endcap", "Depth profile, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
-    TH2F* energyDepth_LowRatio_L1_Barrel = new TH2F("energyDepth_LowRatio_L1_Barrel", "Depth profile, matched jets, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
-    TH2F* energyDepth_LowRatio_L1_Endcap = new TH2F("energyDepth_LowRatio_L1_Endcap", "Depth profile, matched jets, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+    TH2F* energyDepth_LowRatio_Barrel = new TH2F("energyDepth_LowRatio_Barrel", "Depth profile, matched jets, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+    TH2F* energyDepth_LowRatio_Endcap = new TH2F("energyDepth_LowRatio_Endcap", "Depth profile, matched jets, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
     TH2F* energyDepth_TPge5_HoEcut_Barrel = new TH2F("energyDepth_TPge5_HoEcut_Barrel", "Depth profile, inclusive, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
     TH2F* energyDepth_TPge5_HoEcut_Endcap = new TH2F("energyDepth_TPge5_HoEcut_Endcap", "Depth profile, inclusive, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
@@ -675,11 +704,11 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     TH2F* energyDepth_genMatchInclusive_HT120_L1_Barrel = new TH2F("energyDepth_genMatchInclusive_HT120_L1_Barrel", "Depth profile, matched jets, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
     TH2F* energyDepth_genMatchInclusive_HT120_L1_Endcap = new TH2F("energyDepth_genMatchInclusive_HT120_L1_Endcap", "Depth profile, matched jets, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
-    TH2F* energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Barrel = new TH2F("energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Barrel", "Depth profile, matched jets, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
-    TH2F* energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Endcap = new TH2F("energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Endcap", "Depth profile, matched jets, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+    TH2F* energyDepth_genMatchInclusive_TPge5_LowRatio_Barrel = new TH2F("energyDepth_genMatchInclusive_TPge5_LowRatio_Barrel", "Depth profile, matched jets, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+    TH2F* energyDepth_genMatchInclusive_TPge5_LowRatio_Endcap = new TH2F("energyDepth_genMatchInclusive_TPge5_LowRatio_Endcap", "Depth profile, matched jets, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
-    TH2F* energyDepth_genMatchInclusive_LowRatio_L1_Barrel = new TH2F("energyDepth_genMatchInclusive_LowRatio_L1_Barrel", "Depth profile, matched jets, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
-    TH2F* energyDepth_genMatchInclusive_LowRatio_L1_Endcap = new TH2F("energyDepth_genMatchInclusive_LowRatio_L1_Endcap", "Depth profile, matched jets, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
+    TH2F* energyDepth_genMatchInclusive_LowRatio_Barrel = new TH2F("energyDepth_genMatchInclusive_LowRatio_Barrel", "Depth profile, matched jets, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
+    TH2F* energyDepth_genMatchInclusive_LowRatio_Endcap = new TH2F("energyDepth_genMatchInclusive_LowRatio_Endcap", "Depth profile, matched jets, in Endcap", 8, -0.5, 7.5, 60, 0, 1.2);
 
 
     TH2F* energyDepth_genMatchTP_Barrel = new TH2F("energyDepth_genMatchTP_Barrel", "Depth profile, matched TPs, in Barrel", 8, -0.5, 7.5, 60, 0, 1.2);
@@ -694,17 +723,17 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     TH2F* energyDepth_TPE_genMatchInclusive_HoEcut_Barrel = new TH2F("energyDepth_TPE_genMatchInclusive_HoEcut_Barrel", "Depth profile, matched jets, in Barrel", 8, -0.5, 7.5, 60, 0, 10);
     TH2F* energyDepth_TPE_genMatchInclusive_HoEcut_Endcap = new TH2F("energyDepth_TPE_genMatchInclusive_HoEcut_Endcap", "Depth profile, matched jets, in Endcap", 8, -0.5, 7.5, 60, 0, 10);
 
-    TH1F* TPEt_L1_HB = new TH1F("TPEt_L1_HB", "E_{T} of TPs with Low Depth Energy Ratio in HB" ";TP E_{T} (GeV); Entries", 20, 0, 10);
-    TH1F* TPEt_L1_HE = new TH1F("TPEt_L1_HE", "E_{T} of TPs with Low Depth Energy Ratio in HE" ";TP E_{T} (GeV); Entries", 20, 0, 10);
+    TH1F* TPEt_HB = new TH1F("TPEt_HB", "E_{T} of TPs with Low Depth Energy Ratio in HB" ";TP E_{T} (GeV); Entries", 20, 0, 10);
+    TH1F* TPEt_HE = new TH1F("TPEt_HE", "E_{T} of TPs with Low Depth Energy Ratio in HE" ";TP E_{T} (GeV); Entries", 20, 0, 10);
 
-    TH1F* TPEt_L1_Matched_HB = new TH1F("TPEt_L1_Matched_HB", "E_{T} of TPs in HB" ";TP E_{T} (GeV); Entries", 20, 0, 10);
-    TH1F* TPEt_L1_Matched_HE = new TH1F("TPEt_L1_Matched_HE", "E_{T} of TPs in HE" ";TP E_{T} (GeV); Entries", 20, 0, 10);
+    TH1F* TPEt_Matched_HB = new TH1F("TPEt_Matched_HB", "E_{T} of TPs in HB" ";TP E_{T} (GeV); Entries", 20, 0, 10);
+    TH1F* TPEt_Matched_HE = new TH1F("TPEt_Matched_HE", "E_{T} of TPs in HE" ";TP E_{T} (GeV); Entries", 20, 0, 10);
 
-    TH1F* TPEt_L1_LowRatio_HB = new TH1F("TPEt_L1_LowRatio_HB", "E_{T} of TPs with Low Depth Energy Ratio in HB" ";TP E_{T} (GeV); Entries", 20, 0, 10);
-    TH1F* TPEt_L1_LowRatio_HE = new TH1F("TPEt_L1_LowRatio_HE", "E_{T} of TPs with Low Depth Energy Ratio in HE" ";TP E_{T} (GeV); Entries", 20, 0, 10);
+    TH1F* TPEt_LowRatio_HB = new TH1F("TPEt_LowRatio_HB", "E_{T} of TPs with Low Depth Energy Ratio in HB" ";TP E_{T} (GeV); Entries", 20, 0, 10);
+    TH1F* TPEt_LowRatio_HE = new TH1F("TPEt_LowRatio_HE", "E_{T} of TPs with Low Depth Energy Ratio in HE" ";TP E_{T} (GeV); Entries", 20, 0, 10);
 
-    TH1F* TPEt_L1_LowRatio_Matched_HB = new TH1F("TPEt_L1_LowRatio_Matched_HB", "E_{T} of TPs with Low Depth Energy Ratio in HB" ";TP E_{T} (GeV); Entries", 20, 0, 10);
-    TH1F* TPEt_L1_LowRatio_Matched_HE = new TH1F("TPEt_L1_LowRatio_Matched_HE", "E_{T} of TPs with Low Depth Energy Ratio in HE" ";TP E_{T} (GeV); Entries", 20, 0, 10);
+    TH1F* TPEt_LowRatio_Matched_HB = new TH1F("TPEt_LowRatio_Matched_HB", "E_{T} of TPs with Low Depth Energy Ratio in HB" ";TP E_{T} (GeV); Entries", 20, 0, 10);
+    TH1F* TPEt_LowRatio_Matched_HE = new TH1F("TPEt_LowRatio_Matched_HE", "E_{T} of TPs with Low Depth Energy Ratio in HE" ";TP E_{T} (GeV); Entries", 20, 0, 10);
 
     TH1F* DeltaRLLP = new TH1F("DeltaRLLP", ";#Delta R; # Entries", 100, 0, 2);
     
@@ -833,11 +862,14 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
     TH1F * effJetID_HoE_DepthFB_TPE = new TH1F("effJetID_HoE_DepthFB_TPE", "", 14, 0, 14);
     TH1F * effJetID_HoE_DepthFB_TPE_Gen = new TH1F("effJetID_HoE_DepthFB_TPE_Gen", "", 14, 0, 14);
 
-    TH1F * effJetID_HoE_DepthFB_HTscan = new TH1F("effJetID_HoE_DepthFB_HTscan", "", 16, 0, 16);
-    TH1F * effJetID_HoE_DepthFB_Gen_HTscan = new TH1F("effJetID_HoE_DepthFB_Gen_HTscan", "", 16, 0, 16);
+    TH1F * effJetID_HoE_DepthFB_HTscan = new TH1F("effJetID_HoE_DepthFB_HTscan", "", 32, 0, 32);
+    TH1F * effJetID_HoE_DepthFB_Gen_HTscan = new TH1F("effJetID_HoE_DepthFB_Gen_HTscan", "", 32, 0, 32);
 
-    TH1F * effJetID_HoE_DepthFB_Ratio = new TH1F("effJetID_HoE_DepthFB_Ratio", "", 14, 0, 14);
-    TH1F * effJetID_HoE_DepthFB_Ratio_Gen = new TH1F("effJetID_HoE_DepthFB_Ratio_Gen", "", 14, 0, 14);
+    TH1F * effJetID_HoE_DepthFB_Ratio = new TH1F("effJetID_HoE_DepthFB_Ratio", "", 19, 0, 19);
+    TH1F * effJetID_HoE_DepthFB_Ratio_Gen = new TH1F("effJetID_HoE_DepthFB_Ratio_Gen", "", 19, 0, 19);
+
+    TH1F * effJetID_HoE_DepthFB_Jetscan = new TH1F("effJetID_HoE_DepthFB_Jetscan", "", 32, 0, 32);
+    TH1F * effJetID_HoE_DepthFB_Gen_Jetscan = new TH1F("effJetID_HoE_DepthFB_Gen_Jetscan", "", 32, 0, 32);
 
     // Gen Matching verification plots
     TH1F * hJetGenPartDR_LLPdaught = new TH1F("hJetGenPartDR_LLPdaugh",";#DeltaR;",100,0,5);
@@ -1282,6 +1314,10 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
             std::map<const std::string, std::vector<double> > emVariablesAllJets;
             std::vector<bool> GoodJets_pt20(nJetemu, false);
             std::map< std::string, std::vector<bool> > LLPJetTags;
+            LLPJetTags["HB02_HE02"] = GoodJets_pt20;
+            LLPJetTags["HB04_HE04"] = GoodJets_pt20;
+            LLPJetTags["HB06_HE06"] = GoodJets_pt20;
+            LLPJetTags["HB08_HE08"] = GoodJets_pt20;
             LLPJetTags["TP2_HB02_HE02"] = GoodJets_pt20;
             LLPJetTags["TP2_HB04_HE04"] = GoodJets_pt20;
             LLPJetTags["TP2_HB06_HE06"] = GoodJets_pt20;
@@ -1365,16 +1401,21 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 
                             if( abs(tpiEtaemu) <= 16)
                             {
-                                if ((depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.2) LLPJetTags["TP2_HB02_HE02"].at(jetIt) = true;
-                                if ((depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.4) LLPJetTags["TP2_HB04_HE04"].at(jetIt) = true;
-                                if ((depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.6) LLPJetTags["TP2_HB06_HE06"].at(jetIt) = true;
-                                if ((depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.8) LLPJetTags["TP2_HB08_HE08"].at(jetIt) = true;
+                                if ((depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.2) LLPJetTags["HB02_HE02"].at(jetIt) = true;
+                                if ((depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.4) LLPJetTags["HB04_HE04"].at(jetIt) = true;
+                                if ((depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.6) LLPJetTags["HB06_HE06"].at(jetIt) = true;
+                                if ((depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.8) LLPJetTags["HB08_HE08"].at(jetIt) = true;
+                                double HB_TPE_thresh = 2;
+                                if (tpEtemu > HB_TPE_thresh && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.2) LLPJetTags["TP2_HB02_HE02"].at(jetIt) = true;
+                                if (tpEtemu > HB_TPE_thresh && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.4) LLPJetTags["TP2_HB04_HE04"].at(jetIt) = true;
+                                if (tpEtemu > HB_TPE_thresh && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.6) LLPJetTags["TP2_HB06_HE06"].at(jetIt) = true;
+                                if (tpEtemu > HB_TPE_thresh && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > 0.8) LLPJetTags["TP2_HB08_HE08"].at(jetIt) = true;
                                 double HB_depthratio_thresh = 0.6;
                                 if ((depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > HB_depthratio_thresh) LLPJetTags["TP05_HB06_HE06"].at(jetIt) = true;
-                                if (tpEtemu > 4 && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > HB_depthratio_thresh) LLPJetTags["TP4_HB06_HE06"].at(jetIt) = true;
-                                if (tpEtemu > 3 && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > HB_depthratio_thresh) LLPJetTags["TP3_HB06_HE06"].at(jetIt) = true;
-                                if (tpEtemu > 2 && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > HB_depthratio_thresh) LLPJetTags["TP2_HB06_HE06"].at(jetIt) = true;
                                 if (tpEtemu > 1 && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > HB_depthratio_thresh) LLPJetTags["TP1_HB06_HE06"].at(jetIt) = true;
+                                if (tpEtemu > 2 && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > HB_depthratio_thresh) LLPJetTags["TP2_HB06_HE06"].at(jetIt) = true;
+                                if (tpEtemu > 3 && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > HB_depthratio_thresh) LLPJetTags["TP3_HB06_HE06"].at(jetIt) = true;
+                                if (tpEtemu > 4 && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > HB_depthratio_thresh) LLPJetTags["TP4_HB06_HE06"].at(jetIt) = true;
                                 if (tpEtemu > 5 && (depthTPIt.at(2) + depthTPIt.at(3)) / tpEtemu > HB_depthratio_thresh) LLPJetTags["TP5_HB06_HE06"].at(jetIt) = true;
 
                                 if (nPassedJets < 4)
@@ -1447,6 +1488,10 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                             }
                             else if ( abs(tpiEtaemu) > 16 && abs(tpiEtaemu) <= 29)
                             {
+                                if ( (depthTPIt.at(1) + depthTPIt.at(2) + depthTPIt.at(3) + depthTPIt.at(4) + depthTPIt.at(5) + depthTPIt.at(6)) / tpEtemu > 0.2) LLPJetTags["HB02_HE02"].at(jetIt) = true;
+                                if ( (depthTPIt.at(1) + depthTPIt.at(2) + depthTPIt.at(3) + depthTPIt.at(4) + depthTPIt.at(5) + depthTPIt.at(6)) / tpEtemu > 0.4) LLPJetTags["HB04_HE04"].at(jetIt) = true;
+                                if ( (depthTPIt.at(1) + depthTPIt.at(2) + depthTPIt.at(3) + depthTPIt.at(4) + depthTPIt.at(5) + depthTPIt.at(6)) / tpEtemu > 0.6) LLPJetTags["HB06_HE06"].at(jetIt) = true;
+                                if ( (depthTPIt.at(1) + depthTPIt.at(2) + depthTPIt.at(3) + depthTPIt.at(4) + depthTPIt.at(5) + depthTPIt.at(6)) / tpEtemu > 0.8) LLPJetTags["HB08_HE08"].at(jetIt) = true;
                                 double HE_TPE_thresh = 2;
                                 if (tpEtemu > HE_TPE_thresh && (depthTPIt.at(1) + depthTPIt.at(2) + depthTPIt.at(3) + depthTPIt.at(4) + depthTPIt.at(5) + depthTPIt.at(6)) / tpEtemu > 0.2) LLPJetTags["TP2_HB02_HE02"].at(jetIt) = true;
                                 if (tpEtemu > HE_TPE_thresh && (depthTPIt.at(1) + depthTPIt.at(2) + depthTPIt.at(3) + depthTPIt.at(4) + depthTPIt.at(5) + depthTPIt.at(6)) / tpEtemu > 0.4) LLPJetTags["TP2_HB04_HE04"].at(jetIt) = true;
@@ -1549,10 +1594,10 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                                         if (nPassedJets == 0) energyDepth_L1_Barrel->Fill(depthIt+1, scaledEDepth);
                                         if (nPassedJets == 0 && tpEtemu > 1) energyDepth_TPge5_L1_Barrel->Fill(depthIt+1, scaledEDepth);
                                         if (nPassedJets == 0 && htSum > 120) energyDepth_HT120_L1_Barrel->Fill(depthIt+1, scaledEDepth);
-                                        if (nPassedJets == 0 && is_low_ratio_HB) energyDepth_LowRatio_L1_Barrel->Fill(depthIt+1, scaledEDepth);
-                                        if (nPassedJets == 0) TPEt_L1_HB->Fill(tpEtemu);
-                                        if (nPassedJets == 0 && is_low_ratio_HB) TPEt_L1_LowRatio_HB->Fill(tpEtemu);
-                                        if (nPassedJets == 0 && tpEtemu > 5 && is_low_ratio_HB) energyDepth_TPge5_LowRatio_L1_Barrel->Fill(depthIt+1, scaledEDepth);
+                                        if (is_low_ratio_HB) energyDepth_LowRatio_Barrel->Fill(depthIt+1, scaledEDepth);
+                                        if (nPassedJets == 0) TPEt_HB->Fill(tpEtemu);
+                                        if (is_low_ratio_HB) TPEt_LowRatio_HB->Fill(tpEtemu);
+                                        if (tpEtemu > 5 && is_low_ratio_HB) energyDepth_TPge5_LowRatio_Barrel->Fill(depthIt+1, scaledEDepth);
                                         energyDepth_TPE_Barrel->Fill(depthIt+1, depthTPIt[depthIt]);
                                         if (seedTower3x3Had/(seedTower3x3Had / seedTower3x3Em) > 0.975)  energyDepth_TPE_HoEcut_Barrel->Fill(depthIt+1, depthTPIt[depthIt]);
                                         if (tpEtemu > 5) energyDepth_TPE_TPge5_Barrel->Fill(depthIt+1, depthTPIt[depthIt]);
@@ -1574,11 +1619,11 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                                         if (nPassedGenMatchedJets == 0) energyDepth_genMatchInclusive_L1_Barrel->Fill(depthIt+1, scaledEDepth);
                                         if (nPassedGenMatchedJets == 0 && tpEtemu > 1) energyDepth_genMatchInclusive_TPge5_L1_Barrel->Fill(depthIt+1, scaledEDepth);
                                         if (nPassedGenMatchedJets == 0 && htSum > 120) energyDepth_genMatchInclusive_HT120_L1_Barrel->Fill(depthIt+1, scaledEDepth);
-                                        if (nPassedGenMatchedJets == 0 && is_low_ratio_HB) energyDepth_genMatchInclusive_LowRatio_L1_Barrel->Fill(depthIt+1, scaledEDepth);
-                                        if (nPassedGenMatchedJets == 0) TPEt_L1_Matched_HB->Fill(tpEtemu);
-                                        if (nPassedGenMatchedJets == 0 && is_low_ratio_HB) TPEt_L1_LowRatio_Matched_HB->Fill(tpEtemu);
-                                        if (nPassedGenMatchedJets == 0) TPEt_L1_Matched_HB->Fill(tpEtemu);
-                                        if (nPassedGenMatchedJets == 0 && tpEtemu > 5 && is_low_ratio_HB) energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Barrel->Fill(depthIt+1, scaledEDepth);
+                                        if (is_low_ratio_HB) energyDepth_genMatchInclusive_LowRatio_Barrel->Fill(depthIt+1, scaledEDepth);
+                                        TPEt_Matched_HB->Fill(tpEtemu);
+                                        if (is_low_ratio_HB) TPEt_LowRatio_Matched_HB->Fill(tpEtemu);
+                                        TPEt_Matched_HB->Fill(tpEtemu);
+                                        if (tpEtemu > 5 && is_low_ratio_HB) energyDepth_genMatchInclusive_TPge5_LowRatio_Barrel->Fill(depthIt+1, scaledEDepth);
                                         energyDepth_TPE_genMatchInclusive_Barrel->Fill(depthIt+1, depthTPIt[depthIt]);
                                         if (seedTower3x3Had/(seedTower3x3Had / seedTower3x3Em) > 0.975)  energyDepth_TPE_genMatchInclusive_HoEcut_Barrel->Fill(depthIt+1, depthTPIt[depthIt]);
                                         if (tpEtemu > 5) energyDepth_TPE_genMatchInclusive_TPge5_Barrel->Fill(depthIt+1, depthTPIt[depthIt]);
@@ -1598,10 +1643,10 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                                         if (nPassedJets == 0) energyDepth_L1_Endcap->Fill(depthIt+1, scaledEDepth);
                                         if (nPassedJets == 0 && tpEtemu > 1) energyDepth_TPge5_L1_Endcap->Fill(depthIt+1, scaledEDepth);
                                         if (nPassedJets == 0 && htSum > 120) energyDepth_HT120_L1_Endcap->Fill(depthIt+1, scaledEDepth);
-                                        if (nPassedJets == 0 && is_low_ratio_HE) energyDepth_LowRatio_L1_Endcap->Fill(depthIt+1, scaledEDepth);
-                                        if (nPassedJets == 0 && tpEtemu > 5 && is_low_ratio_HE) energyDepth_TPge5_LowRatio_L1_Endcap->Fill(depthIt+1, scaledEDepth);
-                                        if (nPassedJets == 0) TPEt_L1_HE->Fill(tpEtemu);
-                                        if (nPassedJets == 0 && is_low_ratio_HE) TPEt_L1_LowRatio_HE->Fill(tpEtemu);
+                                        if (is_low_ratio_HE) energyDepth_LowRatio_Endcap->Fill(depthIt+1, scaledEDepth);
+                                        if (tpEtemu > 5 && is_low_ratio_HE) energyDepth_TPge5_LowRatio_Endcap->Fill(depthIt+1, scaledEDepth);
+                                        TPEt_HE->Fill(tpEtemu);
+                                        if (is_low_ratio_HE) TPEt_LowRatio_HE->Fill(tpEtemu);
                                         if (seedTower3x3Had/(seedTower3x3Had / seedTower3x3Em) > 0.975)  energyDepth_TPE_HoEcut_Endcap->Fill(depthIt+1, depthTPIt[depthIt]);
                                         if (tpEtemu > 5) energyDepth_TPE_TPge5_Endcap->Fill(depthIt+1, depthTPIt[depthIt]);
                                         if (tpEtemu > 5) energyDepth_TPge5_Endcap->Fill(depthIt+1, scaledEDepth);
@@ -1623,10 +1668,10 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                                         if (nPassedGenMatchedJets == 0) energyDepth_genMatchInclusive_L1_Endcap->Fill(depthIt+1, scaledEDepth);
                                         if (nPassedGenMatchedJets == 0 && tpEtemu > 1) energyDepth_genMatchInclusive_TPge5_L1_Endcap->Fill(depthIt+1, scaledEDepth);
                                         if (nPassedGenMatchedJets == 0 && htSum > 120) energyDepth_genMatchInclusive_HT120_L1_Endcap->Fill(depthIt+1, scaledEDepth);
-                                        if (nPassedGenMatchedJets == 0 && is_low_ratio_HE) energyDepth_genMatchInclusive_LowRatio_L1_Endcap->Fill(depthIt+1, scaledEDepth);
-                                        if (nPassedGenMatchedJets == 0) TPEt_L1_Matched_HE->Fill(tpEtemu);
-                                        if (nPassedGenMatchedJets == 0 && is_low_ratio_HE) TPEt_L1_LowRatio_Matched_HE->Fill(tpEtemu);
-                                        if (nPassedGenMatchedJets == 0 && tpEtemu > 5 && is_low_ratio_HE) energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Endcap->Fill(depthIt+1, scaledEDepth);
+                                        if (is_low_ratio_HE) energyDepth_genMatchInclusive_LowRatio_Endcap->Fill(depthIt+1, scaledEDepth);
+                                        TPEt_Matched_HE->Fill(tpEtemu);
+                                        if (is_low_ratio_HE) TPEt_LowRatio_Matched_HE->Fill(tpEtemu);
+                                        if (tpEtemu > 5 && is_low_ratio_HE) energyDepth_genMatchInclusive_TPge5_LowRatio_Endcap->Fill(depthIt+1, scaledEDepth);
                                         energyDepth_TPE_genMatchInclusive_Endcap->Fill(depthIt+1, depthTPIt[depthIt]);
                                         if (seedTower3x3Had/(seedTower3x3Had / seedTower3x3Em) > 0.975)  energyDepth_TPE_genMatchInclusive_HoEcut_Endcap->Fill(depthIt+1, depthTPIt[depthIt]);
                                         if (tpEtemu > 5) energyDepth_TPE_genMatchInclusive_TPge5_Endcap->Fill(depthIt+1, depthTPIt[depthIt]);
@@ -1722,10 +1767,11 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
             
             std::vector<bool> pass_HoE(4, false);
             std::vector<bool> pass_HoE_DFB_02(4, false), pass_HoE_DFB_04(4, false), pass_HoE_DFB_06(4, false), pass_HoE_DFB_08(4, false);
+            std::vector<bool> pass_HoE_TP2_DFB_02(4, false), pass_HoE_TP2_DFB_04(4, false), pass_HoE_TP2_DFB_06(4, false), pass_HoE_TP2_DFB_08(4, false);
             std::vector<bool> pass_HoE_DFBTP05(4, false), pass_HoE_DFBTP1(4, false), pass_HoE_DFBTP2(4, false), pass_HoE_DFBTP3(4, false), pass_HoE_DFBTP4(4, false), pass_HoE_DFBTP5(4, false);
             for (int ijet = 0; ijet < nJetemu && ijet < 4; ijet++)
             {
-              if ((hadVariablesAllJets["H3OvE3"].at(ijet))/(hadVariablesAllJets["H3OvE3"].at(ijet)+emVariablesAllJets["H3OvE3"].at(ijet)) > 0.9) pass_HoE.at(ijet) = true;
+              if ((hadVariablesAllJets["H3OvE3"].at(ijet))/(hadVariablesAllJets["H3OvE3"].at(ijet)+emVariablesAllJets["H3OvE3"].at(ijet)) > -1) pass_HoE.at(ijet) = true;
               if (pass_HoE.at(ijet) && LLPJetTags["TP05_HB06_HE06"].at(ijet)) pass_HoE_DFBTP05.at(ijet) = true;
               if (pass_HoE.at(ijet) && LLPJetTags["TP1_HB06_HE06"].at(ijet)) pass_HoE_DFBTP1.at(ijet) = true;
               if (pass_HoE.at(ijet) && LLPJetTags["TP2_HB06_HE06"].at(ijet)) pass_HoE_DFBTP2.at(ijet) = true;
@@ -1733,10 +1779,15 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
               if (pass_HoE.at(ijet) && LLPJetTags["TP4_HB06_HE06"].at(ijet)) pass_HoE_DFBTP4.at(ijet) = true;
               if (pass_HoE.at(ijet) && LLPJetTags["TP5_HB06_HE06"].at(ijet)) pass_HoE_DFBTP5.at(ijet) = true;
 
-              if (pass_HoE.at(ijet) && LLPJetTags["TP2_HB02_HE02"].at(ijet)) pass_HoE_DFB_02.at(ijet) = true;
-              if (pass_HoE.at(ijet) && LLPJetTags["TP2_HB04_HE04"].at(ijet)) pass_HoE_DFB_04.at(ijet) = true;
-              if (pass_HoE.at(ijet) && LLPJetTags["TP2_HB06_HE06"].at(ijet)) pass_HoE_DFB_06.at(ijet) = true;
-              if (pass_HoE.at(ijet) && LLPJetTags["TP2_HB08_HE08"].at(ijet)) pass_HoE_DFB_08.at(ijet) = true;
+              if (pass_HoE.at(ijet) && LLPJetTags["HB02_HE02"].at(ijet)) pass_HoE_DFB_02.at(ijet) = true;
+              if (pass_HoE.at(ijet) && LLPJetTags["HB04_HE04"].at(ijet)) pass_HoE_DFB_04.at(ijet) = true;
+              if (pass_HoE.at(ijet) && LLPJetTags["HB06_HE06"].at(ijet)) pass_HoE_DFB_06.at(ijet) = true;
+              if (pass_HoE.at(ijet) && LLPJetTags["HB08_HE08"].at(ijet)) pass_HoE_DFB_08.at(ijet) = true;
+
+              if (pass_HoE.at(ijet) && LLPJetTags["TP2_HB02_HE02"].at(ijet)) pass_HoE_TP2_DFB_02.at(ijet) = true;
+              if (pass_HoE.at(ijet) && LLPJetTags["TP2_HB04_HE04"].at(ijet)) pass_HoE_TP2_DFB_04.at(ijet) = true;
+              if (pass_HoE.at(ijet) && LLPJetTags["TP2_HB06_HE06"].at(ijet)) pass_HoE_TP2_DFB_06.at(ijet) = true;
+              if (pass_HoE.at(ijet) && LLPJetTags["TP2_HB08_HE08"].at(ijet)) pass_HoE_TP2_DFB_08.at(ijet) = true;
             }
 
             hHTSum_emu->Fill(htSum);
@@ -1773,6 +1824,17 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
             if ((htSum > 300 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(14);
             if ((htSum > 360 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(15);
 
+            if (htSum > 360 || (htSum > 120 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)))) effJetID_HoE_DepthFB_HTscan->Fill(16);
+            if (htSum > 360 || (htSum > 180 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(17);
+            if (htSum > 360 || (htSum > 240 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(18);
+            if (htSum > 360 || (htSum > 300 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(19);
+            if (htSum > 360 || (htSum > 360 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(20);
+            if ((htSum > 120 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)))) effJetID_HoE_DepthFB_HTscan->Fill(21);
+            if ((htSum > 180 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(22);
+            if ((htSum > 240 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(23);
+            if ((htSum > 300 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(24);
+            if ((htSum > 360 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_HTscan->Fill(25);
+
 //            if (htSum > 120 && (pass_HoE_DFBTP05.at(0)4|| pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3)) ) effJetID_HoE_DepthFB->Fill(4); 
             effJetID_HoE_DepthFB_Ratio->Fill(0);
             if (htSum > 360) effJetID_HoE_DepthFB_Ratio->Fill(1); 
@@ -1786,7 +1848,48 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
             if ((htSum > 120 && (pass_HoE_DFB_06.at(0) || pass_HoE_DFB_06.at(1) || pass_HoE_DFB_06.at(2) || pass_HoE_DFB_06.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(9); 
             if ((htSum > 120 && (pass_HoE_DFB_08.at(0) || pass_HoE_DFB_08.at(1) || pass_HoE_DFB_08.at(2) || pass_HoE_DFB_08.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(10); 
 
+            if (htSum > 360 || (htSum > 120 && (pass_HoE_TP2_DFB_02.at(0) || pass_HoE_TP2_DFB_02.at(1) || pass_HoE_TP2_DFB_02.at(2) || pass_HoE_TP2_DFB_02.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(11); 
+            if (htSum > 360 || (htSum > 120 && (pass_HoE_TP2_DFB_04.at(0) || pass_HoE_TP2_DFB_04.at(1) || pass_HoE_TP2_DFB_04.at(2) || pass_HoE_TP2_DFB_04.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(12); 
+            if (htSum > 360 || (htSum > 120 && (pass_HoE_TP2_DFB_06.at(0) || pass_HoE_TP2_DFB_06.at(1) || pass_HoE_TP2_DFB_06.at(2) || pass_HoE_TP2_DFB_06.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(13); 
+            if (htSum > 360 || (htSum > 120 && (pass_HoE_TP2_DFB_08.at(0) || pass_HoE_TP2_DFB_08.at(1) || pass_HoE_TP2_DFB_08.at(2) || pass_HoE_TP2_DFB_08.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(14); 
+            if ((htSum > 120 && (pass_HoE_TP2_DFB_02.at(0) || pass_HoE_TP2_DFB_02.at(1) || pass_HoE_TP2_DFB_02.at(2) || pass_HoE_TP2_DFB_02.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(15); 
+            if ((htSum > 120 && (pass_HoE_TP2_DFB_04.at(0) || pass_HoE_TP2_DFB_04.at(1) || pass_HoE_TP2_DFB_04.at(2) || pass_HoE_TP2_DFB_04.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(16); 
+            if ((htSum > 120 && (pass_HoE_TP2_DFB_06.at(0) || pass_HoE_TP2_DFB_06.at(1) || pass_HoE_TP2_DFB_06.at(2) || pass_HoE_TP2_DFB_06.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(17); 
+            if ((htSum > 120 && (pass_HoE_TP2_DFB_08.at(0) || pass_HoE_TP2_DFB_08.at(1) || pass_HoE_TP2_DFB_08.at(2) || pass_HoE_TP2_DFB_08.at(3)) ) ) effJetID_HoE_DepthFB_Ratio->Fill(18); 
 
+            effJetID_HoE_DepthFB_Jetscan->Fill(0);
+            if (jetEt_3 > 20) effJetID_HoE_DepthFB_Jetscan->Fill(1);
+            if (jetEt_3 > 30) effJetID_HoE_DepthFB_Jetscan->Fill(2);
+            if (jetEt_3 > 40) effJetID_HoE_DepthFB_Jetscan->Fill(3);
+            if (jetEt_3 > 50) effJetID_HoE_DepthFB_Jetscan->Fill(4);
+            if (jetEt_3 > 60) effJetID_HoE_DepthFB_Jetscan->Fill(5);
+            if (jetEt_3 > 20 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(6);
+            if (jetEt_3 > 30 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(7);
+            if (jetEt_3 > 40 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(8);
+            if (jetEt_3 > 50 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(9);
+            if (jetEt_3 > 60 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(10);
+            if (jetEt_3 > 20 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(11);
+            if (jetEt_3 > 30 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(12);
+            if (jetEt_3 > 40 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(13);
+            if (jetEt_3 > 50 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(14);
+            if (jetEt_3 > 60 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Jetscan->Fill(15);
+            if (jetEt_4 > 20) effJetID_HoE_DepthFB_Jetscan->Fill(16);
+            if (jetEt_4 > 30) effJetID_HoE_DepthFB_Jetscan->Fill(17);
+            if (jetEt_4 > 40) effJetID_HoE_DepthFB_Jetscan->Fill(18);
+            if (jetEt_4 > 50) effJetID_HoE_DepthFB_Jetscan->Fill(19);
+            if (jetEt_4 > 60) effJetID_HoE_DepthFB_Jetscan->Fill(20);
+            if (jetEt_4 > 20 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(21);
+            if (jetEt_4 > 30 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(22);
+            if (jetEt_4 > 40 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(23);
+            if (jetEt_4 > 50 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(24);
+            if (jetEt_4 > 60 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(25);
+            if (jetEt_4 > 20 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(26);
+            if (jetEt_4 > 30 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(27);
+            if (jetEt_4 > 40 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(28);
+            if (jetEt_4 > 50 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(29);
+            if (jetEt_4 > 60 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Jetscan->Fill(30);
+
+            
             if (nGoodGen > 0) 
             {
                 hHTSum_Gen_emu->Fill(htSum);
@@ -1823,6 +1926,17 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                 if ((htSum > 240 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(13);
                 if ((htSum > 300 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(14);
                 if ((htSum > 360 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(15);
+                if (htSum > 360 || (htSum > 120 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)))) effJetID_HoE_DepthFB_Gen_HTscan->Fill(16);
+                if (htSum > 360 || (htSum > 180 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(17);
+                if (htSum > 360 || (htSum > 240 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(18);
+                if (htSum > 360 || (htSum > 300 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(19);
+                if (htSum > 360 || (htSum > 360 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(20);
+                if ((htSum > 120 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)))) effJetID_HoE_DepthFB_Gen_HTscan->Fill(21);
+                if ((htSum > 180 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(22);
+                if ((htSum > 240 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(23);
+                if ((htSum > 300 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(24);
+                if ((htSum > 360 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3)) )) effJetID_HoE_DepthFB_Gen_HTscan->Fill(25);
+
 
             //if ((htSum > 120 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3)) ) ) effJetID_HoE_DepthFB_Gen->Fill(4); 
                 effJetID_HoE_DepthFB_Ratio_Gen->Fill(0);
@@ -1837,6 +1951,48 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                 if ((htSum > 120 && (pass_HoE_DFB_06.at(0) || pass_HoE_DFB_06.at(1) || pass_HoE_DFB_06.at(2) || pass_HoE_DFB_06.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(9); 
                 if ((htSum > 120 && (pass_HoE_DFB_08.at(0) || pass_HoE_DFB_08.at(1) || pass_HoE_DFB_08.at(2) || pass_HoE_DFB_08.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(10); 
 
+                if (htSum > 360 || (htSum > 120 && (pass_HoE_TP2_DFB_02.at(0) || pass_HoE_TP2_DFB_02.at(1) || pass_HoE_TP2_DFB_02.at(2) || pass_HoE_TP2_DFB_02.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(11); 
+                if (htSum > 360 || (htSum > 120 && (pass_HoE_TP2_DFB_04.at(0) || pass_HoE_TP2_DFB_04.at(1) || pass_HoE_TP2_DFB_04.at(2) || pass_HoE_TP2_DFB_04.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(12); 
+                if (htSum > 360 || (htSum > 120 && (pass_HoE_TP2_DFB_06.at(0) || pass_HoE_TP2_DFB_06.at(1) || pass_HoE_TP2_DFB_06.at(2) || pass_HoE_TP2_DFB_06.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(13); 
+                if (htSum > 360 || (htSum > 120 && (pass_HoE_TP2_DFB_08.at(0) || pass_HoE_TP2_DFB_08.at(1) || pass_HoE_TP2_DFB_08.at(2) || pass_HoE_TP2_DFB_08.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(14); 
+                if ((htSum > 120 && (pass_HoE_TP2_DFB_02.at(0) || pass_HoE_TP2_DFB_02.at(1) || pass_HoE_TP2_DFB_02.at(2) || pass_HoE_TP2_DFB_02.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(15); 
+                if ((htSum > 120 && (pass_HoE_TP2_DFB_04.at(0) || pass_HoE_TP2_DFB_04.at(1) || pass_HoE_TP2_DFB_04.at(2) || pass_HoE_TP2_DFB_04.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(16); 
+                if ((htSum > 120 && (pass_HoE_TP2_DFB_06.at(0) || pass_HoE_TP2_DFB_06.at(1) || pass_HoE_TP2_DFB_06.at(2) || pass_HoE_TP2_DFB_06.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(17); 
+                if ((htSum > 120 && (pass_HoE_TP2_DFB_08.at(0) || pass_HoE_TP2_DFB_08.at(1) || pass_HoE_TP2_DFB_08.at(2) || pass_HoE_TP2_DFB_08.at(3)) ) ) effJetID_HoE_DepthFB_Ratio_Gen->Fill(18); 
+
+                effJetID_HoE_DepthFB_Gen_Jetscan->Fill(0);
+                if (jetEt_3 > 20) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(1);
+                if (jetEt_3 > 30) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(2);
+                if (jetEt_3 > 40) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(3);
+                if (jetEt_3 > 50) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(4);
+                if (jetEt_3 > 60) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(5);
+                if (jetEt_3 > 20 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(6);
+                if (jetEt_3 > 30 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(7);
+                if (jetEt_3 > 40 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(8);
+                if (jetEt_3 > 50 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(9);
+                if (jetEt_3 > 60 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(10);
+                if (jetEt_3 > 20 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(11);
+                if (jetEt_3 > 30 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(12);
+                if (jetEt_3 > 40 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(13);
+                if (jetEt_3 > 50 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(14);
+                if (jetEt_3 > 60 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(15);
+                if (jetEt_4 > 20) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(16);
+                if (jetEt_4 > 30) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(17);
+                if (jetEt_4 > 40) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(18);
+                if (jetEt_4 > 50) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(19);
+                if (jetEt_4 > 60) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(20);
+                if (jetEt_4 > 20 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(21);
+                if (jetEt_4 > 30 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(22);
+                if (jetEt_4 > 40 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(23);
+                if (jetEt_4 > 50 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(24);
+                if (jetEt_4 > 60 && (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(25);
+                if (jetEt_4 > 20 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(26);
+                if (jetEt_4 > 30 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(27);
+                if (jetEt_4 > 40 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(28);
+                if (jetEt_4 > 50 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(29);
+                if (jetEt_4 > 60 && (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3))) effJetID_HoE_DepthFB_Gen_Jetscan->Fill(30);
+
+
             }
 
             // for each bin fill according to whether our object has a larger corresponding energy
@@ -1845,6 +2001,13 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                 if( pass_HoE.at(0) && (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_HoE_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
                 if( pass_HoE_DFBTP05.at(0) && (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_HoE_TP05_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
                 if( pass_HoE_DFBTP5.at(0) && (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_HoE_TP5_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if(  pass_HoE_DFB_02.at(0) && (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_HoE_Ratio02_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if(  pass_HoE_DFB_06.at(0) && (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_HoE_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if(  pass_HoE_TP2_DFB_02.at(0) && (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_HoE_TP2_Ratio02_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if(  pass_HoE_TP2_DFB_06.at(0) && (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_HoE_TP2_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if(  pass_HoE_DFBTP1.at(0) && (jetEt_1) >= jetLo + (bin*jetBinWidth) ) singleJetRates_HoE_TP1_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+
+
             } 
 
             for(int bin=0; bin<nJetBins; bin++){
@@ -1852,6 +2015,13 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                 if( (pass_HoE.at(0) || pass_HoE.at(1)) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_HoE_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
                 if( (pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1)) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_HoE_TP05_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
                 if( (pass_HoE_DFBTP5.at(0) || pass_HoE_DFBTP5.at(1)) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_HoE_TP5_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( (pass_HoE_DFB_02.at(0) || pass_HoE_DFB_02.at(1)) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_HoE_Ratio02_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( (pass_HoE_DFB_06.at(0) || pass_HoE_DFB_06.at(1)) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_HoE_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( (pass_HoE_TP2_DFB_02.at(0) || pass_HoE_TP2_DFB_02.at(1)) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_HoE_TP2_Ratio02_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( (pass_HoE_TP2_DFB_06.at(0) || pass_HoE_TP2_DFB_06.at(1)) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_HoE_TP2_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( (pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1)) && (jetEt_2) >= jetLo + (bin*jetBinWidth) ) doubleJetRates_HoE_TP1_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+
+
             }  
 
             for(int bin=0; bin<nJetBins; bin++){
@@ -1859,6 +2029,11 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                 if( ( pass_HoE.at(0) || pass_HoE.at(1) || pass_HoE.at(2) ) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_HoE_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
                 if( ( pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) ) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_HoE_TP05_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
                 if( ( pass_HoE_DFBTP5.at(0) || pass_HoE_DFBTP5.at(1) || pass_HoE_DFBTP5.at(2) ) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_HoE_TP5_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_DFB_02.at(0) || pass_HoE_DFB_02.at(1) || pass_HoE_DFB_02.at(2) ) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_HoE_Ratio02_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_DFB_06.at(0) || pass_HoE_DFB_06.at(1) || pass_HoE_DFB_02.at(2) ) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_HoE_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_TP2_DFB_02.at(0) || pass_HoE_TP2_DFB_02.at(1) || pass_HoE_TP2_DFB_02.at(2) ) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_HoE_TP2_Ratio02_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_TP2_DFB_06.at(0) || pass_HoE_TP2_DFB_06.at(1) || pass_HoE_TP2_DFB_02.at(2) ) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_HoE_TP2_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) ) && (jetEt_3) >= jetLo + (bin*jetBinWidth) ) tripleJetRates_HoE_TP1_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
 
             }  
 
@@ -1867,6 +2042,12 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                 if( ( pass_HoE.at(0) || pass_HoE.at(1) || pass_HoE.at(2) || pass_HoE.at(3) ) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_HoE_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
                 if( ( pass_HoE_DFBTP05.at(0) || pass_HoE_DFBTP05.at(1) || pass_HoE_DFBTP05.at(2) || pass_HoE_DFBTP05.at(3) ) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_HoE_TP05_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
                 if( ( pass_HoE_DFBTP5.at(0) || pass_HoE_DFBTP5.at(1) || pass_HoE_DFBTP5.at(2) || pass_HoE_DFBTP5.at(3) ) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_HoE_TP5_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_DFB_02.at(0) || pass_HoE_DFB_02.at(1) || pass_HoE_DFB_02.at(2) || pass_HoE_DFB_02.at(3) ) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_HoE_Ratio02_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_DFB_06.at(0) || pass_HoE_DFB_06.at(1) || pass_HoE_DFB_06.at(2) || pass_HoE_DFB_06.at(3) ) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_HoE_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_TP2_DFB_02.at(0) || pass_HoE_TP2_DFB_02.at(1) || pass_HoE_TP2_DFB_02.at(2) || pass_HoE_TP2_DFB_02.at(3) ) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_HoE_TP2_Ratio02_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_TP2_DFB_06.at(0) || pass_HoE_TP2_DFB_06.at(1) || pass_HoE_TP2_DFB_06.at(2) || pass_HoE_TP2_DFB_06.at(3) ) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_HoE_TP2_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+                if( ( pass_HoE_DFBTP1.at(0) || pass_HoE_DFBTP1.at(1) || pass_HoE_DFBTP1.at(2) || pass_HoE_DFBTP1.at(3) ) && (jetEt_4) >= jetLo + (bin*jetBinWidth) ) quadJetRates_HoE_TP1_Ratio06_emu->Fill(jetLo+(bin*jetBinWidth));  //GeV
+
             }  
              
             for(int bin=0; bin<nEgBins; bin++){
@@ -1927,6 +2108,16 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
                 if( ((pass_HoE_DFB_04.at(0) || pass_HoE_DFB_04.at(1) || pass_HoE_DFB_04.at(2) || pass_HoE_DFB_04.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_Ratio04_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
                 if( ((pass_HoE_DFB_06.at(0) || pass_HoE_DFB_06.at(1) || pass_HoE_DFB_06.at(2) || pass_HoE_DFB_06.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_Ratio06_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
                 if( ((pass_HoE_DFB_08.at(0) || pass_HoE_DFB_08.at(1) || pass_HoE_DFB_08.at(2) || pass_HoE_DFB_08.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_Ratio08_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
+
+                if( htSum > 360 || ((pass_HoE_TP2_DFB_02.at(0) || pass_HoE_TP2_DFB_02.at(1) || pass_HoE_TP2_DFB_02.at(2) || pass_HoE_TP2_DFB_02.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_TP2_Ratio02_ORHT360_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
+                if( htSum > 360 || ((pass_HoE_TP2_DFB_04.at(0) || pass_HoE_TP2_DFB_04.at(1) || pass_HoE_TP2_DFB_04.at(2) || pass_HoE_TP2_DFB_04.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_TP2_Ratio04_ORHT360_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
+                if( htSum > 360 || ((pass_HoE_TP2_DFB_06.at(0) || pass_HoE_TP2_DFB_06.at(1) || pass_HoE_TP2_DFB_06.at(2) || pass_HoE_TP2_DFB_06.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_TP2_Ratio06_ORHT360_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
+                if( htSum > 360 || ((pass_HoE_TP2_DFB_08.at(0) || pass_HoE_TP2_DFB_08.at(1) || pass_HoE_TP2_DFB_08.at(2) || pass_HoE_TP2_DFB_08.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_TP2_Ratio08_ORHT360_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
+
+                if( ((pass_HoE_TP2_DFB_02.at(0) || pass_HoE_TP2_DFB_02.at(1) || pass_HoE_TP2_DFB_02.at(2) || pass_HoE_TP2_DFB_02.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_TP2_Ratio02_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
+                if( ((pass_HoE_TP2_DFB_04.at(0) || pass_HoE_TP2_DFB_04.at(1) || pass_HoE_TP2_DFB_04.at(2) || pass_HoE_TP2_DFB_04.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_TP2_Ratio04_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
+                if( ((pass_HoE_TP2_DFB_06.at(0) || pass_HoE_TP2_DFB_06.at(1) || pass_HoE_TP2_DFB_06.at(2) || pass_HoE_TP2_DFB_06.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_TP2_Ratio06_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
+                if( ((pass_HoE_TP2_DFB_08.at(0) || pass_HoE_TP2_DFB_08.at(1) || pass_HoE_TP2_DFB_08.at(2) || pass_HoE_TP2_DFB_08.at(3)) && (htSum) >= htSumLo+(bin*htSumBinWidth) )) htSumRates_HoE_TP2_Ratio08_emu->Fill(htSumLo+(bin*htSumBinWidth)); //GeV           
 
             }
 
@@ -2238,18 +2429,38 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
         singleJetRates_HoE_emu->Scale(norm);
         singleJetRates_HoE_TP05_emu->Scale(norm);
         singleJetRates_HoE_TP5_emu->Scale(norm);
+        singleJetRates_HoE_Ratio02_emu->Scale(norm);
+        singleJetRates_HoE_Ratio06_emu->Scale(norm);
+        singleJetRates_HoE_TP2_Ratio02_emu->Scale(norm);
+        singleJetRates_HoE_TP2_Ratio06_emu->Scale(norm);
+        singleJetRates_HoE_TP1_Ratio06_emu->Scale(norm);
         doubleJetRates_emu->Scale(norm);
         doubleJetRates_HoE_emu->Scale(norm);
         doubleJetRates_HoE_TP05_emu->Scale(norm);
         doubleJetRates_HoE_TP5_emu->Scale(norm);
+        doubleJetRates_HoE_Ratio02_emu->Scale(norm);
+        doubleJetRates_HoE_Ratio06_emu->Scale(norm);
+        doubleJetRates_HoE_TP2_Ratio02_emu->Scale(norm);
+        doubleJetRates_HoE_TP2_Ratio06_emu->Scale(norm);
+        doubleJetRates_HoE_TP1_Ratio06_emu->Scale(norm);
         tripleJetRates_emu->Scale(norm);
         tripleJetRates_HoE_emu->Scale(norm);
         tripleJetRates_HoE_TP05_emu->Scale(norm);
         tripleJetRates_HoE_TP5_emu->Scale(norm);
+        tripleJetRates_HoE_Ratio02_emu->Scale(norm);
+        tripleJetRates_HoE_Ratio06_emu->Scale(norm);
+        tripleJetRates_HoE_TP2_Ratio02_emu->Scale(norm);
+        tripleJetRates_HoE_TP2_Ratio06_emu->Scale(norm);
+        tripleJetRates_HoE_TP1_Ratio06_emu->Scale(norm);
         quadJetRates_emu->Scale(norm);
         quadJetRates_HoE_emu->Scale(norm);
         quadJetRates_HoE_TP05_emu->Scale(norm);
         quadJetRates_HoE_TP5_emu->Scale(norm);
+        quadJetRates_HoE_Ratio02_emu->Scale(norm);
+        quadJetRates_HoE_Ratio06_emu->Scale(norm);
+        quadJetRates_HoE_TP2_Ratio02_emu->Scale(norm);
+        quadJetRates_HoE_TP2_Ratio06_emu->Scale(norm);
+        quadJetRates_HoE_TP1_Ratio06_emu->Scale(norm);
         singleEgRates_emu->Scale(norm);
         doubleEgRates_emu->Scale(norm);
         singleTauRates_emu->Scale(norm);
@@ -2280,6 +2491,15 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
         htSumRates_HoE_Ratio04_ORHT360_emu->Scale(norm);
         htSumRates_HoE_Ratio06_ORHT360_emu->Scale(norm);
         htSumRates_HoE_Ratio08_ORHT360_emu->Scale(norm);
+        htSumRates_HoE_TP2_Ratio02_emu->Scale(norm);
+        htSumRates_HoE_TP2_Ratio04_emu->Scale(norm);
+        htSumRates_HoE_TP2_Ratio06_emu->Scale(norm);
+        htSumRates_HoE_TP2_Ratio08_emu->Scale(norm);
+        htSumRates_HoE_TP2_Ratio02_ORHT360_emu->Scale(norm);
+        htSumRates_HoE_TP2_Ratio04_ORHT360_emu->Scale(norm);
+        htSumRates_HoE_TP2_Ratio06_ORHT360_emu->Scale(norm);
+        htSumRates_HoE_TP2_Ratio08_ORHT360_emu->Scale(norm);
+
         mhtSumRates_emu->Scale(norm);
         etSumRates_emu->Scale(norm);
         metSumRates_emu->Scale(norm);
@@ -2296,18 +2516,38 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
         singleJetRates_HoE_emu->Write();
         singleJetRates_HoE_TP05_emu->Write();
         singleJetRates_HoE_TP5_emu->Write();
+        singleJetRates_HoE_Ratio02_emu->Write();
+        singleJetRates_HoE_Ratio06_emu->Write();
+        singleJetRates_HoE_TP2_Ratio02_emu->Write();
+        singleJetRates_HoE_TP2_Ratio06_emu->Write();
+        singleJetRates_HoE_TP1_Ratio06_emu->Write();
         doubleJetRates_emu->Write();
         doubleJetRates_HoE_emu->Write();
         doubleJetRates_HoE_TP05_emu->Write();
         doubleJetRates_HoE_TP5_emu->Write();
+        doubleJetRates_HoE_Ratio02_emu->Write();
+        doubleJetRates_HoE_Ratio06_emu->Write();
+        doubleJetRates_HoE_TP2_Ratio02_emu->Write();
+        doubleJetRates_HoE_TP2_Ratio06_emu->Write();
+        doubleJetRates_HoE_TP1_Ratio06_emu->Write();
         tripleJetRates_emu->Write();
         tripleJetRates_HoE_emu->Write();
         tripleJetRates_HoE_TP05_emu->Write();
         tripleJetRates_HoE_TP5_emu->Write();
+        tripleJetRates_HoE_Ratio02_emu->Write();
+        tripleJetRates_HoE_Ratio06_emu->Write();
+        tripleJetRates_HoE_TP2_Ratio02_emu->Write();
+        tripleJetRates_HoE_TP2_Ratio06_emu->Write();
+        tripleJetRates_HoE_TP1_Ratio06_emu->Write();
         quadJetRates_emu->Write();
         quadJetRates_HoE_emu->Write();
         quadJetRates_HoE_TP05_emu->Write();
         quadJetRates_HoE_TP5_emu->Write();
+        quadJetRates_HoE_Ratio02_emu->Write();
+        quadJetRates_HoE_Ratio06_emu->Write();
+        quadJetRates_HoE_TP2_Ratio02_emu->Write();
+        quadJetRates_HoE_TP2_Ratio06_emu->Write();
+        quadJetRates_HoE_TP1_Ratio06_emu->Write();
         singleEgRates_emu->Write();
         doubleEgRates_emu->Write();
         singleTauRates_emu->Write();
@@ -2338,6 +2578,14 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
         htSumRates_HoE_Ratio04_ORHT360_emu->Write();
         htSumRates_HoE_Ratio06_ORHT360_emu->Write();
         htSumRates_HoE_Ratio08_ORHT360_emu->Write();
+        htSumRates_HoE_TP2_Ratio02_emu->Write();
+        htSumRates_HoE_TP2_Ratio04_emu->Write();
+        htSumRates_HoE_TP2_Ratio06_emu->Write();
+        htSumRates_HoE_TP2_Ratio08_emu->Write();
+        htSumRates_HoE_TP2_Ratio02_ORHT360_emu->Write();
+        htSumRates_HoE_TP2_Ratio04_ORHT360_emu->Write();
+        htSumRates_HoE_TP2_Ratio06_ORHT360_emu->Write();
+        htSumRates_HoE_TP2_Ratio08_ORHT360_emu->Write();
 
         mhtSumRates_emu->Write();
         etSumRates_emu->Write();
@@ -2448,11 +2696,11 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
         energyDepth_HT120_L1_Barrel->Write();
         energyDepth_HT120_L1_Endcap->Write();
 
-        energyDepth_LowRatio_L1_Barrel->Write();
-        energyDepth_LowRatio_L1_Endcap->Write();
+        energyDepth_LowRatio_Barrel->Write();
+        energyDepth_LowRatio_Endcap->Write();
 
-        energyDepth_TPge5_LowRatio_L1_Barrel->Write();
-        energyDepth_TPge5_LowRatio_L1_Endcap->Write();
+        energyDepth_TPge5_LowRatio_Barrel->Write();
+        energyDepth_TPge5_LowRatio_Endcap->Write();
 
         energyDepth_TPE_TPge5_Barrel->Write();
         energyDepth_TPE_TPge5_Endcap->Write();
@@ -2497,10 +2745,10 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
         energyDepth_genMatchInclusive_HT120_L1_Endcap->Write();
 
 
-        energyDepth_genMatchInclusive_LowRatio_L1_Barrel->Write();
-        energyDepth_genMatchInclusive_LowRatio_L1_Endcap->Write();
-        energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Barrel->Write();
-        energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Endcap->Write();
+        energyDepth_genMatchInclusive_LowRatio_Barrel->Write();
+        energyDepth_genMatchInclusive_LowRatio_Endcap->Write();
+        energyDepth_genMatchInclusive_TPge5_LowRatio_Barrel->Write();
+        energyDepth_genMatchInclusive_TPge5_LowRatio_Endcap->Write();
 
         energyDepth_TPE_genMatchInclusive_Barrel->Write();
         energyDepth_TPE_genMatchInclusive_Endcap->Write();
@@ -2511,17 +2759,17 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
         energyDepth_TPE_genMatchInclusive_HoEcut_Barrel->Write();
         energyDepth_TPE_genMatchInclusive_HoEcut_Endcap->Write();
 
-        TPEt_L1_HB->Write();
-        TPEt_L1_HE->Write();
+        TPEt_HB->Write();
+        TPEt_HE->Write();
 
-        TPEt_L1_Matched_HB->Write();
-        TPEt_L1_Matched_HE->Write();
+        TPEt_Matched_HB->Write();
+        TPEt_Matched_HE->Write();
 
-        TPEt_L1_LowRatio_HB->Write();
-        TPEt_L1_LowRatio_HE->Write();
+        TPEt_LowRatio_HB->Write();
+        TPEt_LowRatio_HE->Write();
 
-        TPEt_L1_LowRatio_Matched_HB->Write();
-        TPEt_L1_LowRatio_Matched_HE->Write();
+        TPEt_LowRatio_Matched_HB->Write();
+        TPEt_LowRatio_Matched_HE->Write();
 
         energyDepth_genMatchTP_Barrel->Write();
         energyDepth_genMatchTP_Endcap->Write();
@@ -2731,6 +2979,12 @@ void rates(std::string sampleType, const std::string& inputFileDirectory){
 
         effJetID_HoE_DepthFB_Gen_HTscan->Scale(1/effJetID_HoE_DepthFB_Gen_HTscan->GetBinContent(1));
         effJetID_HoE_DepthFB_Gen_HTscan->Write();
+
+        effJetID_HoE_DepthFB_Jetscan->Scale(1/effJetID_HoE_DepthFB_Jetscan->GetBinContent(1));
+        effJetID_HoE_DepthFB_Jetscan->Write();
+
+        effJetID_HoE_DepthFB_Gen_Jetscan->Scale(1/effJetID_HoE_DepthFB_Gen_Jetscan->GetBinContent(1));
+        effJetID_HoE_DepthFB_Gen_Jetscan->Write();
 
         effJetID_HoE_DepthFB_Ratio->Scale(1/effJetID_HoE_DepthFB_Ratio->GetBinContent(1));
         effJetID_HoE_DepthFB_Ratio->Write();
