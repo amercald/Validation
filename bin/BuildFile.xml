@@ -5,7 +5,8 @@
   <bin file="rates.cxx" name="rates.exe"/>
   <bin file="rates_hoe.cxx" name="rates_hoe.exe"/>
   <bin file="rates_Edepth.cxx" name="rates_Edepth.exe"/>
+  <bin file="rates_compare_samples.cxx" name="rates_compare_samples.exe"/>
   <bin file="draw_l1analysis.cxx" name="draw_l1analysis.exe"/>
   <bin file="l1jetanalysis.cxx" name="l1jetanalysis.exe"/>
 </environment>
-<flags CXXFLAGS="-Wall -Werror -Wno-error=unused-but-set-variable -g"/>
+<flags CXXFLAGS="-Wall -Werror -Wno-error=unused-but-set-variable -Wno-unused-variable -g"/>
