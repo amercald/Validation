@@ -13,7 +13,7 @@ path = "/uscms/home/amercald/nobackup/HCAL/CMSSW_11_0_2/src/HcalTrigger/Validati
 QCD_dict = {"name" : "QCD",
             "color" : ROOT.kBlack,
             "legendlabel" : " QCD"}
-NuGun_dict = {"name" : "RelValNuGun",
+NuGun_dict = {"name" : "NuGun",
             "color" : ROOT.kBlack,
             "legendlabel" : "PU Jets"}
 LLP500_dict = {"name" : "LLP_MH1000_Ctau500",
@@ -131,7 +131,7 @@ def plotGenDepthProfile(currentlist, histname, bghistname_barrel, bghistname_end
 #        print("using rates_"+filename["nam+".root"+" with color "+str(filename["color"]))
         file = ROOT.TFile.Open(path+"rates_"+filename["name"]+".root")
         fill = False
-        if filename["name"] == "QCD" or filename["name"] == "RelValNuGun":
+        if filename["name"] == "QCD" or "NuGun" in filename["name"]:
             if "Endcap" in histname: adjustedhistname = bghistname_endcap
             elif "Barrel" in histname: adjustedhistname = bghistname_barrel
         else:
@@ -319,6 +319,11 @@ if __name__ == "__main__":
         plotGenDepthProfile(file_list_350_NuGun, g, "energyDepth_Barrel", "energyDepth_Endcap")
         plotGenDepthProfile(file_list_250_NuGun, g, "energyDepth_Barrel", "energyDepth_Endcap")
 
+    plotGenDepthProfile(file_list_350_NuGun, "energyDepth_HT120_Endcap", "energyDepth_HT120_Barrel", "energyDepth_HT120_Endcap")
+    plotGenDepthProfile(file_list_250_NuGun, "energyDepth_HT120_Endcap", "energyDepth_HT120_Barrel", "energyDepth_HT120_Endcap")
+    plotGenDepthProfile(file_list_350_NuGun, "energyDepth_HT120_Barrel", "energyDepth_HT120_Barrel", "energyDepth_HT120_Endcap")
+    plotGenDepthProfile(file_list_250_NuGun, "energyDepth_HT120_Barrel", "energyDepth_HT120_Barrel", "energyDepth_HT120_Endcap")#
+
     plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_L1_Endcap", "energyDepth_L1_Barrel", "energyDepth_L1_Endcap")
     plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_L1_Endcap", "energyDepth_L1_Barrel", "energyDepth_L1_Endcap")
     plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_L1_Barrel", "energyDepth_L1_Barrel", "energyDepth_L1_Endcap")
@@ -334,10 +339,10 @@ if __name__ == "__main__":
     plotGenDepthProfile(file_list_350_NuGun, "energyDepth_HT120_L1_Barrel", "energyDepth_HT120_L1_Barrel", "energyDepth_HT120_L1_Endcap")
     plotGenDepthProfile(file_list_250_NuGun, "energyDepth_HT120_L1_Barrel", "energyDepth_HT120_L1_Barrel", "energyDepth_HT120_L1_Endcap")#
 
-    plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_LowRatio_L1_Endcap", "energyDepth_LowRatio_L1_Barrel", "energyDepth_LowRatio_L1_Endcap")
-    plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_LowRatio_L1_Endcap", "energyDepth_LowRatio_L1_Barrel", "energyDepth_LowRatio_L1_Endcap")
-    plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_LowRatio_L1_Barrel", "energyDepth_LowRatio_L1_Barrel", "energyDepth_LowRatio_L1_Endcap")
-    plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_LowRatio_L1_Barrel", "energyDepth_LowRatio_L1_Barrel", "energyDepth_LowRatio_L1_Endcap")#
+    plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_LowRatio_Endcap", "energyDepth_LowRatio_Barrel", "energyDepth_LowRatio_Endcap")
+    plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_LowRatio_Endcap", "energyDepth_LowRatio_Barrel", "energyDepth_LowRatio_Endcap")
+    plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_LowRatio_Barrel", "energyDepth_LowRatio_Barrel", "energyDepth_LowRatio_Endcap")
+    plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_LowRatio_Barrel", "energyDepth_LowRatio_Barrel", "energyDepth_LowRatio_Endcap")#
 
     plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_TPge5_Endcap", "energyDepth_TPge5_Barrel", "energyDepth_TPge5_Endcap")
     plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_TPge5_Endcap", "energyDepth_TPge5_Barrel", "energyDepth_TPge5_Endcap")
@@ -359,11 +364,6 @@ if __name__ == "__main__":
     plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_HT120_L1_Barrel", "energyDepth_HT120_L1_Barrel", "energyDepth_HT120_L1_Endcap")
     plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_HT120_L1_Barrel", "energyDepth_HT120_L1_Barrel", "energyDepth_HT120_L1_Endcap")#
 
-    plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Endcap", "energyDepth_TPge5_LowRatio_L1_Barrel", "energyDepth_TPge5_LowRatio_L1_Endcap")
-    plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Endcap", "energyDepth_TPge5_LowRatio_L1_Barrel", "energyDepth_TPge5_LowRatio_L1_Endcap")
-    plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Barrel", "energyDepth_TPge5_LowRatio_L1_Barrel", "energyDepth_TPge5_LowRatio_L1_Endcap")
-    plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_TPge5_LowRatio_L1_Barrel", "energyDepth_TPge5_LowRatio_L1_Barrel", "energyDepth_TPge5_LowRatio_L1_Endcap")#
-    
     plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_HoEcut_Endcap", "energyDepth_HoEcut_Barrel", "energyDepth_HoEcut_Endcap")
     plotGenDepthProfile(file_list_250_NuGun, "energyDepth_genMatchInclusive_HoEcut_Endcap", "energyDepth_HoEcut_Barrel", "energyDepth_HoEcut_Endcap")
     plotGenDepthProfile(file_list_350_NuGun, "energyDepth_genMatchInclusive_HoEcut_Barrel", "energyDepth_HoEcut_Barrel", "energyDepth_HoEcut_Endcap")

@@ -4,8 +4,8 @@ import numpy as np
 class rootPlotter():
 
     def __init__(self):
-        self.path = "/uscms/home/amercald/nobackup/HCAL/CMSSW_11_0_2/src/HcalTrigger/Validation/result_rates/"
-        self.outpath = "/uscms/home/amercald/nobackup/HCAL/CMSSW_11_0_2/src/HcalTrigger/Validation/plots/"
+        self.path = "/uscms/home/amercald/nobackup/HCAL/CMSSW_11_0_2/src/HcalTrigger/Validation/result_rates_remove19_20/"
+        self.outpath = "/uscms/home/amercald/nobackup/HCAL/CMSSW_11_0_2/src/HcalTrigger/Validation/plots_remove19_20/"
         self.magicMargins = {"T" : 0.07, "B" : 0.11, "L" : 0.11, "R" : 0.13}
         self.XCANVAS = 2400; self.YCANVAS = 2400
         ROOT.gROOT.SetBatch(True)
@@ -101,7 +101,7 @@ class rootPlotter():
 #        l.Draw()
         c1.SaveAs(self.outpath+histname+appendname+logname+".pdf")
 
-    def plotProfiles(self, filelist, histname, bghistname, appendname = "", xlabel = "", xrange = [-1, -1], yrange = [-1, -1]):
+    def plotProfiles(self, filelist, histname, bghistname, appendname = "", title = "", log = False, rebin = 1, xlabel = "", ylabel = "", xrange = [-1, -1], yrange = [-1, -1]):
         c1 = ROOT.TCanvas("%s"%(histname), "%s"%(histname), self.XCANVAS, self.YCANVAS);
         ROOT.gPad.SetTopMargin(self.magicMargins["T"])
         ROOT.gPad.SetBottomMargin(self.magicMargins["B"])
@@ -116,48 +116,56 @@ class rootPlotter():
         l.SetTextSize(0.90 * self.magicMargins["T"])
         ROOT.gPad.Modified()
         ROOT.gPad.Update()
-        hlist = []
+        logname = ""
+        if log:
+            ROOT.gPad.SetLogy()
+            logname = "_log_"
         legend = ROOT.TLegend(0.4, 0.55, 0.8, 0.92)
         hcounter = 0
         for f in filelist:
             file = ROOT.TFile.Open(self.path+"rates_"+f["filename"]+".root")
-            if "NuGun" or "QCD" in f["filename"]:
-                hist = file.Get(bghistname)
+            if "NuGun" in f["filename"] or "QCD" in f["filename"]:
+                hist = file.Get(bghistname).ProfileX(bghistname+"dupe")
                 hist.SetFillColor(16)
-                hist.SetFillStyle(3004)
-                
+                hist.SetFillStyle(3002)
             else:
-                hist = file.Get(histname)
+                hist = file.Get(histname).ProfileX(histname+"dupe")
+
+            if "hHTSum" in histname:
+                int_above_360 = hist.Integral(72, 240) / hist.Integral()
+                int_above_120 = hist.Integral(24, 240) / hist.Integral()
+                print("INTEGRALS: ", int_above_360, int_above_120)
+            if title:
+                hist.SetTitle(title)
             if hcounter == 0:
-                framehist = hist.Clone()
+                framehist = hist.Clone("frame")
                 framehist.Reset("ICE")
                 framehist.SetStats(0)
+                framehist.Rebin(rebin)
                 if (xrange[0] != -1 and xrange[1] != -1): framehist.GetXaxis().SetRangeUser(xrange[0], xrange[1])
                 if (yrange[0] != -1 and yrange[1] != -1): framehist.GetYaxis().SetRangeUser(yrange[0], yrange[1])
-                framehist.GetYaxis().SetTitle("A.U.")
                 if xlabel: framehist.GetXaxis().SetTitle(xlabel)
+                if ylabel: framehist.GetYaxis().SetTitle(ylabel)
                 framehist.Draw()
-            profilehist = hist.ProfileX()
-            profilehist.SetMarkerStyle(20)
-            profilehist.SetMarkerSize(1.7)
-            profilehist.SetLineWidth(2)
-            profilehist.SetMarkerColor(f["color"])
-            profilehist.SetLineColor(f["color"])
-#            profilehist.Draw("h same")
+            hist.Rebin(rebin)
+            hist.SetMarkerStyle(20)
+            hist.SetMarkerSize(1.7)
+            hist.SetLineWidth(3)
+            hist.SetMarkerColor(f["color"])
+            hist.SetLineColor(f["color"])
+            hist.Draw("h same")
             legendentr = f["legendlabel"]
-            legend.AddEntry(profilehist, legendentr, "l")
+            legend.AddEntry(hist, legendentr, "l")
             hcounter += 1
-            hlist.append(profilehist)
-
-        for h in hlist:
-            h.Draw("h same")
         legend.SetBorderSize(0)
         legend.SetFillStyle(0)
         legend.SetTextSize(0.025)
         legend.SetHeader("#bf{CMS #scale[0.8]{#it{Preliminary}}}")
         legend.Draw("same")
 #        l.Draw()
-        c1.SaveAs(self.outpath+histname+appendname+".pdf")
+        c1.SaveAs(self.outpath+histname+appendname+logname+".pdf")
+
+
 
     def plot1BinProjections(self, filelist, histname, bghistname, appendname = "", title = "", log = False, rebin = 1, xlabel = "", xrange = [-1, -1], yrange = [-1, -1], overflow = False):
         
@@ -242,9 +250,9 @@ class rootPlotter():
             c1.SaveAs(self.outpath+histname+"_"+str(ieta)+appendname+logname+".pdf")
             del c1
 
-    def plotRatesVsEff(self, rateff_list, background, signal_list, effhistname, title, appendname, legendentry = ""):
+    def plotRatesVsEff(self, rateff_list, background, signal_list, effhistname, title, appendname, legendentry = "", def_rates = True, extra_list = [], extralabel = "", extra_list2 = [], extralabel2 = ""):
         
-        c1 = ROOT.TCanvas("%s"%(effhistname), "%s"%(effhistname), self.XCANVAS, self.YCANVAS);
+        c1 = ROOT.TCanvas("%s"%(effhistname), "%s"%(effhistname), self.XCANVAS+1000, self.YCANVAS);
         ROOT.gPad.SetTopMargin(self.magicMargins["T"])
         ROOT.gPad.SetBottomMargin(self.magicMargins["B"])
         ROOT.gPad.SetLeftMargin(self.magicMargins["L"])
@@ -254,7 +262,7 @@ class rootPlotter():
         ROOT.gPad.SetLogy()
         ROOT.gPad.SetGrid()
         multigraph = ROOT.TMultiGraph()
-        multigraph.SetMinimum(1)
+        multigraph.SetMinimum(1000)
         multigraph.SetMaximum(10**10)
         multigraph.GetXaxis().SetRangeUser(0, 1)
         multigraph.GetXaxis().SetTitle("LLP Signal Efficiency")
@@ -278,7 +286,7 @@ class rootPlotter():
                 sgfile = ROOT.TFile.Open(self.path+"rates_"+sg["filename"]+".root")
                 effhist = sgfile.Get(effhistname)
                 eff = effhist.GetBinContent(rateff["effbin"])
-                if rateff["rateshist"] == "htSumRates_emu":
+                if rateff["def"] and (rateff["ratebin"] == 361 or rateff["ratebin"] == 121) and def_rates:
                     if rateff["ratebin"] == 361:
                         rate_360_def = rate
                         eff_360_def = eff
@@ -289,22 +297,25 @@ class rootPlotter():
                 else:
                     rate_list.append(rate)
                     eff_list.append(eff)
+                    
+                    print("rate: "+str(rate)+" eff: "+str(eff)+" HT: "+str(rateff["ratebin"]))
 
-            print(rate_list, eff_list)
+#            print(rate_list, eff_list)
 
-            rateff_graph_360_def = ROOT.TGraph(1, np.array([eff_360_def]), np.array([rate_360_def]))
-            rateff_graph_360_def.SetMarkerStyle(22)
-            rateff_graph_360_def.SetMarkerSize(7)
-            rateff_graph_360_def.SetMarkerColor(sg["color"])
-            multigraph.Add(rateff_graph_360_def)
-            legend.AddEntry(rateff_graph_360_def, sg["legendlabel"]+"; HT > 360", "lp")
+            if def_rates:
+                rateff_graph_360_def = ROOT.TGraph(1, np.array([eff_360_def]), np.array([rate_360_def]))
+                rateff_graph_360_def.SetMarkerStyle(22)
+                rateff_graph_360_def.SetMarkerSize(7)
+                rateff_graph_360_def.SetMarkerColor(sg["color"])
+                multigraph.Add(rateff_graph_360_def)
+                legend.AddEntry(rateff_graph_360_def, sg["legendlabel"]+"; HT > 360", "lp")
 
-            rateff_graph_120_def = ROOT.TGraph(1, np.array([eff_120_def]), np.array([rate_120_def]))
-            rateff_graph_120_def.SetMarkerStyle(21)
-            rateff_graph_120_def.SetMarkerSize(7)
-            rateff_graph_120_def.SetMarkerColor(sg["color"])
-            multigraph.Add(rateff_graph_120_def)
-            legend.AddEntry(rateff_graph_120_def, sg["legendlabel"]+"; HT > 120", "lp")
+                rateff_graph_120_def = ROOT.TGraph(1, np.array([eff_120_def]), np.array([rate_120_def]))
+                rateff_graph_120_def.SetMarkerStyle(21)
+                rateff_graph_120_def.SetMarkerSize(7)
+                rateff_graph_120_def.SetMarkerColor(sg["color"])
+                multigraph.Add(rateff_graph_120_def)
+                legend.AddEntry(rateff_graph_120_def, sg["legendlabel"]+"; HT > 120", "lp")
 
             rate_arr = np.array(rate_list)
             eff_arr = np.array(eff_list)
@@ -312,10 +323,43 @@ class rootPlotter():
             rateff_graph.SetMarkerSize(7)
             rateff_graph.SetMarkerStyle(31)
             rateff_graph.SetMarkerColor(sg["color"])
-            rateff_graph.SetLineColor(sg["color"])
+            rateff_graph.SetLineColor(sg["color"])                
 
             legend.AddEntry(rateff_graph, sg["legendlabel"]+";"+legendentry, "lp")
             multigraph.Add(rateff_graph)
+       
+            extra_rateff = [extra_list, extra_list2]
+            extra_legend = [extralabel, extralabel2]
+            extra_markerstyle = [35, 37]
+
+            for extra in range(len(extra_rateff)):
+                if extra_rateff[extra]:
+
+                    print( "COMBINING WITH extra!!!!\n\n")
+                    extra_ratelist = []
+                    extra_efflist = []
+
+                    for rateff in extra_rateff[extra]:
+                        if not rateff["def"]:
+                            ratehist = bgfile.Get(rateff["rateshist"])
+                            rate = ratehist.GetBinContent(rateff["ratebin"])
+                        
+                            sgfile = ROOT.TFile.Open(self.path+"rates_"+sg["filename"]+".root")
+                            effhist = sgfile.Get(effhistname)
+                            eff = effhist.GetBinContent(rateff["effbin"])
+
+                            extra_ratelist.append(rate)
+                            extra_efflist.append(eff)
+                    print(extra_ratelist, extra_efflist)
+                    rateff_graph_extra = ROOT.TGraph(len(extra_ratelist), np.array(extra_efflist), np.array(extra_ratelist))
+                    rateff_graph_extra.SetMarkerSize(7)
+                    rateff_graph_extra.SetMarkerStyle(extra_markerstyle[extra])
+                    rateff_graph_extra.SetMarkerColor(sg["color"])
+                    rateff_graph_extra.SetLineColor(sg["color"])                
+                    multigraph.Add(rateff_graph_extra)
+                    legend.AddEntry(rateff_graph_extra, sg["legendlabel"]+";"+legendentry+extra_legend[extra], "lp")
+
+
 
 
         multigraph.Draw("ALP")
@@ -328,7 +372,7 @@ class rootPlotter():
         c1.SaveAs(self.outpath+"rateff"+appendname+".pdf")
 
 
-    def plotJetRates(self, histname, title):
+    def plotJetRates(self, histname, title, appendname, rate_list):
         c1 = ROOT.TCanvas("c1", "c1", self.XCANVAS, self.YCANVAS)
         pad1 = ROOT.TPad("pad1", "pad1", 0, 0.3, 1, 1)
         pad1.SetTopMargin(self.magicMargins["T"])
@@ -349,42 +393,24 @@ class rootPlotter():
         pad2.SetTicks()
         pad2.Draw()
 
-        legend = ROOT.TLegend(0.65, 0.77, 0.9, 0.92)
-
-        rate_no_cut = {"histname" : "_emu",
-                       "legendentry" : "No LLP ID",
-                       "color" : ROOT.kBlack }
-
-        rate_HoE_cut = {"histname" : "_HoE_emu",
-                       "legendentry" : "H/(H+E) > 0.9",
-                       "color" : ROOT.kGreen+2 }
-
-        rate_05_cut = {"histname" : "_HoE_TP05_emu",
-                       "legendentry" : "LLP ID E_{T,TP} > 0.5 GeV",
-                       "color" : ROOT.kRed }
-
-        rate_5_cut = {"histname" : "_HoE_TP5_emu",
-                       "legendentry" : "LLP ID E_{T,TP} > 5 GeV",
-                       "color" : ROOT.kBlue }
-                   
+        legend = ROOT.TLegend(0.45, 0.77, 0.89, 0.92)
 
         file = ROOT.TFile.Open(self.path+"rates_"+self.NuGun_dict["filename"]+".root")
 
-        rate_list = [rate_no_cut, rate_HoE_cut, rate_05_cut] 
         ratehist_list = []
         ratiohist_list = []
         for cut in rate_list:
-            print(histname+cut["histname"])
+            print("Getting "+histname+cut["histname"])
             ratehist = file.Get(histname+cut["histname"])
             ratehist.SetLineColor(cut["color"])
             ratehist.SetLineWidth(2)
             ratehist.SetStats(0)
             ratehist_list.append(ratehist)
 
-            if cut != rate_no_cut:
+            if cut["histname"] != "_emu":
                 ratiohist = ratehist.Clone("h2")
-                ratiohist.Divide(file.Get(histname+rate_no_cut["histname"]))
-                ratiohist.GetYaxis().SetTitle("Tag / No tag")
+                ratiohist.Divide(file.Get(histname+rate_list[0]["histname"]))
+                ratiohist.GetYaxis().SetTitle("Cut / No cut")
                 ratiohist_list.append(ratiohist)
 
             legend.AddEntry(ratehist, cut["legendentry"], "l")
@@ -417,4 +443,4 @@ class rootPlotter():
             hcounter += 1
 
 
-        c1.SaveAs(self.outpath+histname+"_HovE_FB.pdf")
+        c1.SaveAs(self.outpath+histname+"_HovE_FB"+appendname+".pdf")
