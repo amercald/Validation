@@ -39,3 +39,18 @@ https://github.com/gk199/Validation/blob/TimingAndDepth/bin/rates.cxx#L1168-L118
 H/E on L1Jets can be applied as here:
 
 https://github.com/gk199/Validation/blob/HoE_RatesWork/bin/rates.cxx#L373-L434
+
+# Scripts for HCAL Trigger Studies for LLPs
+
+Dictionary of L1 nTuple names and locations are saved in `dict_ntuples.py`. Example of running main analysis code in `bin/rates.cxx` over nTuples locally:
+```
+chmod +x run_rates.py
+./run_rates -l NuGun LLP_MH250_60_Ctau500 ...
+```
+Scripts for running `bin/rates.cxx` on the LPC batch farm are included in `scripts/condor`.
+```
+cd scripts/condor
+chmod +x setup_condor.sh
+./setup_condor.sh
+python job_submitter -l NuGun LLP_MH250_60_Ctau500 ...
+```

@@ -125,17 +125,42 @@ def plotRatesHoEcut(histname, xrange, currentlist):
     c1.SaveAs(outpath+histname+"_"+towersize+".pdf")
     del c1
 
+def signaleff_Rate(effname, ratename, file_list):
+    c1 = ROOT.TCanvas("%s"%(histname), "%s"%(histname), XCANVAS, YCANVAS);
+    #ROOT.gPad.SetLogz()
+    ROOT.gPad.SetTopMargin(magicMargins["T"])
+    ROOT.gPad.SetBottomMargin(magicMargins["B"])
+    ROOT.gPad.SetLeftMargin(magicMargins["L"])
+    ROOT.gPad.SetRightMargin(magicMargins["R"])
+    
+    ROOT.gPad.SetGridy()
+    ROOT.gPad.SetTicks()
+    eff_arr = []
+    rate_arr = []
+    
+    for filename in file_list:
+        file = ROOT.TFile.Open(path+"rates_"+filename["filename"]+".root")        
+        effplot = file.Get(effname)
+        for bin in range(effplot.GetNbinsX()):
+            eff_arr.append(effplot.GetBinContent(bin))
+        
+    
+   # graph = TGraph()
+
+
 if __name__ == "__main__":
     
-    plotRatesHoEcut("singleJetRates_emu", 400,file_list)
-    plotRatesHoEcut("doubleJetRates_emu", 400,file_list)
-    plotRatesHoEcut("tripleJetRates_emu", 400,file_list)
-    plotRatesHoEcut("quadJetRates_emu", 400,file_list)
-    plotRatesHoEcut("htSumRates_emu", 1600,file_list)
+    #plotRatesHoEcut("singleJetRates_emu", 400,file_list)
+    #plotRatesHoEcut("doubleJetRates_emu", 400,file_list)
+    #plotRatesHoEcut("tripleJetRates_emu", 400,file_list)
+    #plotRatesHoEcut("quadJetRates_emu", 400,file_list)
+    #plotRatesHoEcut("htSumRates_emu", 1600,file_list)
 
-    plotRatesHoEcut("singleJetRates_emu", 400,file_list_3x3)
-    plotRatesHoEcut("doubleJetRates_emu", 400,file_list_3x3)
-    plotRatesHoEcut("tripleJetRates_emu", 400,file_list_3x3)
-    plotRatesHoEcut("quadJetRates_emu", 400,file_list_3x3)
-    plotRatesHoEcut("htSumRates_emu", 1600,file_list_3x3)
+    #plotRatesHoEcut("singleJetRates_emu", 400,file_list_3x3)
+    #plotRatesHoEcut("doubleJetRates_emu", 400,file_list_3x3)
+    #plotRatesHoEcut("tripleJetRates_emu", 400,file_list_3x3)
+    #plotRatesHoEcut("quadJetRates_emu", 400,file_list_3x3)
+    #plotRatesHoEcut("htSumRates_emu", 1600,file_list_3x3)
+
+    signaleff_Rate("eff_signal_HTcut", "htSumRates_emu", file_list)
 
