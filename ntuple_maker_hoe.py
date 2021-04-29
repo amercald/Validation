@@ -27,7 +27,7 @@ process.maxEvents = cms.untracked.PSet(
 # Input source
 process.source = cms.Source("PoolSource",
 #    fileNames = cms.untracked.vstring('/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_2.root'),
-fileNames = cms.untracked.vstring('file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_2.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_4.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_5.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_7.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_8.root', 'file:/eos/cms/store/user/lowang/RelValNuGun/RelValNuGun_RAW_TDC/200710_204538/0000/RelValNuGun_PU_step1_9.root'),
+                            fileNames = cms.untracked.vstring('/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/10D453C2-6161-9C46-81FC-86BE05BFE75A.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/2EE8E62A-EA26-9D4E-8225-09E121869187.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/3B24D3E3-EF10-AA4F-B83E-43687B149592.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/686168B8-276C-C540-B71F-D484E12E5D9B.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/7F07E812-2A4C-1F44-B391-7293548BA25B.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/97CB9490-E89A-FB4A-A4BC-FD8E3D7E7595.root/', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/9A5BA94B-2821-9544-95E4-DBA1D82A42B8.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/9B6B9056-2B2B-2049-90B9-F4A5945E1B0E.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/AE1E95BB-61AE-504C-925B-54DB70519F28.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/C699C1FC-D398-A040-8195-3267099C7739.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/DDB82C98-2E22-D743-8C8F-B0BF6DED54A0.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/E9ECD2BD-FE90-3942-B0FA-A170D92E7AD7.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/EC854807-A260-4940-8860-DA7BE9113291.root', '/store/mc/Run3Winter20DRPremixMiniAOD/HTo2LongLivedTo4b_MH-250_MFF-120_CTau-1000mm_TuneCP5_14TeV_pythia8_HCAL/GEN-SIM-DIGI-RAW/packHBTDC_110X_mcRun3_2021_realistic_v6-v1/230000/F4C824A6-CC41-B24A-AE34-3752F607F909.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
@@ -37,7 +37,7 @@ process.options = cms.untracked.PSet(
 
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('l1Ntuple nevts:-1'),
+    annotation = cms.untracked.string('l1Ntuple nevts:200'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
@@ -48,7 +48,7 @@ process.configurationMetadata = cms.untracked.PSet(
 
 # Other statements
 from Configuration.AlCa.GlobalTag import GlobalTag
-process.GlobalTag = GlobalTag(process.GlobalTag, '106X_upgrade2021_realistic_v4', '')
+process.GlobalTag = GlobalTag(process.GlobalTag, '110X_mcRun3_2021_realistic_v6', '')
 
 # Path and EndPath definitions
 process.raw2digi_step = cms.Path(process.RawToDigi)

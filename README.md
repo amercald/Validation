@@ -54,3 +54,15 @@ chmod +x setup_condor.sh
 ./setup_condor.sh
 python job_submitter -l NuGun LLP_MH250_60_Ctau500 ...
 ```
+
+## Making L1 nTuples
+
+Follow the [CRAB3 tutorial](https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookCRAB3Tutorial) for set up
+
+Edit `submit_run_11_X_MC_def.py` to change `DATASET` to the desired samples. Change also the `requestName` and `outputDatasetTag` appropriately.
+
+Once configuration options in `submit_run_11_X_MC_def.py` and `ntuple_maker_hoe.py` are as desired use
+
+```crab submit submit_run_11_X_MC_def.py```
+
+to submit nTupilizing jobs to CRAB schedule.
